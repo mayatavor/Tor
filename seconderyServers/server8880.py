@@ -34,8 +34,6 @@ def main():
     serv.bind((HOST, PORT))
     serv.listen()
 
-    sentToNextClient("127.0.0.1", 8882, b"hi::::127.0.0.1::::8883")
-
     while True:
         conn, addr = serv.accept()
         x = threading.Thread(target=thread, args=(conn,))
