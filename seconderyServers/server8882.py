@@ -25,7 +25,11 @@ def thread(conn):
         next_port = list[-1]
         print(next_ip + " and " + next_port)
         print(list[0])
-        sentToNextClient(next_ip, next_port, list[0])
+
+        list=list.remove(list[-1])
+        list=list.remove(list[-1])
+
+        sentToNextClient(next_ip, next_port, "".join(list))
     conn.close()
     
 
