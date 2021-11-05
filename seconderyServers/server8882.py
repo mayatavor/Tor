@@ -26,10 +26,10 @@ def thread(conn):
         print(next_ip + " and " + next_port)
         print(list[0])
 
-        list=list.pop(-1)
-        list=list.pop(-1)
+        list.pop(-1)
+        list.pop(-1)
 
-        sentToNextClient(next_ip, next_port, "".join(list))
+        sentToNextClient(next_ip, next_port, "::::".join(list))
     conn.close()
     
 
