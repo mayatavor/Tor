@@ -6,6 +6,8 @@ HOST = '127.0.0.1'  # Standard loopback interface address
 PORT = 8881         # Port to listen on
 
 def sentToNextClient(ip, port, msg):
+    print("in sendtTONextClient, port = ", port, " ip = ", ip)
+    print("message = ", msg)
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect((ip, int(port)))
 
@@ -18,7 +20,7 @@ def thread(conn):
     while True:
         data = conn.recv(4096)
         if not data: break
-        print(data)
+        print("data = ", data)
         data = data.decode()
         list = data.split("::::")
         if len(list) < 3: break

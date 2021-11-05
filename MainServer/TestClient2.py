@@ -1,9 +1,9 @@
 import socket
 SERVER = "127.0.0.1"
-PORT = 8080
+PORT = 5678
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((SERVER, PORT))
-client.sendall(bytes("Hey, this is client 2", "UTF-8"))
+client.sendall(bytes("hiFromTestClient2", "UTF-8"))
 while True:
     in_data = client.recv(1024)
     print("From Server: ", in_data.decode())
@@ -11,5 +11,4 @@ while True:
     client.sendall(bytes(out_data, 'UTF-8'))
     if out_data=='bye':
         break
-
 client.close()

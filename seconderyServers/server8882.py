@@ -2,7 +2,7 @@ import socket
 import threading
 
 HOST = '127.0.0.1'  # Standard loopback interface address
-PORT = 8882         # Port to listen on
+PORT = 9876         # Port to listen on
 
 def sentToNextClient(ip, port, msg):
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
