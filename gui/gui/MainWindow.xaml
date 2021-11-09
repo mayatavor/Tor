@@ -31,7 +31,8 @@
                         <Grid HorizontalAlignment="Center" Margin="5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="35"/>
                             </Grid.ColumnDefinitions>
 
                             <Border Width="40" Height="40" CornerRadius="25" BorderBrush="Black" BorderThickness="0.6">
@@ -44,6 +45,8 @@
                                 <TextBlock Text="Rayhan Alvarado" Margin="10 0"/>
                                 <TextBlock Text="Today is Mariah's bday!" Margin="10 0" TextTrimming="CharacterEllipsis" Opacity="0.6" FontSize="11"/>
                             </StackPanel>
+
+                            <Image Source="Assets/star.png" Width="15" Height="15" Grid.Column="2" Margin="20,10,0,15"/>
                         </Grid>
                     </ListViewItem>
                 </Border>
