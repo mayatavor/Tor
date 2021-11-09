@@ -17,7 +17,15 @@
 
         <StackPanel Grid.Column="0" Background="#69a6e2">
             <StackPanel Orientation="Horizontal" Background="White">
-                <TextBlock Text="Your Chats" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Width="270" Height="45" Background="White"/>
+                <Grid HorizontalAlignment="Center" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="230"/>
+                        <ColumnDefinition Width="35"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Text="Your Chats" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Width="270" Height="45" Background="White"/>
+                    <Image Grid.Column="1" Source="Assets/settings.png" Width="25" Height="25"/>
+                </Grid>
             </StackPanel>
             <TextBox Margin="20 10" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="SEARCH" Foreground="White"/>
 
@@ -46,7 +54,7 @@
                                 <TextBlock Text="Today is Mariah's bday!" Margin="10 0" TextTrimming="CharacterEllipsis" Opacity="0.6" FontSize="11"/>
                             </StackPanel>
 
-                            <Image Source="Assets/star.png" Width="15" Height="15" Grid.Column="2" Margin="20,10,0,15"/>
+                            <Image Source="Assets/star.png" Width="15" Height="15" Grid.Column="2" Margin="20,12.5,0,12.5"/>
                         </Grid>
                     </ListViewItem>
                 </Border>
