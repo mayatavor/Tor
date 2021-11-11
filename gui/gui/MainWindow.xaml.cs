@@ -19,10 +19,35 @@ namespace gui
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
+    { 
+
+        //need to create a communicator class to talk to the main server
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        public void SendMessageClick()
+        {
+
+        }
+
+        /* trying to detect the "Enter" click in order to send the message without having to click the send button
+        private void Message_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                MessageBox.Show("Pressed enter.");
+            }
+        }
+
+        private void OnKeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                UserName.Text = "hi maya";
+            }
+        }
+        */
     }
 }
