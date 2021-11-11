@@ -4,12 +4,6 @@
     <list default="true" id="fc33848b-b42a-44d5-8b86-8ccea3f78bd8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ClientThread.py" beforeDir="false" afterPath="$PROJECT_DIR$/ClientThread.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gui/.vs/gui/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../gui/.vs/gui/v16/.suo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gui/gui/SocketT.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../gui/gui/SocketT.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gui/gui/bin/Debug/gui.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../gui/gui/bin/Debug/gui.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gui/gui/bin/Debug/gui.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../gui/gui/bin/Debug/gui.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gui/gui/obj/Debug/gui.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../gui/gui/obj/Debug/gui.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gui/gui/obj/Debug/gui.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../gui/gui/obj/Debug/gui.pdb" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/venv/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -52,7 +46,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pythonServer.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="655">
@@ -64,11 +58,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ClientThread.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="34" column="13" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
+            <state relative-caret-position="366">
+              <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
             </state>
           </provider>
         </entry>
@@ -203,13 +197,6 @@
     <entry file="file://$PROJECT_DIR$/../seconderyServers/server8880.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/ClientThread.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="34" column="13" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pythonServer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="655">
@@ -217,6 +204,13 @@
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ClientThread.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
         </state>
       </provider>
     </entry>

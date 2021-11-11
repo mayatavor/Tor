@@ -32,7 +32,7 @@ class ClientThread(threading.Thread):
         #msg = self.createMessageRoute(messageContent=msg)
             msg += SPACER + LOCALHOST + SPACER + FIRST_PORT + SPACER + LOCALHOST+ SPACER + SECOND_PORT
             print("creates message + route = " + msg )
-            #sendToFirstClient(LOCALHOST, 8881, msg)
+            sendToFirstClient(LOCALHOST, 8881, msg)
         print("Client at ", self.clientAddress, " disconnected...")
 
 
