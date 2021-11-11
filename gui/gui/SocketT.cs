@@ -76,7 +76,7 @@ namespace gui
             {
                 IPHostEntry ipHost = Dns.GetHostEntry("localhost");
                 IPAddress ipAddr = ipHost.AddressList[1];
-                IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 8080);
+                IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 5678);
 
                 // Creation TCP/IP Socket using 
                 // Socket Class Costructor
@@ -89,11 +89,6 @@ namespace gui
                     this.sender.Connect(localEndPoint);
 
                     Console.WriteLine("Socket connected to {0}", this.sender.RemoteEndPoint.ToString());
-
-                    int bytesRec = this.sender.Receive(bytes);
-
-                    string t = System.Text.Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-
                 }
                 catch (ArgumentNullException ane)
                 {
