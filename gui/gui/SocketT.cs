@@ -6,12 +6,16 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
 namespace gui
 {
+    
     class SocketT
     {
         private byte[] bytes;
         private Socket sender;
+        const string SPACER = "::::";
 
         public SocketT()
         {
@@ -38,28 +42,30 @@ namespace gui
             return TalkToServer(v);
         }
 
-        public string TalkToServer(string json)
+        public string TalkToServer(string mas)
         {
             try
             {
-                byte[] msg = Encoding.ASCII.GetBytes(json);
+                int len = mas.Length;
+                string v = getPaddedNumber(len, 3) + mas;
+                byte[] msg = Encoding.ASCII.GetBytes(v);
                 // Send the data through the socket.
                 int bytesSent = this.sender.Send(msg);
 
                 byte[] bytesArr = new byte[3];
-                //recive the data from the socket
                 int bytesRec = this.sender.Receive(bytesArr);
 
-                byte[] bytesArr2 = new byte[4];
+                string t = System.Text.Encoding.UTF8.GetString(bytesArr, 0, bytesArr.Length);
+
+                int len2 = int.Parse(t);
+
+                byte[] bytesArr2 = new byte[len2];
                 bytesRec = this.sender.Receive(bytesArr2);
+                //int len = int.Parse(t);
+                //byte[] bytesArr3 = new byte[len];
+                //bytesRec = this.sender.Receive(bytesArr3);
 
-                string t = System.Text.Encoding.UTF8.GetString(bytesArr2, 0, bytesArr2.Length);
-
-                int len = int.Parse(t);
-                byte[] bytesArr3 = new byte[len];
-                bytesRec = this.sender.Receive(bytesArr3);
-
-                string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);
+                string res = System.Text.Encoding.UTF8.GetString(bytesArr2, 0, bytesArr2.Length);
 
                 return res;
             }
