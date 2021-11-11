@@ -76,7 +76,7 @@ namespace gui
             {
                 IPHostEntry ipHost = Dns.GetHostEntry("localhost");
                 IPAddress ipAddr = ipHost.AddressList[1];
-                IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 5678);
+                IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 8080);
 
                 // Creation TCP/IP Socket using 
                 // Socket Class Costructor

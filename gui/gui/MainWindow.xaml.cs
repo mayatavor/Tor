@@ -20,16 +20,17 @@ namespace gui
     /// </summary>
     public partial class MainWindow : Window
     { 
-
+        private Communicator _communicator;
         //need to create a communicator class to talk to the main server
         public MainWindow()
         {
             InitializeComponent();
+            this._communicator = new Communicator();
         }
 
-        public void SendMessageClick()
+        private void SendMessage_Click(object sender, RoutedEventArgs e)
         {
-
+            this._communicator.SendMessage(Message.Text);
         }
 
         /* trying to detect the "Enter" click in order to send the message without having to click the send button
