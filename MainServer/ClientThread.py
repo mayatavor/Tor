@@ -27,7 +27,10 @@ class ClientThread(threading.Thread):
             if msg=='bye':
                break
             print ("from client", msg)
-            self.csocket.send(bytes("main server received message "+ msg, 'UTF-8'))
+            ansToClient = "main server received message "+ msg
+            lenAns = str(len(ansToClient))
+            self.csocket.send(bytes(lenAns.rjust(3, '0'), 'UTF-8'))
+            self.csocket.send(bytes(ansToClient), 'UTF-8')
         #'hi::::127.0.0.1::::8881::::127.0.0.1::::8882'
         #msg = self.createMessageRoute(messageContent=msg)
             msg += SPACER + LOCALHOST + SPACER + FIRST_PORT + SPACER + LOCALHOST+ SPACER + SECOND_PORT
