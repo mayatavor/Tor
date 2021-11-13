@@ -22,21 +22,23 @@ class ClientThread(threading.Thread):
         print("Connection from : ", self.clientAddress)
         msg = ''
         while True:
-            data = self.csocket.recv(2048)
-            msg = data.decode()
+            data = self.csocket.recv(3)
+            length = int(data.decode())
+            msg = self.csocket.recv(length).decode('utf-8')
             if msg=='bye':
                break
             print ("from client", msg)
             ansToClient = "main server received message "+ msg
             lenAns = str(len(ansToClient))
-            self.csocket.send(bytes(lenAns.rjust(3, '0'), 'UTF-8'))
-            self.csocket.send(bytes(ansToClient), 'UTF-8')
-            self.csocket.send(bytes(ansToClient, 'UTF-8'))
+            x = lenAns.rjust(3, '0')
+            print(x)
+            self.csocket.send(x.encode())
+            self.csocket.send(ansToClient.encode())
         #'hi::::127.0.0.1::::8881::::127.0.0.1::::8882'
         #msg = self.createMessageRoute(messageContent=msg)
             msg += SPACER + LOCALHOST + SPACER + FIRST_PORT + SPACER + LOCALHOST+ SPACER + SECOND_PORT
             print("creates message + route = " + msg )
-            sendToFirstClient(LOCALHOST, 8881, msg)
+            #sendToFirstClient(LOCALHOST, 8881, msg)
         print("Client at ", self.clientAddress, " disconnected...")
 
 
