@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:gui"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="MainWindow" Height="490" Width="800">
+        Title="                                                                                                                 OurTor" Height="490" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="270"/>
@@ -104,13 +104,14 @@
                         <ColumnDefinition Width="70"/>
                     </Grid.ColumnDefinitions>
 
-
                     <TextBox
                         Name="Message"
                         Grid.Column="0" 
                         MaxHeight="80"
                         TextWrapping="Wrap"
                         Margin="5"
+                        FontSize="15"
+                        materialDesign:HintAssist.Hint="Type a message"
                         AcceptsReturn="True"
                         VerticalScrollBarVisibility="Auto"/>
 
