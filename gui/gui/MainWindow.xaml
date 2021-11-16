@@ -112,16 +112,10 @@
                         AcceptsReturn="True"
                         VerticalScrollBarVisibility="Auto"/>
 
-                    <Button 
-                        Grid.Column="1"
-                        VerticalAlignment="Bottom"
-                        Background="White" 
-                        BorderBrush="Black"
-                        Click="SendMessage_Click"
-                        Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                        Name="SendMessage">
-                        <materialDesign:PackIcon Kind="Send"/>
+                    <Button BorderBrush="{x:Null}" Background="{x:Null}" Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                        <Image Source="Assets/SEND.png" Height="40" Width="40"/>
                     </Button>
+
 
                 </Grid>
             </Border>
