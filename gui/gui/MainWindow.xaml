@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:gui"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="                                                                                                                 OurTor" Height="490" Width="800">
+        Title="                                                                                                            OurTor" Height="490" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="270"/>
@@ -92,7 +92,7 @@
                     Background="#eaf2fb"/>
             </StackPanel>
 
-            <StackPanel Margin="0 178" VerticalAlignment="Bottom">
+            <StackPanel Margin="0 174" VerticalAlignment="Bottom">
             </StackPanel>
             <Border 
                 Background="#bfd9f3" 
