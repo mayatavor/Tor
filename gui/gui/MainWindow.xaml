@@ -92,7 +92,7 @@
                     Background="#eaf2fb"/>
             </StackPanel>
 
-            <StackPanel Margin="0 178" VerticalAlignment="Bottom">
+            <StackPanel Margin="0 174" VerticalAlignment="Bottom">
             </StackPanel>
             <Border 
                 Background="#bfd9f3" 
