@@ -14,9 +14,103 @@ Server::~Server()
 {
 	try
 	{
+		//Nedd to be added: free the queues memory
+
+
 		// the only use of the destructor should be for freeing 
 		// resources that was allocated in the constructor
 		closesocket(_serverSocket);
 	}
 	catch (...) {}
+}
+
+void Server::serve(int port)
+{
+	struct sockaddr_in sa = { 0 };
+
+	sa.sin_port = htons(port); // port that server will listen for
+	sa.sin_family = AF_INET;   // must be AF_INET
+	sa.sin_addr.s_addr = INADDR_ANY;    // when there are few ip's for the machine. We will use always "INADDR_ANY"
+
+	// again stepping out to the global namespace
+	// Connects between the socket and the configuration (port and etc..)
+	if (bind(_serverSocket, (struct sockaddr*)&sa, sizeof(sa)) == SOCKET_ERROR)
+		throw std::exception(__FUNCTION__ " - bind");
+
+	// Start listening for incoming requests of clients
+	if (listen(_serverSocket, SOMAXCONN) == SOCKET_ERROR)
+		throw std::exception(__FUNCTION__ " - listen");
+	std::cout << "Listening on port " << port << std::endl;
+
+	std::thread t(&Server::messagesHandler, this);
+
+	while (true)
+	{
+		// the main thread is only accepting clients 
+		// and add then to the list of handlers
+		std::cout << "Waiting for client connection request" << std::endl;
+		accept();
+	}
+}
+
+void Server::messagesHandler()
+{
+	Helper h;
+	while (true)
+	{
+		std::unique_lock<std::mutex> lock(this->_mu);
+		this->_cv.wait(lock, [this] {return !this->_messagesQueue.empty(); });
+		ClientMessage cm = this->_messagesQueue.front();
+		this->_messagesQueue.pop();
+		lock.unlock();
+		this->_clients.insert(std::pair<std::string, SOCKET>("", cm.getSocket()));
+	}
+}
+
+void Server::accept()
+{
+	// notice that we step out to the global namespace
+	// for the resolution of the function accept
+
+	// this accepts the client and create a specific socket from server to this client
+	SOCKET client_socket = ::accept(_serverSocket, NULL, NULL);
+
+	if (client_socket == INVALID_SOCKET)
+		throw std::exception(__FUNCTION__);
+
+	std::cout << "Client accepted. Server and client can speak" << std::endl;
+
+	// the function that handle the conversation with the client
+	std::thread t(&Server::clientHandler, this, client_socket);
+	t.detach();
+}
+
+void Server::clientHandler(SOCKET clientSocket)
+{
+	try
+	{
+		Helper h;
+		while (true)
+		{
+			int len = h.getIntPartFromSocket(clientSocket, 3);
+			std::string msg = h.getStringPartFromSocket(clientSocket, len);
+			addMessageToQueue(-1, "", "", msg, clientSocket);
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::unique_lock<std::mutex> lock(this->_mu);
+		this->_messagesQueue.push(*new ClientMessage(-1, "", "", "", clientSocket));
+		lock.unlock();
+		this->_cv.notify_one();
+		std::cout << e.what() << std::endl;
+	}
+}
+
+void Server::addMessageToQueue(int code, std::string sender, std::string reciever, std::string content, SOCKET clientSocket)
+{
+	std::unique_lock<std::mutex> lock(this->_mu);
+	this->_messagesQueue.push(*new ClientMessage(code, sender, reciever, content, clientSocket));
+	lock.unlock();
+	this->_cv.notify_one();
 }
