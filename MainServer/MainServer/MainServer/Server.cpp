@@ -96,7 +96,8 @@ void Server::clientHandler(SOCKET socket)
 			int code = h.getIntPartFromSocket(socket, 3);
 			if (code == SECONDARY_SERVER_CONNECTED)
 			{
-				
+				int len = h.getIntPartFromSocket(socket, 2);
+				int serverId = h.getIntPartFromSocket(socket, len);
 			}
 			else 
 			{
