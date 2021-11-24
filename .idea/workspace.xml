@@ -19,11 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4661a711-e274-437a-8542-a1eb1fc9b8fa" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/seconderyServers/server8880.py" beforeDir="false" afterPath="$PROJECT_DIR$/seconderyServers/server8880.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/seconderyServers/server8882.py" beforeDir="false" afterPath="$PROJECT_DIR$/seconderyServers/server8882.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/seconderyServers/server8883.py" beforeDir="false" afterPath="$PROJECT_DIR$/seconderyServers/server8883.py" afterDir="false" />
-    </list>
+    <list default="true" id="4661a711-e274-437a-8542-a1eb1fc9b8fa" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +30,7 @@
     <session id="-559602213">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.opened" value="1" />
         </counts>
