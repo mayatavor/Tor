@@ -3,11 +3,11 @@
 #include <WinSock2.h>
 #include <Windows.h>
 #include <string>
-class ClientMessage
+class Message
 {
 public:
-	ClientMessage(int code, std::string sender, std::string sendTo, std::string messageConent, SOCKET& senderSocket);  //constructor
-	~ClientMessage(); //destructor
+	Message(int code, std::string sender, std::string sendTo, std::string messageConent, SOCKET& senderSocket);  //constructor
+	~Message(); //destructor
 
 	//retruns the sender
 	std::string getSender() const;

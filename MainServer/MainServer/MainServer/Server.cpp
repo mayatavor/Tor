@@ -58,12 +58,13 @@ void Server::messagesHandler()
 	Helper h;
 	while (true)
 	{
-		std::unique_lock<std::mutex> lock(this->_mu);
-		this->_cv.wait(lock, [this] {return !this->_messagesQueue.empty(); });
-		ClientMessage cm = this->_messagesQueue.front();
+		std::unique_lock<std::mutex> lock(this->_messagesMutex);
+		this->_messagesCv.wait(lock, [this] {return !this->_messagesQueue.empty(); });
+		Message m = this->_messagesQueue.front();
 		this->_messagesQueue.pop();
 		lock.unlock();
-		this->_clients.insert(std::pair<std::string, SOCKET>("", cm.getSocket()));
+		if(m.getCode() == )
+		this->_clients.insert(std::pair<std::string, SOCKET>("", m.getSocket()));
 	}
 }
 
@@ -85,32 +86,48 @@ void Server::accept()
 	t.detach();
 }
 
-void Server::clientHandler(SOCKET clientSocket)
+void Server::clientHandler(SOCKET socket)
 {
 	try
 	{
 		Helper h;
 		while (true)
 		{
-			int len = h.getIntPartFromSocket(clientSocket, 3);
-			std::string msg = h.getStringPartFromSocket(clientSocket, len);
-			addMessageToQueue(-1, "", "", msg, clientSocket);
+			int code = h.getIntPartFromSocket(socket, 3);
+			if (code == SECONDARY_SERVER_CONNECTED)
+			{
+				
+			}
+			else 
+			{
+				int len = h.getIntPartFromSocket(socket, 3);
+				std::string msg = h.getStringPartFromSocket(socket, len);
+				addMessageToMessagesQueue(-1, "", "", msg, socket);
+			}
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::unique_lock<std::mutex> lock(this->_mu);
-		this->_messagesQueue.push(*new ClientMessage(-1, "", "", "", clientSocket));
+		std::unique_lock<std::mutex> lock(this->_messagesMutex);
+		this->_messagesQueue.push(*new Message(-1, "", "", "", socket));
 		lock.unlock();
-		this->_cv.notify_one();
+		this->_messagesCv.notify_one();
 		std::cout << e.what() << std::endl;
 	}
 }
 
-void Server::addMessageToQueue(int code, std::string sender, std::string reciever, std::string content, SOCKET clientSocket)
+void Server::addMessageToMessagesQueue(int code, std::string sender, std::string reciever, std::string content, SOCKET clientSocket)
 {
-	std::unique_lock<std::mutex> lock(this->_mu);
-	this->_messagesQueue.push(*new ClientMessage(code, sender, reciever, content, clientSocket));
+	std::unique_lock<std::mutex> lock(this->_messagesMutex);
+	this->_messagesQueue.push(*new Message(code, sender, reciever, content, clientSocket));
 	lock.unlock();
-	this->_cv.notify_one();
+	this->_messagesCv.notify_one();
+}
+
+void Server::addSecondaryEerver(SOCKET socket)
+{
+	std::unique_lock<std::mutex> lock(this->_secondaryServersMu);
+	
+	lock.unlock();
+	this->_messagesCv.notify_one();
 }
