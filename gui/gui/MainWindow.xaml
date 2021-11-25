@@ -101,9 +101,6 @@
                     <ListViewItem>
                         <local:MessageRecived HorizontalAlignment="Left"/>
                     </ListViewItem>
-                    <ListViewItem>
-                        <local:MessageSent HorizontalAlignment="Right"/>
-                    </ListViewItem>
                 </ListView>
 
 

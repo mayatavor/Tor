@@ -37,8 +37,7 @@ namespace gui
 
         public string TalkToServer(string req, string code)
         {
-            int len = req.Length;
-            string v = len + req;
+            string v = code + getPaddedNumber(req.Length, 3) + req;
             return TalkToServer(v);
         }
 
@@ -46,9 +45,7 @@ namespace gui
         {
             try
             {
-                int len = mas.Length;
-                string v = getPaddedNumber(len, 3) + mas;
-                byte[] msg = Encoding.ASCII.GetBytes(v);
+                byte[] msg = Encoding.ASCII.GetBytes(mas);
                 // Send the data through the socket.
                 int bytesSent = this.sender.Send(msg);
 
