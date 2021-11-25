@@ -65,7 +65,9 @@ void Server::messagesHandler()
 		Message m = this->_messagesQueue.front();
 		this->_messagesQueue.pop();
 		lock.unlock();
-		h.sendData(m.getSocket(), m.GetMessageContent());
+		int len = m.GetMessageContent().length();
+		std::string msg = "200" + len + m.GetMessageContent();
+		h.sendData(m.getSocket(), msg);
 		//this->_clients.insert(std::pair<std::string, SOCKET>("", m.getSocket())); ///if login or signUpMessage
 	}
 }
@@ -106,7 +108,7 @@ void Server::clientHandler(SOCKET socket)
 			{
 				int len = h.getIntPartFromSocket(socket, 3);
 				std::string msg = h.getStringPartFromSocket(socket, len);
-				addMessageToMessagesQueue(-1, "", "", msg, socket);
+				addMessageToMessagesQueue(SEND_MESSAGE, "", "", msg, socket);
 			}
 		}
 	}
