@@ -24,8 +24,8 @@ namespace gui
         public MessageSent(string msg)
         {
             this.text = msg;
-            this.MessageText.Text = text; //MessageText is Null
             InitializeComponent();
+            this.MessageText.Text = text;
         }
 
         public void setText(string newText)
