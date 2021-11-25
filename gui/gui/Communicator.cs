@@ -25,7 +25,7 @@ namespace gui
 
         public string SendMessage(string msg)
         {
-            string res = this._socket.TalkToServer(msg);
+            string res = this._socket.TalkToServer(msg, "200");
             return res;
         }
 

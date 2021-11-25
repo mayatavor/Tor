@@ -38,7 +38,7 @@ def thread(conn):
     conn.close()
 
 def connectToMainServer(s):
-    msg = "100" + len(MY_ID) + MY_ID
+    msg = "100" + "01" + "2"
     s.send(msg.encode())
 
 
