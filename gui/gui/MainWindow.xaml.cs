@@ -33,8 +33,8 @@ namespace gui
         {
             //this.MessagesList.Items.Add(new MessageSent(Message.Text));
             string answer = this._communicator.SendMessage(Message.Text);
-            MessageSent user = new MessageSent();
-            user.setText(Message.Text);
+            MessageSent user = new MessageSent(Message.Text);
+            //user.setText(Message.Text);
 
             this.MessagesList.Items.Add(user);
 

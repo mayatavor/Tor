@@ -21,10 +21,10 @@ namespace gui
     public partial class MessageSent : UserControl
     {
         private string text;
-        public MessageSent()
+        public MessageSent(string msg)
         {
-            text = "67";
-            this.AddText(text);
+            this.text = msg;
+            this.MessageText.Text = text; //MessageText is Null
             InitializeComponent();
         }
 
