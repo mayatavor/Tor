@@ -21,6 +21,7 @@ namespace gui
     public partial class MainWindow : Window
     { 
         private Communicator _communicator;
+        public IObservable<string> ListItems { get; set; }
         //need to create a communicator class to talk to the main server
         public MainWindow()
         {
@@ -32,8 +33,9 @@ namespace gui
         {
             //this.MessagesList.Items.Add(new MessageSent(Message.Text));
             string answer = this._communicator.SendMessage(Message.Text);
-            UserControl user = new MessageSent();
-            
+            MessageSent user = new MessageSent();
+            user.setText(Message.Text);
+
             this.MessagesList.Items.Add(user);
 
             //this.MessagesList.Items.Add(new MessageRecived(Message.Text));
