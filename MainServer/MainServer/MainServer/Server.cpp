@@ -12,6 +12,8 @@ Server::Server()
 
 Server::~Server()
 {
+		this->_secondaryServers.clear();
+		delete &this->_secondaryServers;
 	try
 	{
 		//Nedd to be added: free the queues memory
@@ -63,7 +65,6 @@ void Server::messagesHandler()
 		Message m = this->_messagesQueue.front();
 		this->_messagesQueue.pop();
 		lock.unlock();
-		if(m.getCode() == )
 		this->_clients.insert(std::pair<std::string, SOCKET>("", m.getSocket()));
 	}
 }
@@ -98,6 +99,7 @@ void Server::clientHandler(SOCKET socket)
 			{
 				int len = h.getIntPartFromSocket(socket, 2);
 				int serverId = h.getIntPartFromSocket(socket, len);
+				addSecondaryServer(socket, serverId);
 			}
 			else 
 			{
@@ -125,10 +127,10 @@ void Server::addMessageToMessagesQueue(int code, std::string sender, std::string
 	this->_messagesCv.notify_one();
 }
 
-void Server::addSecondaryEerver(SOCKET socket)
+void Server::addSecondaryServer(SOCKET socket, int id)
 {
 	std::unique_lock<std::mutex> lock(this->_secondaryServersMu);
-	
+	this->_secondaryServers.push_back(new SecondaryServer(socket, id));
 	lock.unlock();
 	this->_messagesCv.notify_one();
 }
