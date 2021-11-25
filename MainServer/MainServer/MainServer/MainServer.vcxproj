@@ -140,7 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Message.cpp" />
-    <ClCompile Include="CommunicationWithSecondaryServers.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="SecondaryServer.cpp" />
     <ClCompile Include="Server.cpp" />
@@ -149,7 +148,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Message.h" />
-    <ClInclude Include="CommunicationWithSecondaryServers.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="SecondaryServer.h" />
     <ClInclude Include="Server.h" />
