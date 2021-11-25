@@ -60,7 +60,7 @@ namespace gui {
         #line hidden
         
         
-        #line 84 "..\..\MainWindow.xaml"
+        #line 90 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.TextBlock UserName;
         
@@ -68,9 +68,6 @@ namespace gui {
         #line hidden
         
         
-<<<<<<< HEAD
-        #line 108 "..\..\MainWindow.xaml"
-=======
         #line 100 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.ListView MessagesList;
@@ -80,7 +77,6 @@ namespace gui {
         
         
         #line 122 "..\..\MainWindow.xaml"
->>>>>>> AddMessagesToSeconderyServers
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.TextBox Message;
         
@@ -110,6 +106,13 @@ namespace gui {
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "4.0.0.0")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        internal System.Delegate _CreateDelegate(System.Type delegateType, string handler) {
+            return System.Delegate.CreateDelegate(delegateType, this, handler);
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "4.0.0.0")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
@@ -127,6 +130,9 @@ namespace gui {
             this.UserName = ((System.Windows.Controls.TextBlock)(target));
             return;
             case 4:
+            this.MessagesList = ((System.Windows.Controls.ListView)(target));
+            return;
+            case 5:
             this.Message = ((System.Windows.Controls.TextBox)(target));
             return;
             }

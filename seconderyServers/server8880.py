@@ -22,7 +22,7 @@ def thread(conn):
     while True:
         data = conn.recv(4096)
         if not data: break
-        print("data = ", data)
+        print(data)
         data = data.decode()
         list = data.split("::::")
         if len(list) < 3: break

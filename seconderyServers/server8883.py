@@ -29,7 +29,12 @@ def thread(conn):
         next_ip = list[-2]
         next_port = list[-1]
         print(next_ip + " and " + next_port)
-        conn.send(list[0].encode())
+        print(list[0])
+
+        list.pop(-1)
+        list.pop(-1)
+
+        sentToNextClient(next_ip, next_port, "::::".join(list))
     conn.close()
 
 def connectToMainServer(s):
