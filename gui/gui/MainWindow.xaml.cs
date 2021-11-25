@@ -29,34 +29,31 @@ namespace gui
             this._communicator = new Communicator();
         }
 
+        private void SendMsg(string text)
+        {
+            string answer = this._communicator.SendMessage(text);
+            MessageSent user = new MessageSent();
+            user.setText(text);
+
+            this.MessagesList.Items.Add(user);
+        }
+
         private void SendMessage_Click(object sender, RoutedEventArgs e)
         {
             //this.MessagesList.Items.Add(new MessageSent(Message.Text));
-            string answer = this._communicator.SendMessage(Message.Text);
-            MessageSent user = new MessageSent();
-            user.setText(Message.Text);
-
-            this.MessagesList.Items.Add(user);
+            SendMsg(Message.Text);
 
             //this.MessagesList.Items.Add(new MessageRecived(Message.Text));
         }
 
-        /* trying to detect the "Enter" click in order to send the message without having to click the send button
+     
+
         private void Message_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-            {
-                MessageBox.Show("Pressed enter.");
+                {
+                SendMsg(Message.Text);
             }
         }
-
-        private void OnKeyDownHandler(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return)
-            {
-                UserName.Text = "hi maya";
-            }
-        }
-        */
     }
 }

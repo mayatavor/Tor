@@ -119,11 +119,12 @@
                             Name="Message"
                             Grid.Column="0" 
                             MaxHeight="80"
+                            KeyDown="Message_KeyDown"
                             TextWrapping="Wrap"
                             Margin="5"
                             FontSize="15"
                             materialDesign:HintAssist.Hint="Type a message"
-                            AcceptsReturn="True"
+                            AcceptsReturn="False"
                             VerticalScrollBarVisibility="Auto"/>
 
                     </Border>
