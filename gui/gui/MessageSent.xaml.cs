@@ -31,7 +31,7 @@ namespace gui
         public void setText(string newText)
         {
             this.text = newText;
-            this.AddText(text);
+            this.MessageText.Text = text;
         }
 
     }
