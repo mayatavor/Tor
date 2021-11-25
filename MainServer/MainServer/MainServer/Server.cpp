@@ -65,7 +65,8 @@ void Server::messagesHandler()
 		Message m = this->_messagesQueue.front();
 		this->_messagesQueue.pop();
 		lock.unlock();
-		this->_clients.insert(std::pair<std::string, SOCKET>("", m.getSocket()));
+		h.sendData(m.getSocket(), m.GetMessageContent());
+		//this->_clients.insert(std::pair<std::string, SOCKET>("", m.getSocket())); ///if login or signUpMessage
 	}
 }
 
@@ -101,7 +102,7 @@ void Server::clientHandler(SOCKET socket)
 				int serverId = h.getIntPartFromSocket(socket, len);
 				addSecondaryServer(socket, serverId);
 			}
-			else 
+			else if(code == SEND_MESSAGE)
 			{
 				int len = h.getIntPartFromSocket(socket, 3);
 				std::string msg = h.getStringPartFromSocket(socket, len);

@@ -16,6 +16,8 @@
 #define SECONDARY_SERVER_CONNECTED 100
 #define USER_LOGGED_IN 101
 #define USER_SIGNED_UP 102
+#define GHOST_LOGGED_IN 103
+#define SEND_MESSAGE 200
 
 class Server
 {
