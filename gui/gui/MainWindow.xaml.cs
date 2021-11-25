@@ -30,9 +30,13 @@ namespace gui
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)
         {
+            //this.MessagesList.Items.Add(new MessageSent(Message.Text));
             string answer = this._communicator.SendMessage(Message.Text);
-            this.MessagesList.Items.Add(new MessageSent(Message.Text));
-            this.MessagesList.Items.Add(new MessageRecived(Message.Text));
+            UserControl user = new MessageSent();
+            
+            this.MessagesList.Items.Add(user);
+
+            //this.MessagesList.Items.Add(new MessageRecived(Message.Text));
         }
 
         /* trying to detect the "Enter" click in order to send the message without having to click the send button

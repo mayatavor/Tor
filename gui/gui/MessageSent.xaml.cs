@@ -20,10 +20,19 @@ namespace gui
     /// </summary>
     public partial class MessageSent : UserControl
     {
-        public MessageSent(string msg)
+        private string text;
+        public MessageSent()
         {
-            this.AddText(msg);
+            text = "67";
+            this.AddText(text);
             InitializeComponent();
         }
+
+        public void setText(string newText)
+        {
+            this.text = newText;
+            this.AddText(text);
+        }
+
     }
 }

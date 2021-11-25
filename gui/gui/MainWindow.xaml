@@ -127,7 +127,7 @@
                             VerticalScrollBarVisibility="Auto"/>
 
                     </Border>
-                    <Button BorderBrush="{x:Null}" Background="{x:Null}" Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                    <Button BorderBrush="{x:Null}" Click="SendMessage_Click" Background="{x:Null}" Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
                             <Image Source="Assets/SEND.png" Height="40" Width="40"/>
                         </Button>
 

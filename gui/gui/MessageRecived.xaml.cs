@@ -20,9 +20,8 @@ namespace gui
     /// </summary>
     public partial class MessageRecived : UserControl
     {
-        public MessageRecived(string msg)
+        public MessageRecived()
         {
-            AddText(msg);
             InitializeComponent();
         }
     }
