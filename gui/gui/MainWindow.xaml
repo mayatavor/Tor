@@ -98,9 +98,6 @@
                     Background="#eaf2fb"/>
 
                 <ListView Grid.Row="1" Name="MessagesList" VerticalAlignment="Bottom" HorizontalContentAlignment="Stretch">
-                    <ListViewItem>
-                        <local:MessageRecived HorizontalAlignment="Left"/>
-                    </ListViewItem>
                 </ListView>
 
 
