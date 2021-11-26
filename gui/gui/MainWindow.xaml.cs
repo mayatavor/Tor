@@ -21,6 +21,7 @@ namespace gui
     public partial class MainWindow : Window
     { 
         private Communicator _communicator;
+        public IObservable<string> ListItems { get; set; }
         //need to create a communicator class to talk to the main server
         public MainWindow()
         {
@@ -28,27 +29,31 @@ namespace gui
             this._communicator = new Communicator();
         }
 
-        private void SendMessage_Click(object sender, RoutedEventArgs e)
+        private void SendMsg(string text)
         {
-            this._communicator.SendMessage(Message.Text);
+            string answer = this._communicator.SendMessage(text);
+            MessageSent user = new MessageSent(text);
+            //user.setText(text);
+
+            this.MessagesList.Items.Add(user);
         }
 
-        /* trying to detect the "Enter" click in order to send the message without having to click the send button
+        private void SendMessage_Click(object sender, RoutedEventArgs e)
+        {
+            //this.MessagesList.Items.Add(new MessageSent(Message.Text));
+            SendMsg(Message.Text);
+
+            //this.MessagesList.Items.Add(new MessageRecived(Message.Text));
+        }
+
+     
+
         private void Message_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-            {
-                MessageBox.Show("Pressed enter.");
+                {
+                SendMsg(Message.Text);
             }
         }
-
-        private void OnKeyDownHandler(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return)
-            {
-                UserName.Text = "hi maya";
-            }
-        }
-        */
     }
 }

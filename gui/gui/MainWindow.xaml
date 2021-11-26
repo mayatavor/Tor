@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:gui"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="MainWindow" Height="490" Width="800">
+        Title="                                                                                                            OurTor" Height="490" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="270"/>
@@ -22,9 +22,11 @@
                         <ColumnDefinition Width="230"/>
                         <ColumnDefinition Width="35"/>
                     </Grid.ColumnDefinitions>
-                    
+
                     <TextBlock Text="Your Chats" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Width="270" Height="45" Background="White"/>
-                    <Image Grid.Column="1" Source="Assets/settings.png" Width="25" Height="25"/>
+                    <Button BorderBrush="{x:Null}" Background="{x:Null}" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Grid.ColumnSpan="2" Margin="225,0,0,3">
+                        <Image Source="Assets/settings.png" Width="25" Height="25"/>
+                    </Button>
                 </Grid>
             </StackPanel>
             <TextBox Margin="20 10" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="SEARCH" Foreground="White"/>
@@ -35,7 +37,7 @@
                     BorderBrush="Black"
                     Width="250" 
                     Height="70">
-                    <ListViewItem HorizontalAlignment="Stretch" Width="270" Margin="0,0,-12,-1">
+                    <ListViewItem Width="270" Margin="0,0,-12,-1">
                         <Grid HorizontalAlignment="Center" Margin="5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="50"/>
@@ -77,7 +79,13 @@
 
 
         <StackPanel Grid.Column="1" Background="#f2f2f2">
-            <StackPanel Orientation="Horizontal" Background="White">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45"/>
+                    <RowDefinition Height="350"/>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+
                 <TextBlock 
                     x:Name="UserName" 
                     Text="UserName1" 
@@ -88,44 +96,42 @@
                     Width="522" 
                     Height="45" 
                     Background="#eaf2fb"/>
-            </StackPanel>
 
-            <StackPanel Margin="0 178" VerticalAlignment="Bottom">
-            </StackPanel>
-            <Border 
-                Background="#bfd9f3" 
-                VerticalAlignment="Bottom" 
-                Height="60">
-                <Grid Margin="0 10">
+                <ListView Grid.Row="1" Name="MessagesList" VerticalAlignment="Bottom" HorizontalContentAlignment="Stretch">
+                </ListView>
+
+
+                <Grid Margin="0 10" Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="70"/>
                     </Grid.ColumnDefinitions>
+                    
+                    <Border 
+                    Background="#bfd9f3" 
+                    VerticalAlignment="Bottom" 
+                    CornerRadius="15 15 15 15"
+                    Height="40" Margin="10,0,0,0">
+                        <TextBox
+                            Name="Message"
+                            Grid.Column="0" 
+                            MaxHeight="80"
+                            KeyDown="Message_KeyDown"
+                            TextWrapping="Wrap"
+                            Margin="5"
+                            FontSize="15"
+                            materialDesign:HintAssist.Hint="Type a message"
+                            AcceptsReturn="False"
+                            VerticalScrollBarVisibility="Auto"/>
+
+                    </Border>
+                    <Button BorderBrush="{x:Null}" Click="SendMessage_Click" Background="{x:Null}" Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                            <Image Source="Assets/SEND.png" Height="40" Width="40"/>
+                        </Button>
 
 
-                    <TextBox
-                        Name="Message"
-                        Grid.Column="0" 
-                        MaxHeight="80"
-                        TextWrapping="Wrap"
-                        Margin="5"
-                        AcceptsReturn="True"
-                        VerticalScrollBarVisibility="Auto"/>
-
-                    <Button 
-                        Grid.Column="1"
-                        VerticalAlignment="Bottom"
-                        Background="White" 
-                        BorderBrush="Black"
-                        Click="SendMessage_Click"
-                        Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                        Name="SendMessage">
-                        <materialDesign:PackIcon Kind="Send"/>
-                    </Button>
-
-                </Grid>
-            </Border>
-
+                    </Grid>
+            </Grid>
         </StackPanel>
 
     </Grid>

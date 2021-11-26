@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-<<<<<<< HEAD
     <list default="true" id="787c6367-b6e8-4536-bead-82c373f29133" name="Default Changelist" comment="" />
-=======
     <list default="true" id="fc33848b-b42a-44d5-8b86-8ccea3f78bd8" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/MainServer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MainServer.iml" afterDir="false" />
@@ -21,13 +19,11 @@
     </list>
     <ignored path="$PROJECT_DIR$/venv/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
->>>>>>> dbea94f6f3a1d293f51c5f56c799ffd6ec734c6e
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-<<<<<<< HEAD
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -88,7 +84,6 @@
       <method v="2" />
     </configuration>
     <configuration name="pythonServer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-=======
   <component name="FUSProjectUsageTrigger">
     <session id="-554642507">
       <usages-collector id="statistics.lifecycle.project">
@@ -181,7 +176,6 @@
   </component>
   <component name="RunManager">
     <configuration name="pythonServer" type="PythonConfigurationType" factoryName="Python" temporary="true">
->>>>>>> dbea94f6f3a1d293f51c5f56c799ffd6ec734c6e
       <module name="MainServer" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -205,18 +199,14 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.pythonServer" />
-<<<<<<< HEAD
         <item itemvalue="Python.TestClient2" />
         <item itemvalue="Python.TestClient" />
-=======
->>>>>>> dbea94f6f3a1d293f51c5f56c799ffd6ec734c6e
       </list>
     </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
-<<<<<<< HEAD
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="787c6367-b6e8-4536-bead-82c373f29133" name="Default Changelist" comment="" />
@@ -248,7 +238,6 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="143" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1636046989444" />
-=======
   <component name="ToolWindowManager">
     <frame x="952" y="-8" width="976" height="1056" extended-state="0" />
     <editor active="true" />
@@ -288,6 +277,5 @@
         </state>
       </provider>
     </entry>
->>>>>>> dbea94f6f3a1d293f51c5f56c799ffd6ec734c6e
   </component>
 </project>
