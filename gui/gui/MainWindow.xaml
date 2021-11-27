@@ -15,8 +15,8 @@
 
         <Grid Grid.Column="1" Background="#FFE4E4E4"/>
 
-        <StackPanel Grid.Column="0" Background="#69a6e2">
-            <StackPanel Orientation="Horizontal" Background="White">
+        <StackPanel Grid.Column="0" Background="#ff8080">
+            <StackPanel Height="55" Orientation="Horizontal" Background="White">
                 <Grid HorizontalAlignment="Center" Margin="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="230"/>
@@ -29,7 +29,8 @@
                     </Button>
                 </Grid>
             </StackPanel>
-            <TextBox Margin="20 10" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="SEARCH" Foreground="White"/>
+            <TextBox Margin="20 10" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                     materialDesign:HintAssist.Hint="SEARCH" Foreground="White"/>
 
             <ListView>
                 <Border Margin="0,8" 
@@ -78,24 +79,24 @@
         </StackPanel>
 
 
-        <StackPanel Grid.Column="1" Background="#f2f2f2">
+        <StackPanel Grid.Column="1" Background="#ffe6e6">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="45"/>
-                    <RowDefinition Height="350"/>
+                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="340"/>
                     <RowDefinition Height="60"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock 
                     x:Name="UserName" 
-                    Text="UserName1" 
+                    Text="UserName" 
                     FontSize="30"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" 
                     TextAlignment="Center" 
                     Width="522" 
-                    Height="45" 
-                    Background="#eaf2fb"/>
+                    Height="55" 
+                    Background="#fffafa"/>
 
                 <ListView Grid.Row="1" Name="MessagesList" VerticalAlignment="Bottom" HorizontalContentAlignment="Stretch">
                 </ListView>
@@ -108,7 +109,7 @@
                     </Grid.ColumnDefinitions>
                     
                     <Border 
-                    Background="#bfd9f3" 
+                    Background="#ffcccc" 
                     VerticalAlignment="Bottom" 
                     CornerRadius="15 15 15 15"
                     Height="40" Margin="10,0,0,0">

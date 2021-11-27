@@ -9,16 +9,12 @@ gui
 none
 false
 DEBUG;TRACE
-<<<<<<< HEAD
-C:\magshimim\seniorYear\haifa-1002-ourthor\gui\gui\App.xaml
-=======
 C:\magshimim\OurTor\haifa-1002-ourthor\gui\gui\App.xaml
->>>>>>> AddMessagesToSeconderyServers
-31965184646
+4688048721
 
-101525739243
-171694014779
-MainWindow.xaml;MessageRecived.xaml;MessageSent.xaml;
+11-336806828
+171502123007
+Connection.xaml;MainWindow.xaml;MessageRecived.xaml;MessageSent.xaml;
 
 True
 
