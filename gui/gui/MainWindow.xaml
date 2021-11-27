@@ -23,8 +23,23 @@
                         <ColumnDefinition Width="35"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Your Chats" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Width="270" Height="45" Background="White"/>
-                    <Button BorderBrush="{x:Null}" Background="{x:Null}" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Grid.ColumnSpan="2" Margin="225,0,0,3">
+                    <TextBlock
+                        Text="Your Chats" 
+                        FontSize="30"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" 
+                        TextAlignment="Center" 
+                        Width="270"
+                        Height="45" 
+                        Background="White"/>
+
+                    <Button 
+                        BorderBrush="{x:Null}"
+                        Background="{x:Null}" 
+                        VerticalAlignment="Bottom" 
+                        Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
+                        Grid.ColumnSpan="2" 
+                        Margin="225,0,0,3">
                         <Image Source="Assets/settings.png" Width="25" Height="25"/>
                     </Button>
                 </Grid>
@@ -107,7 +122,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="70"/>
                     </Grid.ColumnDefinitions>
-                    
+
                     <Border 
                     Background="#ffcccc" 
                     VerticalAlignment="Bottom" 
@@ -127,11 +142,11 @@
 
                     </Border>
                     <Button BorderBrush="{x:Null}" Click="SendMessage_Click" Background="{x:Null}" Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
-                            <Image Source="Assets/SEND.png" Height="40" Width="40"/>
-                        </Button>
+                        <Image Source="Assets/SEND.png" Height="40" Width="40"/>
+                    </Button>
 
 
-                    </Grid>
+                </Grid>
             </Grid>
         </StackPanel>
 
