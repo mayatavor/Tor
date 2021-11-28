@@ -29,5 +29,10 @@ namespace gui
             return res;
         }
 
+        public bool Login(string username, string password)
+        {
+            string res = this._socket.TalkToServer(msg, "101");
+        }
+
     }
 }

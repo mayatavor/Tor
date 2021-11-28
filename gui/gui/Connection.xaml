@@ -84,9 +84,16 @@
                      x:Name="EnterSignUp"
                     Content="Enter"
                     BorderThickness="0"
-                    Background="Transparent"/>
+                    Background="Transparent"
+                    Click="EnterSignUp_Click"/>
             </Border>
-            
+
+            <TextBlock Text="" 
+                       Name="ErrorSignUp"
+                       FontSize="12" 
+                       Foreground="#b30000"
+                       Margin="32,370,32,90"/>
+
         </Grid>
 
         <Grid Grid.Column="1" Background="#ffb3b3" Height="490" Width="264">
@@ -142,8 +149,15 @@
                     x:Name="EnterLogIn"
                     Content="Enter"
                     BorderThickness="0"
-                    Background="Transparent"/>
+                    Background="Transparent"
+                    Click="EnterLogIn_Click"/>
             </Border>
+
+            <TextBlock Text=" " 
+                       Name="ErrorLogIn"
+                       FontSize="12" 
+                       Foreground="#b30000"
+                       Margin="32,370,32,90"/>
 
         </Grid>
 
@@ -166,8 +180,15 @@
                     x:Name="EnterGhost"
                     Content="Enter As A Ghost"
                     BorderThickness="0"
-                    Background="Transparent"/>
+                    Background="Transparent"
+                    Click="EnterGhost_Click"/>
             </Border>
+
+            <TextBlock Text=" " 
+                       Name="ErrorGhost"
+                       FontSize="12" 
+                       Foreground="#b30000"
+                       Margin="32,370,32,90"/>
         </Grid>
         
         

@@ -19,9 +19,29 @@ namespace gui
     /// </summary>
     public partial class Connection : Window
     {
+        private Communicator _communicator;
         public Connection()
         {
             InitializeComponent();
+            this._communicator = new Communicator();
+        }
+
+        private void EnterGhost_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EnterLogIn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EnterSignUp_Click(object sender, RoutedEventArgs e)
+        {
+            if(this.PasswordSignUp != this.PasswordConfirmSignUp)
+            {
+                this.ErrorSignUp.Text = "Passwords does not match";
+            }
         }
     }
 }
