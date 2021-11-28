@@ -31,15 +31,18 @@ namespace gui
         private void SendMsg(string text)
         {
             //bool answer = this._communicator.SendMessage(text);
-            //MessageSent user = new MessageSent(text);
-            //this.MessagesList.Items.Add(user);
             bool answer = false;
             if (answer == false)
             {
                 MessageError error = new MessageError(text);
                 this.MessagesList.Items.Add(error);
-
             }
+            else
+            {
+                MessageSent user = new MessageSent(text);
+                this.MessagesList.Items.Add(user);
+            }
+            this.Message.Text = "";
         }
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)

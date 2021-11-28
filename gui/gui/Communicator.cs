@@ -48,5 +48,18 @@ namespace gui
             return true;
         }
 
+        public bool SignUp(string username, string password)
+        {
+            Request newReq = new Request(username, password);
+
+            Response res = this._socket.TalkToServer(newReq, "102");
+
+            if (res == null)
+                return false;
+            else if (res.status == 0)
+                return false;
+            return true;
+        }
+
     }
 }
