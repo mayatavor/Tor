@@ -47,49 +47,8 @@
             <TextBox Margin="20 10" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                      materialDesign:HintAssist.Hint="SEARCH" Foreground="White"/>
 
-            <ListView>
-                <Border Margin="0,8" 
-                    BorderThickness="1"
-                    BorderBrush="Black"
-                    Width="250" 
-                    Height="70">
-                    <ListViewItem Width="270" Margin="0,0,-12,-1">
-                        <Grid HorizontalAlignment="Center" Margin="5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="140"/>
-                                <ColumnDefinition Width="35"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Border Width="40" Height="40" CornerRadius="25" BorderBrush="Black" BorderThickness="0.6">
-                                <Border.Background>
-                                    <ImageBrush ImageSource="Assets/face1.png"/>
-                                </Border.Background>
-                            </Border>
-
-                            <StackPanel Grid.Column="1">
-                                <TextBlock 
-                                    x:Name="UserName_Name"
-                                    Text="Rayhan Alvarado" 
-                                    Margin="10 0"/>
-                                <TextBlock 
-                                    x:Name="LastText"
-                                    Text="Today is Mariah's bday! can we do something together?" 
-                                    Margin="10 0" 
-                                    TextTrimming="CharacterEllipsis" 
-                                    Opacity="0.6" 
-                                    FontSize="11"/>
-                            </StackPanel>
-
-                            <Image
-                                Source="Assets/star.png" 
-                                Width="15" 
-                                Height="15" 
-                                Grid.Column="2" 
-                                Margin="20,12.5,0,12.5"/>
-                        </Grid>
-                    </ListViewItem>
-                </Border>
+            <ListView x:Name="UsersList">
+                
             </ListView>
         </StackPanel>
 
@@ -130,7 +89,7 @@
                     Height="40" Margin="10,0,0,0">
                         <TextBox
                             Name="Message"
-                            Grid.Column="0" 
+                            Grid.Column="0"
                             MaxHeight="80"
                             KeyDown="Message_KeyDown"
                             TextWrapping="Wrap"

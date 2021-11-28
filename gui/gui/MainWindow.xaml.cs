@@ -22,10 +22,13 @@ namespace gui
     { 
         private Communicator _communicator;
         public IObservable<string> ListItems { get; set; }
+        public IObservable<string> ListUsers { get; set; }
         public MainWindow(/*Communicator c*/)
         {
             InitializeComponent();
             //this._communicator = c;
+            UserInfo user = new UserInfo();
+            this.UsersList.Items.Add(user);
         }
 
         private void SendMsg(string text)
