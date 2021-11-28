@@ -88,7 +88,7 @@
                     Click="EnterSignUp_Click"/>
             </Border>
 
-            <TextBlock Text="" 
+            <TextBlock Text=" " 
                        Name="ErrorSignUp"
                        FontSize="12" 
                        Foreground="#b30000"

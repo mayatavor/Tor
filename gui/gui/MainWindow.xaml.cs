@@ -26,16 +26,17 @@ namespace gui
         public MainWindow()
         {
             InitializeComponent();
-            this._communicator = new Communicator();
+            //this._communicator = _communicator;
         }
 
         private void SendMsg(string text)
         {
-            string answer = this._communicator.SendMessage(text);
+            //bool answer = this._communicator.SendMessage(text);
             MessageSent user = new MessageSent(text);
             //user.setText(text);
-
+            MessageError error = new MessageError();
             this.MessagesList.Items.Add(user);
+            this.MessagesList.Items.Add(error);
         }
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)

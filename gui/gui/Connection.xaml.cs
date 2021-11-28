@@ -38,9 +38,28 @@ namespace gui
 
         private void EnterSignUp_Click(object sender, RoutedEventArgs e)
         {
-            if(this.PasswordSignUp != this.PasswordConfirmSignUp)
+            if (this.PasswordSignUp.Text == " " || this.PasswordConfirmSignUp.Text == " " || this.UserNameSignUp.Text == " ")
+            {
+                this.ErrorSignUp.Text = "Please enter all needed values";
+            }
+            else if (this.PasswordSignUp.Text != this.PasswordConfirmSignUp.Text)
             {
                 this.ErrorSignUp.Text = "Passwords does not match";
+            }
+            else
+            {
+                bool res = this._communicator.Login(this.UserNameSignUp.Text, this.PasswordSignUp.Text);
+
+                if (res == false)
+                {
+                    this.ErrorSignUp.Text = "The user can't be logged";
+                }
+                else
+                {
+                   // MainWindow wnd = new MainWindow(this._communicator);
+                   // this.Close();
+                   // wnd.ShowDialog();
+                }
             }
         }
     }

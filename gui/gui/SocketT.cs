@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -35,13 +36,16 @@ namespace gui
             }
         }
 
-        public string TalkToServer(string req, string code)
+        public Response TalkToServer(Request req, string code)
         {
-            string v = code + getPaddedNumber(req.Length, 3) + req;
+            string json = JsonConvert.SerializeObject(req, Formatting.Indented);
+            int len = json.Length;
+            string paddedLen = this.getPaddedNumber(len, 3);
+            string v = code + paddedLen + json;
             return TalkToServer(v);
         }
 
-        public string TalkToServer(string mas)
+        public Response TalkToServer(string mas)
         {
             try
             {
@@ -49,22 +53,23 @@ namespace gui
                 // Send the data through the socket.
                 int bytesSent = this.sender.Send(msg);
 
+                //recive the data from the socket
                 byte[] bytesArr = new byte[3];
                 int bytesRec = this.sender.Receive(bytesArr);
 
-                string t = System.Text.Encoding.UTF8.GetString(bytesArr, 0, bytesArr.Length);
-
-                int len2 = int.Parse(t);
-
-                byte[] bytesArr2 = new byte[len2];
+                byte[] bytesArr2 = new byte[4];
                 bytesRec = this.sender.Receive(bytesArr2);
-                //int len = int.Parse(t);
-                //byte[] bytesArr3 = new byte[len];
-                //bytesRec = this.sender.Receive(bytesArr3);
 
-                string res = System.Text.Encoding.UTF8.GetString(bytesArr2, 0, bytesArr2.Length);
+                string t = System.Text.Encoding.UTF8.GetString(bytesArr2, 0, bytesArr2.Length);
 
-                return res;
+                int len = int.Parse(t);
+                byte[] bytesArr3 = new byte[len];
+                bytesRec = this.sender.Receive(bytesArr3);
+
+                string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);
+
+                Response r = JsonConvert.DeserializeObject<Response>(res);
+                return r;
             }
             catch (Exception w)
             {

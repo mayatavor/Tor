@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace gui
 {
-    class Communicator
+    public class Communicator
     {
         private SocketT _socket;
         private string userName;
@@ -23,15 +23,29 @@ namespace gui
             this.userName = userName;
         }
 
-        public string SendMessage(string msg)
+        public bool SendMessage(string msg)
         {
-            string res = this._socket.TalkToServer(msg, "200");
-            return res;
+            Request newReq = new Request(msg);
+
+            Response res = this._socket.TalkToServer(newReq, "200");
+            if (res == null)
+                return false;
+            else if (res.status == 0)
+                return false;
+            return true;
         }
 
         public bool Login(string username, string password)
         {
-            string res = this._socket.TalkToServer(msg, "101");
+            Request newReq = new Request(username, password);
+
+            Response res = this._socket.TalkToServer(newReq, "101");
+
+            if (res == null)
+                return false;
+            else if (res.status == 0)
+                return false;
+            return true;
         }
 
     }
