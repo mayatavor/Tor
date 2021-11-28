@@ -20,9 +20,12 @@ namespace gui
     /// </summary>
     public partial class MessageError : UserControl
     {
-        public MessageError()
+        private string text;
+        public MessageError(string msg)
         {
+            this.text = msg;
             InitializeComponent();
+            this.MessageText.Text = text;
         }
     }
 }

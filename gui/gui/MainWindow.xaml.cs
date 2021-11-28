@@ -22,29 +22,29 @@ namespace gui
     { 
         private Communicator _communicator;
         public IObservable<string> ListItems { get; set; }
-        //need to create a communicator class to talk to the main server
-        public MainWindow()
+        public MainWindow(/*Communicator c*/)
         {
             InitializeComponent();
-            //this._communicator = _communicator;
+            //this._communicator = c;
         }
 
         private void SendMsg(string text)
         {
             //bool answer = this._communicator.SendMessage(text);
-            MessageSent user = new MessageSent(text);
-            //user.setText(text);
-            MessageError error = new MessageError();
-            this.MessagesList.Items.Add(user);
-            this.MessagesList.Items.Add(error);
+            //MessageSent user = new MessageSent(text);
+            //this.MessagesList.Items.Add(user);
+            bool answer = false;
+            if (answer == false)
+            {
+                MessageError error = new MessageError(text);
+                this.MessagesList.Items.Add(error);
+
+            }
         }
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)
         {
-            //this.MessagesList.Items.Add(new MessageSent(Message.Text));
             SendMsg(Message.Text);
-
-            //this.MessagesList.Items.Add(new MessageRecived(Message.Text));
         }
 
      
@@ -52,7 +52,7 @@ namespace gui
         private void Message_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-                {
+            {
                 SendMsg(Message.Text);
             }
         }
