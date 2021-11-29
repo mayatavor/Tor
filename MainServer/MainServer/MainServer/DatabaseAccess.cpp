@@ -82,6 +82,27 @@ void DatabaseAccess::createUser(const User& user)
 	}
 }
 
+void DatabaseAccess::deleteUser(const int& userId)
+{
+	std::string str = "DELETE FROM Users WHERE userID = " + std::to_string(userId) + ";";
+	try
+	{
+		exec(str.c_str());
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+}
+
+bool DatabaseAccess::doesUserExist(const int& userId)
+{
+	User user = getUser(userId);
+	if (user.getId() == 0)
+		return false;
+	return true;
+}
+
 User DatabaseAccess::getUser(const int& userId)
 {
 	std::list<User> users;
