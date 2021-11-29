@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:gui"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="#ff8080" HorizontalAlignment="Center" Margin="5" Width="240" Height="70">
+    <Grid Background="#ff8080" HorizontalAlignment="Center" Margin="5" Width="240" Height="50">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
             <ColumnDefinition Width="140"/>
@@ -41,14 +41,14 @@
             Name="StarOrNot" 
             Click="StarOrNot_Click" 
             Height="40"
-            Width="40"
             Background="Transparent" 
-            BorderBrush="Transparent">
+            BorderBrush="Transparent" Margin="0,5,-12,5">
             <Image
-                Source="Assets/star.png" 
+                Source="Assets/emptyHeart.png" 
                 Width="15" 
+                Name="StarBackGround"
                 Height="15"
-                Margin="-6 0 0 0"/>
+                Margin="0 0 0 0"/>
         </Button>
     </Grid>
 </UserControl>

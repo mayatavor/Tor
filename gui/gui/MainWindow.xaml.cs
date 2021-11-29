@@ -27,8 +27,10 @@ namespace gui
         {
             InitializeComponent();
             //this._communicator = c;
-            UserInfo user = new UserInfo();
+            UserInfo user = new UserInfo(true, "maya");
             this.UsersList.Items.Add(user);
+            UserInfo user2 = new UserInfo(false, "yoni");
+            this.UsersList.Items.Add(user2);
         }
 
         private void SendMsg(string text)
@@ -60,6 +62,16 @@ namespace gui
             if (e.Key == Key.Enter)
             {
                 SendMsg(Message.Text);
+            }
+        }
+
+        private void UsersList_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var item = (sender as ListView).SelectedItem;
+            if (item != null)
+            {
+                UserInfo user = (UserInfo)item;
+                this.UserName.Text = user.GetUsername();
             }
         }
     }

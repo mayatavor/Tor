@@ -20,14 +20,46 @@ namespace gui
     /// </summary>
     public partial class UserInfo : UserControl
     {
-        public UserInfo()
+        private bool star;
+        private string username;
+        public UserInfo(bool isStar, string username)
         {
+            this.star = isStar;
+            this.username = username;
             InitializeComponent();
+
+            if (this.star == true)
+            {
+                this.StarBackGround.Source = new BitmapImage(new Uri("Assets/fullHeart.png", UriKind.Relative));
+                this.star = false;
+            }
+            else
+            {
+                this.StarBackGround.Source = new BitmapImage(new Uri("Assets/emptyHeart.png", UriKind.Relative));
+                this.star = true;
+            }
+
+            this.UserName_Name.Text = username;
         }
 
         private void StarOrNot_Click(object sender, RoutedEventArgs e)
         {
+            if(this.star == true)
+            {
+                this.StarBackGround.Source = new BitmapImage(new Uri("Assets/fullHeart.png", UriKind.Relative));
+                this.star = false;
+            }
+            else
+            {
+                this.StarBackGround.Source = new BitmapImage(new Uri("Assets/emptyHeart.png", UriKind.Relative));
+                this.star = true;
+            }
 
+        }
+
+        public string GetUsername()
+        {
+            return this.username;
         }
     }
 }
