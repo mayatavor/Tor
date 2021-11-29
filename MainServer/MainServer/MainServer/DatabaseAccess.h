@@ -27,10 +27,10 @@ private:
 	bool createDBstructure();
 
 	/*
-	* The functinon gets the sql statement and creates the suitable table.
+	* The functinon gets the sql statement and calls to sqlite3_exec to perfrom the suitable sql function.
 	* input: The sql statement
-	* output: True if the table created successfully, false if not.
+	* output: True if the query succeeded, false if not.
 	*/
-	bool createTable(char* sqlStatement);
+	bool exec(char* sqlStatement);
 };
 
