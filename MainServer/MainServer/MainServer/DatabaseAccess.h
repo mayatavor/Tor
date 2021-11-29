@@ -38,6 +38,6 @@ private:
 	* input: The sql statement
 	* output: True if the query succeeded, false if not.
 	*/
-	bool exec(char* sqlStatement);
+	bool exec(const char* sqlStatement);
 };
 

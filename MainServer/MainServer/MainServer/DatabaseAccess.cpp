@@ -69,6 +69,19 @@ int getUsersCallback(void* data, int argc, char** argv, char** azColName)
 }
 
 
+void DatabaseAccess::createUser(const User& user)
+{
+	std::string str = "INSERT INTO Users (username, password, ipAddress) VALUES('" + user.getUsername() + "', '" + user.getPassword() + "', '" + user.getIp() + "');";
+	try
+	{
+		exec(str.c_str());
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+}
+
 User DatabaseAccess::getUser(const int& userId)
 {
 	std::list<User> users;
@@ -103,7 +116,7 @@ bool DatabaseAccess::createDBstructure()
 	}
 }
 
-bool DatabaseAccess::exec(char* sqlStatement)
+bool DatabaseAccess::exec(const char* sqlStatement)
 {
 	char** errMessage = nullptr;
 	int res = sqlite3_exec(_db, sqlStatement, nullptr, nullptr, errMessage);
