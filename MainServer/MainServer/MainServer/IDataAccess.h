@@ -1,4 +1,5 @@
 #pragma once
+#include "User.h"
 
 class IDataAccess
 {
@@ -8,6 +9,13 @@ public:
 	virtual bool open() = 0;
 	virtual void close() = 0;
 	virtual void clear() = 0;
+
+	//users
+	virtual void createUser(const User& user) = 0;
+	virtual void deleteUser(const int& userId) = 0;
+	virtual bool doesUserExist(const int& userId) = 0;
+	virtual User getUser(const int& userId) = 0;
+	
 
 private:
 

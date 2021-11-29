@@ -1,5 +1,6 @@
 #include "DatabaseAccess.h"
 #include <io.h>
+#include <list>
 
 bool DatabaseAccess::open()
 {
@@ -46,6 +47,41 @@ void DatabaseAccess::clear()
 	{
 		std::cout << e.what() << std::endl;
 	}
+}
+
+
+int getUsersCallback(void* data, int argc, char** argv, char** azColName)
+{
+	std::list<User>* users = (std::list<User>*)data;
+	User user;
+	for (int i = 0; i < argc; i++) {
+		if (std::string(azColName[i]) == "userId") 
+			user.setId(std::atoi(argv[i]));
+		else if (std::string(azColName[i]) == "username") 
+			user.setUsername(argv[i]);
+		else if (std::string(azColName[i]) == "password") 
+			user.setPassword(argv[i]);
+		else if (std::string(azColName[i]) == "ipAddress")
+			user.setIpAddress(argv[i]);
+	}
+	users->push_back(user);
+	return 0;
+}
+
+
+User DatabaseAccess::getUser(const int& userId)
+{
+	std::list<User> users;
+	std::string str = "SELECT * FROM Users WHERE ID = " + std::to_string(userId) + ";";
+	const char* sqlStatement = str.c_str();
+	char** errMessage = nullptr;
+	int res = sqlite3_exec(this->_db, sqlStatement, getUsersCallback, &users, errMessage);
+	if (res != SQLITE_OK)
+		std::cout << "Something went wrong" << std::endl;
+	if (!users.empty())
+		return *users.begin();
+	else
+		return User();
 }
 
 bool DatabaseAccess::createDBstructure()

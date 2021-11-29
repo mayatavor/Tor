@@ -16,6 +16,13 @@ public:
 	void close();  //Closes the Database.
 	void clear();  //Cleans all the was saved in the DB
 
+
+	//users
+	void createUser(const User& user);
+	void deleteUser(const int& userId);
+	bool doesUserExist(const int& userId);
+	User getUser(const int& userId);
+
 private:
 	sqlite3* _db;
 
