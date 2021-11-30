@@ -158,6 +158,7 @@
     <ClInclude Include="Message.h" />
     <ClInclude Include="ChatMessage.h" />
     <ClInclude Include="Helper.h" />
+    <ClInclude Include="MessageType.h" />
     <ClInclude Include="SecondaryServer.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="socket.h" />
