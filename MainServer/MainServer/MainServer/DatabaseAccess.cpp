@@ -130,11 +130,13 @@ bool DatabaseAccess::createDBstructure()
 		exec(statement2);
 		exec(statement3);
 		exec(statement4);
+		return true;
 	}
 	catch (const std::exception& e)
 	{
 		std::cout << e.what() << std::endl;
 	}
+	return false;
 }
 
 bool DatabaseAccess::exec(const char* sqlStatement)
