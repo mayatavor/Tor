@@ -1,35 +1,18 @@
 #include "Message.h"
 
-Message::Message(int code, std::string sender, std::string sendTo, std::string messageConent, SOCKET& senderSocket)
+
+Message::Message(int code, SOCKET socket)
 {
-	this->_code = code;
-	this->_sender = sender;
-	this->_sendTo = sendTo;
-	this->_messageContent = messageConent;
-	this->_senderSocket = senderSocket;
+	this->m_code = code;
+	this->m_senderSocket = socket;
 }
 
-Message::~Message() = default;
-
-std::string Message::getSender() const
+ int Message::getCode() 
 {
-	return this->_sender;
+	return this->m_code();
 }
 
-std::string Message::getSendTo() const
-{
-	return this->_sendTo;
-}
-
-std::string Message::GetMessageContent() const
-{
-	return this->_messageContent;
-}
-int Message::getCode()
-{
-	return this->_code;
-}
-SOCKET& Message::getSocket()
-{
-	return this->_senderSocket;
-}
+ SOCKET Message::getSocket()
+ {
+	 return this->m_senderSocket;
+ }

@@ -65,6 +65,11 @@ void Server::messagesHandler()
 		Message m = this->_messagesQueue.front();
 		this->_messagesQueue.pop();
 		lock.unlock();
+
+		if (m.getCode() == USER_LOGGED_IN) {
+			
+		}
+
 		int len = m.GetMessageContent().length();
 		std::string msg = "200" + len + m.GetMessageContent();
 		h.sendData(m.getSocket(), msg);
