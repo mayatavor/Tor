@@ -1,7 +1,11 @@
 #include "Server.h"
+#include "MessageType.h"
+#include "DatabaseAccess.h"
 
 Server::Server()
 {
+	this->_db = new DatabaseAccess();
+	this->_db->open();
 	// this server use TCP. that why SOCK_STREAM & IPPROTO_TCP
 	// if the server use UDP we will use: SOCK_DGRAM & IPPROTO_UDP
 	_serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -12,8 +16,9 @@ Server::Server()
 
 Server::~Server()
 {
-		this->_secondaryServers.clear();
-		delete &this->_secondaryServers;
+	delete this->_db;
+	this->_secondaryServers.clear();
+	delete &this->_secondaryServers;
 	try
 	{
 		//Nedd to be added: free the queues memory
@@ -62,18 +67,35 @@ void Server::messagesHandler()
 	{
 		std::unique_lock<std::mutex> lock(this->_messagesMutex);
 		this->_messagesCv.wait(lock, [this] {return !this->_messagesQueue.empty(); });
-		Message m = this->_messagesQueue.front();
+		std::pair<SOCKET, Message> m = this->_messagesQueue.front();
 		this->_messagesQueue.pop();
 		lock.unlock();
+		if (!m.second.validateArgumentLength())
+			std::cout << "Invalid Message" << std::endl;
+		else
+		{
+			std::vector<std::string> args = m.second.getArgs();
+			switch (m.second.getMessageType())
+			{
+			case logIn:
+				User u = this->_db->getUser(args[1]);
+				if(u.getId() == -1)
+					//send message 
 
-		if (m.getCode() == USER_LOGGED_IN) {
-			
+				break;
+			default:
+				break;
+			}
 		}
 
-		int len = m.GetMessageContent().length();
-		std::string msg = "200" + len + m.GetMessageContent();
-		h.sendData(m.getSocket(), msg);
-		//this->_clients.insert(std::pair<std::string, SOCKET>("", m.getSocket())); ///if login or signUpMessage
+		//if (m.getCode() == USER_LOGGED_IN) {
+		//	
+		//}
+
+		//int len = m.GetMessageContent().length();
+		//std::string msg = "200" + len + m.GetMessageContent();
+		//h.sendData(m.getSocket(), msg);
+		////this->_clients.insert(std::pair<std::string, SOCKET>("", m.getSocket())); ///if login or signUpMessage
 	}
 }
 
@@ -102,7 +124,7 @@ void Server::clientHandler(SOCKET socket)
 		Helper h;
 		while (true)
 		{
-			int code = h.getIntPartFromSocket(socket, 3);
+			/*int code = h.getIntPartFromSocket(socket, 3);
 			if (code == SECONDARY_SERVER_CONNECTED)
 			{
 				int len = h.getIntPartFromSocket(socket, 2);
@@ -114,23 +136,27 @@ void Server::clientHandler(SOCKET socket)
 				int len = h.getIntPartFromSocket(socket, 3);
 				std::string msg = h.getStringPartFromSocket(socket, len);
 				addMessageToMessagesQueue(SEND_MESSAGE, "", "", msg, socket);
-			}
+			}*/
+			int len = h.getIntPartFromSocket(socket, 3);
+			std::string message = h.getStringPartFromSocket(socket, len);
+			addMessageToMessagesQueue(message, socket);
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::unique_lock<std::mutex> lock(this->_messagesMutex);
+		/*std::unique_lock<std::mutex> lock(this->_messagesMutex);
 		this->_messagesQueue.push(*new Message(-1, "", "", "", socket));
 		lock.unlock();
-		this->_messagesCv.notify_one();
+		this->_messagesCv.notify_one();*/
 		std::cout << e.what() << std::endl;
 	}
 }
 
-void Server::addMessageToMessagesQueue(int code, std::string sender, std::string reciever, std::string content, SOCKET clientSocket)
+void Server::addMessageToMessagesQueue(std::string allMsg, SOCKET socket)
 {
 	std::unique_lock<std::mutex> lock(this->_messagesMutex);
-	this->_messagesQueue.push(*new Message(code, sender, reciever, content, clientSocket));
+	//this->_messagesQueue.push(*new Message(code, sender, reciever, content, clientSocket));
+	this->_messagesQueue.push(*new std::pair<SOCKET, Message>(socket, *new Message(allMsg)));
 	lock.unlock();
 	this->_messagesCv.notify_one();
 }

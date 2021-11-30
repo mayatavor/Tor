@@ -12,6 +12,7 @@
 #include <queue>
 #include <list>
 #include <map>
+#include "DatabaseAccess.h"
 
 #define SECONDARY_SERVER_CONNECTED 100
 #define USER_LOGGED_IN 101
@@ -36,15 +37,17 @@ private:
 	std::map<std::string, SOCKET> _clients;
 	std::list<SecondaryServer*> _secondaryServers;
 	SOCKET _serverSocket;
-	std::queue<Message> _messagesQueue;
+	std::queue<std::pair<SOCKET, Message>> _messagesQueue;
 	std::mutex _messagesMutex;
 	std::condition_variable _messagesCv;
 	std::mutex _secondaryServersMu;
 	std::condition_variable _secondayServersCv;
+	DatabaseAccess* _db;
+
 
 	void accept();
 	void clientHandler(SOCKET clientSocket);
-	void addMessageToMessagesQueue(int code, std::string sender, std::string reciever, std::string content, SOCKET socket);
+	void addMessageToMessagesQueue(std::string allMsg, SOCKET socket);
 	void addSecondaryServer(SOCKET socket, int id);
 };
 

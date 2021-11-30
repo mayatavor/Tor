@@ -95,18 +95,18 @@ void DatabaseAccess::deleteUser(const int& userId)
 	}
 }
 
-bool DatabaseAccess::doesUserExist(const int& userId)
+bool DatabaseAccess::doesUserExist(const std::string& username)
 {
-	User user = getUser(userId);
+	User user = getUser(username);
 	if (user.getId() == 0)
 		return false;
 	return true;
 }
 
-User DatabaseAccess::getUser(const int& userId)
+User DatabaseAccess::getUser(const std::string& username)
 {
 	std::list<User> users;
-	std::string str = "SELECT * FROM Users WHERE ID = " + std::to_string(userId) + ";";
+	std::string str = "SELECT * FROM Users WHERE ID = " + username + ";";
 	const char* sqlStatement = str.c_str();
 	char** errMessage = nullptr;
 	int res = sqlite3_exec(this->_db, sqlStatement, getUsersCallback, &users, errMessage);

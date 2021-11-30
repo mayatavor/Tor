@@ -20,8 +20,8 @@ public:
 	//users
 	void createUser(const User& user);
 	void deleteUser(const int& userId);
-	bool doesUserExist(const int& userId);
-	User getUser(const int& userId);
+	bool doesUserExist(const std::string& username);
+	User getUser(const std::string& username);
 
 private:
 	sqlite3* _db;
