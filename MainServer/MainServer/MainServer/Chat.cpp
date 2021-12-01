@@ -1,5 +1,10 @@
 #include "Chat.h"
 
+Chat::Chat()
+{
+	this->_chatId = -1;
+}
+
 Chat::Chat(int firstUserId, int secondUserId)
 {
 	this->_firstUser = firstUserId;

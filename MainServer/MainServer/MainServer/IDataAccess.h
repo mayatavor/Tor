@@ -1,5 +1,7 @@
 #pragma once
 #include "User.h"
+#include "Chat.h"
+#include <list>
 
 class IDataAccess
 {
@@ -22,8 +24,9 @@ public:
 
 
 	//Chats
+	virtual std::list<Chat> getChats() = 0;
 	virtual void createChat(int firstUserId, int secondUserId) = 0;
-	//virtual 
+	virtual Chat getChat(int chatId) = 0;
 
 
 	//Messages

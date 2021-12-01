@@ -2,6 +2,7 @@
 class Chat
 {
 public:
+	Chat();
 	Chat(int firstUserId, int secondUserId);
 	~Chat() = default;
 
@@ -11,7 +12,7 @@ public:
 	int getSecondUserId() const;
 
 	//setters
-	void setchatId(int chatId);
+	void setChatId(int chatId);
 	void setFirstuser(int id);
 	void setSecondUser(int id);
 

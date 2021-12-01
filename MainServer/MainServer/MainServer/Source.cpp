@@ -2,9 +2,15 @@
 #include "WSAInitializer.h"
 #include "Server.h"
 #include "MessageType.h"
+#include <list>
+#include "User.h"
 
 int main()
 {
+
+	DatabaseAccess* db = new DatabaseAccess();
+	db->open();
+	db->createChat(1, 1);
 	try
 	{
 		WSAInitializer wsaInit;
