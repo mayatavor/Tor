@@ -16,9 +16,22 @@ public:
 	virtual bool doesUserExist(const std::string& username) = 0;
 	virtual User getUser(const std::string& username) = 0;
 	virtual void updateUsersIpAndPort(std::string usrname, std::string ip, std::string port) = 0;
+
+
+	//SecondaryServers
+
+
+	//Chats
+	virtual void createChat(int firstUserId, int secondUserId) = 0;
+	//virtual 
+
+
+	//Messages
 	
 
-private:
+
+	//Favorites
+
 
 };
 
