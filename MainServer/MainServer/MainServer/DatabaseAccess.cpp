@@ -134,8 +134,9 @@ bool DatabaseAccess::createDBstructure()
 {
 	char statement1[] = "CREATE TABLE IF NOT EXISTS Users(userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, ipAddress TEXT NOT NULL, port INTEGER NOT NULL); ";
 	char statement2[] = "CREATE TABLE IF NOT EXISTS SecondaryServers(serverID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ipAddress TEXT NOT NULL, password TEXT NOT NULL, d INTEGER NOT NULL, e INTEGER NOT NULL); ";
-	char statement3[] = "CREATE TABLE IF NOT EXISTS Chats(chatId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, firstUserId INTEGER NOT NULL, secondUSerId INTEGER NOT NULL); ";
-	char statement4[] = "CREATE TABLE IF NOT EXISTS Favorites(userId INTEGER NOT NULL, chatId INTEGER NOT NULL); ";
+	char statement3[] = "CREATE TABLE IF NOT EXISTS Chats(chatId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(firstUserId) REFERENCES Users(userId), FOREIGN KEY(secondUserId) REFERENCES Users(userId)); ";
+	char statement4[] = "CREATE TABLE IF NOT EXISTS Favorites(FOREIGN KEY(userId) REFERENCES Users(useId), FOREIGN KEY(chatId) REFERENCES Chats(chatId)); ";
+	char statement5[] = "CREATE TABLE IF NOT EXISTS Messages(messageId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(chatId) REFERENCES Chats(chatId), FOREIGN(senderId) REFERENCES Users(userId), time INTEGER NOT NULL); ";
 	try
 	{
 		exec(statement1);
