@@ -69,9 +69,9 @@ int getUsersCallback(void* data, int argc, char** argv, char** azColName)
 }
 
 
-void DatabaseAccess::createUser(std::string username, std::string password, std::string ip, int port)
+void DatabaseAccess::createUser(std::string username, std::string password, std::string ip, std::string port)
 {
-	std::string str = "INSERT INTO Users (username, password, ipAddress, port) VALUES('" + username + "', '" + password + "', '" + ip + "', '" + std::to_string(port) + "');";
+	std::string str = "INSERT INTO Users (username, password, ipAddress, port) VALUES('" + username + "', '" + password + "', '" + ip + "', '" + port + "');";
 	try
 	{
 		exec(str.c_str());
@@ -98,7 +98,7 @@ void DatabaseAccess::deleteUser(const int& userId)
 bool DatabaseAccess::doesUserExist(const std::string& username)
 {
 	User user = getUser(username);
-	if (user.getId() == 0)
+	if (user.getId() == -1)
 		return false;
 	return true;
 }
@@ -106,7 +106,7 @@ bool DatabaseAccess::doesUserExist(const std::string& username)
 User DatabaseAccess::getUser(const std::string& username)
 {
 	std::list<User> users;
-	std::string str = "SELECT * FROM Users WHERE ID = " + username + ";";
+	std::string str = "SELECT * FROM Users WHERE username = '" + username + "';";
 	const char* sqlStatement = str.c_str();
 	char** errMessage = nullptr;
 	int res = sqlite3_exec(this->_db, sqlStatement, getUsersCallback, &users, errMessage);
@@ -118,6 +118,18 @@ User DatabaseAccess::getUser(const std::string& username)
 		return User();
 }
 
+void DatabaseAccess::updateUsersIpAndPort(std::string usrname, std::string ip, std::string port)
+{
+	std::string str = "UPDATE Users SET ipAddress = '" + ip + "', port = " + port + ";";
+	try
+	{
+		exec(str.c_str());
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+}
 bool DatabaseAccess::createDBstructure()
 {
 	char statement1[] = "CREATE TABLE IF NOT EXISTS Users(userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, ipAddress TEXT NOT NULL, port INTEGER NOT NULL); ";

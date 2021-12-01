@@ -19,10 +19,11 @@ public:
 
 	//users
 	//void createUser(const User& user);
-	void createUser(std::string username, std::string password, std::string ip, int port);
+	void createUser(std::string username, std::string password, std::string ip, std::string port);
 	void deleteUser(const int& userId);
 	bool doesUserExist(const std::string& username);
 	User getUser(const std::string& username);
+	void updateUsersIpAndPort(std::string usrname, std::string ip, std::string port);
 
 private:
 	sqlite3* _db;

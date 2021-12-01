@@ -6,6 +6,7 @@ Server::Server()
 {
 	this->_db = new DatabaseAccess();
 	this->_db->open();
+	
 	// this server use TCP. that why SOCK_STREAM & IPPROTO_TCP
 	// if the server use UDP we will use: SOCK_DGRAM & IPPROTO_UDP
 	_serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -18,7 +19,7 @@ Server::~Server()
 {
 	delete this->_db;
 	this->_secondaryServers.clear();
-	delete &this->_secondaryServers;
+	//delete &this->_secondaryServers;
 	try
 	{
 		//Nedd to be added: free the queues memory
@@ -62,7 +63,7 @@ void Server::serve(int port)
 
 Message* Server::caseLogin(std::vector<std::string> args)
 {
-	User u = this->_db->getUser(args[1]);
+	User u = this->_db->getUser(args[0]);
 	if (u.getId() == -1)
 	{
 		std::vector<std::string> args = { "User doesn't exist" };
@@ -75,7 +76,8 @@ Message* Server::caseLogin(std::vector<std::string> args)
 		Message* msg = new Message(error, args);
 		return msg;
 	}
-	return new Message("");
+	this->_db->updateUsersIpAndPort(args[0], args[2], args[3]);
+	return new Message(success, { "LoggedIn successfully" });
 }
 
 Message* Server::caseSignUp(std::vector<std::string> args)
@@ -85,9 +87,9 @@ Message* Server::caseSignUp(std::vector<std::string> args)
 		std::vector<std::string> msg = { "User with this usename already exists" };
 		return new Message(error, msg);
 	}
-	this->_db->createUser(args[0], args[1], args[2], std::stoi(args[3));
-	std::vector<std::string> args = { "LoggedIn Successfully" };
-	return new Message(success, args);
+	this->_db->createUser(args[0], args[1], args[2],args[3]);
+	std::vector<std::string> answerArgs = { "SignedUp Successfully" };
+	return new Message(success, answerArgs);
 }
 
 void Server::messagesHandler()
@@ -114,6 +116,7 @@ void Server::messagesHandler()
 			case signUp:
 				msg = caseSignUp(args);
 				break;
+
 			default:
 				break;
 			}

@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DatabaseAccess.cpp" />
+    <ClCompile Include="IDataAccess.cpp" />
     <ClCompile Include="LoginMessage.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="ChatMessage.cpp" />

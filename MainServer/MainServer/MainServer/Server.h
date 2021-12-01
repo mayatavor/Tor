@@ -34,6 +34,8 @@ public:
 	* The function supposed to deal with the messages that are inthe queue. Now it can only handle client's login, needto fix it later.
 	*/
 	void messagesHandler();
+	Message* caseLogin(std::vector<std::string> args);
+	Message* caseSignUp(std::vector<std::string> args);
 
 private:
 	std::map<std::string, SOCKET> _clients;
@@ -52,7 +54,5 @@ private:
 	void addMessageToMessagesQueue(std::string allMsg, SOCKET socket);
 	void addSecondaryServer(SOCKET socket, int id);
 
-	Message* caseLogin(std::vector<std::string> args);
-	Message* caseSignUp(std::vector<std::string> args);
 };
 
