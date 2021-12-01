@@ -1,6 +1,6 @@
 ﻿#include "Message.h"
 #include <iostream>
-#define DELIMITER "≡"
+#include <sstream>
 
 //
 //Message::Message(int code, SOCKET socket)
@@ -30,7 +30,7 @@ Message::Message(std::string allMsg)
 	std::string token = allMsg.substr(0, pos);
 	std::cout << token << std::endl;
 	allMsg.erase(0, pos + 1);
-	this->_mt = (MessageType)std::stoi(token.substr(0, token.length() - 1));
+	this->_mt = (MessageType)std::stoi(token.substr(0, token.length() ));
 	while ((pos = allMsg.find(DELIMITER)) != std::string::npos)
 	{
 		token = allMsg.substr(0, pos);
@@ -38,6 +38,13 @@ Message::Message(std::string allMsg)
 		allMsg.erase(0, pos + 1);
 		this->_args.push_back(token);
 	}
+	this->_args.push_back(allMsg);
+}
+
+Message::Message(MessageType type, std::vector<std::string> args)
+{
+	this->_mt = type;
+	this->_args = args;
 }
 
 std::vector<std::string> Message::getArgs() const
@@ -72,4 +79,21 @@ bool Message::validateArgumentLength()
 		break;
 	}
 	return true;
+}
+
+std::string Message::buildMessage()
+{
+	std::string msg = std::accumulate(std::begin(this->_args), std::end(this->_args), std::string(),
+		[](std::string& ss, std::string& s) {
+			return ss.empty() ? s : ss + DELIMITER + s;
+		});
+
+	std::string msgcontent = std::to_string(this->_mt) + DELIMITER + msg;
+	std::string len =  std::to_string(msgcontent.length() + 1);
+	len.insert(len.begin(), 3 - len.length(), '0');
+	/*len += DELIMITER;
+	len += msgcontent;*/
+	std::stringstream ss;
+	ss << len << DELIMITER << msgcontent;
+	return  ss.str();
 }

@@ -5,7 +5,7 @@
 class User
 {
 public:
-	User() = default;
+	User();
 	User(int id, std::string username, std::string password, std::string ipAddress, int port);
 
 	//getters
@@ -27,6 +27,6 @@ private:
 	std::string _username;
 	std::string _password;
 	std::string _ipAddress;
-	int port;
+	int _port;
 };
 

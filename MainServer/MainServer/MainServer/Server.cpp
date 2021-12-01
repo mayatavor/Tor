@@ -60,6 +60,24 @@ void Server::serve(int port)
 	}
 }
 
+Message* Server::caseLogin(std::vector<std::string> args)
+{
+	User u = this->_db->getUser(args[1]);
+	if (u.getId() == -1)
+	{
+		std::vector<std::string> args = { "User doesn't exist" };
+		Message* msg = new Message(userDoesntExist, args);
+		return msg;
+	}
+	else if (args[1] != u.getPassword())
+	{
+		std::vector<std::string> args = { "Wrong Password" };
+		Message* msg = new Message(wrongPasswordLogin, args);
+		return msg;
+	}
+	return new Message("");
+}
+
 void Server::messagesHandler()
 {
 	Helper h;
@@ -78,9 +96,7 @@ void Server::messagesHandler()
 			switch (m.second.getMessageType())
 			{
 			case logIn:
-				User u = this->_db->getUser(args[1]);
-				if(u.getId() == -1)
-					//send message 
+				
 
 				break;
 			default:

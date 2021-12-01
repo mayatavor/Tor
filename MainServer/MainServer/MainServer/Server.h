@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #pragma comment(lib, "Ws2_32.lib")
 #include "SecondaryServer.h"
 #include <WinSock2.h>
@@ -19,6 +19,8 @@
 #define USER_SIGNED_UP 102
 #define GHOST_LOGGED_IN 103
 #define SEND_MESSAGE 200
+
+#define DELIMITER "≡"
 
 class Server
 {
@@ -49,5 +51,7 @@ private:
 	void clientHandler(SOCKET clientSocket);
 	void addMessageToMessagesQueue(std::string allMsg, SOCKET socket);
 	void addSecondaryServer(SOCKET socket, int id);
+
+	Message* caseLogin(std::vector<std::string> args);
 };
 
