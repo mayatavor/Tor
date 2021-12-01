@@ -61,5 +61,10 @@ namespace gui
         {
             return this.username;
         }
+
+        public bool GetStar()
+        {
+            return this.star;
+        }
     }
 }

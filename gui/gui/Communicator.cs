@@ -61,5 +61,14 @@ namespace gui
             return true;
         }
 
+        public Message GetMessages(string username1, string username2)
+        {
+            Request newReq = new Request(username1, username2, " ");
+
+            Response res = this._socket.TalkToServer(newReq, "102");
+
+            return new Message();
+        }
+
     }
 }

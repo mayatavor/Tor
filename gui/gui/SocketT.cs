@@ -78,6 +78,20 @@ namespace gui
             return null;
         }
 
+        private IPAddress LocalIPAddress()
+        {
+            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                return null;
+            }
+
+            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+
+            return host
+                .AddressList
+                .FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
+        }
+
         public bool startSocket()
         {
             try
@@ -90,6 +104,9 @@ namespace gui
                 // Socket Class Costructor
                 Socket sender = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 this.sender = sender;
+                IPAddress d = LocalIPAddress();
+                string ds = d.ToString();
+                
                 // Connect the socket to the remote endpoint. Catch any errors.    
                 try
                 {

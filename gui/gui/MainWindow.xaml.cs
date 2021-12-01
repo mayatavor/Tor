@@ -21,12 +21,11 @@ namespace gui
     public partial class MainWindow : Window
     { 
         private Communicator _communicator;
-        public IObservable<string> ListItems { get; set; }
-        public IObservable<string> ListUsers { get; set; }
         public MainWindow(/*Communicator c*/)
         {
             InitializeComponent();
             //this._communicator = c;
+            this._communicator = new Communicator();
             UserInfo user = new UserInfo(true, "maya");
             this.UsersList.Items.Add(user);
             UserInfo user2 = new UserInfo(false, "yoni");
@@ -55,8 +54,6 @@ namespace gui
             SendMsg(Message.Text);
         }
 
-     
-
         private void Message_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -72,6 +69,24 @@ namespace gui
             {
                 UserInfo user = (UserInfo)item;
                 this.UserName.Text = user.GetUsername();
+            }
+
+            
+        }
+
+        private void search_Click(object sender, RoutedEventArgs e)
+        {
+            string name = this.SearchText.Text;
+            this.SearchText.Text = "";
+
+            for (int i = 0; i < this.UsersList.Items.Count; i++)
+            {
+                UserInfo user = (UserInfo)this.UsersList.Items[i];
+
+                if (!user.GetUsername().Contains(name))
+                {
+                    this.UsersList.Items.RemoveAt(i);
+                }
             }
         }
     }
