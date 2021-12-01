@@ -69,9 +69,9 @@ int getUsersCallback(void* data, int argc, char** argv, char** azColName)
 }
 
 
-void DatabaseAccess::createUser(const User& user)
+void DatabaseAccess::createUser(std::string username, std::string password, std::string ip, std::string port)
 {
-	std::string str = "INSERT INTO Users (username, password, ipAddress) VALUES('" + user.getUsername() + "', '" + user.getPassword() + "', '" + user.getIp() + "');";
+	std::string str = "INSERT INTO Users (username, password, ipAddress, port) VALUES('" + username + "', '" + password + "', '" + ip + "', '" + port + "');";
 	try
 	{
 		exec(str.c_str());
@@ -95,18 +95,18 @@ void DatabaseAccess::deleteUser(const int& userId)
 	}
 }
 
-bool DatabaseAccess::doesUserExist(const int& userId)
+bool DatabaseAccess::doesUserExist(const std::string& username)
 {
-	User user = getUser(userId);
-	if (user.getId() == 0)
+	User user = getUser(username);
+	if (user.getId() == -1)
 		return false;
 	return true;
 }
 
-User DatabaseAccess::getUser(const int& userId)
+User DatabaseAccess::getUser(const std::string& username)
 {
 	std::list<User> users;
-	std::string str = "SELECT * FROM Users WHERE ID = " + std::to_string(userId) + ";";
+	std::string str = "SELECT * FROM Users WHERE username = '" + username + "';";
 	const char* sqlStatement = str.c_str();
 	char** errMessage = nullptr;
 	int res = sqlite3_exec(this->_db, sqlStatement, getUsersCallback, &users, errMessage);
@@ -118,18 +118,32 @@ User DatabaseAccess::getUser(const int& userId)
 		return User();
 }
 
-bool DatabaseAccess::createDBstructure()
+void DatabaseAccess::updateUsersIpAndPort(std::string usrname, std::string ip, std::string port)
 {
-	char statement1[] = "CREATE TABLE IF NOT EXISTS Users(userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, ipAddress TEXT NOT NULL); ";
-	char statement2[] = "CREATE TABLE IF NOT EXISTS SecondaryServers(serverID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ipAddress TEXT NOT NULL, password TEXT NOT NULL, d INTEGER NOT NULL, e INTEGER NOT NULL); ";
-	char statement3[] = "CREATE TABLE IF NOT EXISTS Chats(chatId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, firstUserId INTEGER NOT NULL, secondUSerId INTEGER NOT NULL); ";
-	char statement4[] = "CREATE TABLE IF NOT EXISTS Favorites(userId INTEGER NOT NULL, chatId INTEGER NOT NULL); ";
+	std::string str = "UPDATE Users SET ipAddress = '" + ip + "', port = " + port + ";";
 	try
 	{
-		exec(statement1);
-		exec(statement2);
-		exec(statement3);
-		exec(statement4);
+		exec(str.c_str());
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+}
+bool DatabaseAccess::createDBstructure()
+{
+	char usersTable[] = "CREATE TABLE IF NOT EXISTS Users(userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, ipAddress TEXT NOT NULL, port INTEGER NOT NULL); ";
+	char SecondaryServersTable[] = "CREATE TABLE IF NOT EXISTS SecondaryServers(serverID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ipAddress TEXT NOT NULL, password TEXT NOT NULL, d INTEGER NOT NULL, e INTEGER NOT NULL); ";
+	char chatsTable[] = "CREATE TABLE IF NOT EXISTS Chats(chatId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(firstUserId) REFERENCES Users(userId), FOREIGN KEY(secondUserId) REFERENCES Users(userId)); ";
+	char FavoritesTable[] = "CREATE TABLE IF NOT EXISTS Favorites(FOREIGN KEY(userId) REFERENCES Users(useId), FOREIGN KEY(chatId) REFERENCES Chats(chatId)); ";
+	char MessagesTable[] = "CREATE TABLE IF NOT EXISTS Messages(messageId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(chatId) REFERENCES Chats(chatId), FOREIGN(senderId) REFERENCES Users(userId), time INTEGER NOT NULL); ";
+	try
+	{
+		exec(usersTable);
+		exec(SecondaryServersTable);
+		exec(chatsTable);
+		exec(FavoritesTable);
+		exec(MessagesTable);
 		return true;
 	}
 	catch (const std::exception& e)

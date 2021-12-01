@@ -140,7 +140,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DatabaseAccess.cpp" />
+    <ClCompile Include="IDataAccess.cpp" />
+    <ClCompile Include="LoginMessage.cpp" />
     <ClCompile Include="Message.cpp" />
+    <ClCompile Include="ChatMessage.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="SecondaryServer.cpp" />
     <ClCompile Include="Server.cpp" />
@@ -152,13 +155,15 @@
   <ItemGroup>
     <ClInclude Include="DatabaseAccess.h" />
     <ClInclude Include="IDataAccess.h" />
+    <ClInclude Include="LoginMessage.h" />
     <ClInclude Include="Message.h" />
+    <ClInclude Include="ChatMessage.h" />
     <ClInclude Include="Helper.h" />
+    <ClInclude Include="MessageType.h" />
     <ClInclude Include="SecondaryServer.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="socket.h" />
     <ClInclude Include="sqlite3.h" />
-    <ClInclude Include="unistd.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="WSAInitializer.h" />
   </ItemGroup>
