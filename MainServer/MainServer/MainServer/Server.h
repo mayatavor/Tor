@@ -53,5 +53,6 @@ private:
 	void addSecondaryServer(SOCKET socket, int id);
 
 	Message* caseLogin(std::vector<std::string> args);
+	Message* caseSignUp(std::vector<std::string> args);
 };
 

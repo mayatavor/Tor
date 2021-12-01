@@ -66,16 +66,28 @@ Message* Server::caseLogin(std::vector<std::string> args)
 	if (u.getId() == -1)
 	{
 		std::vector<std::string> args = { "User doesn't exist" };
-		Message* msg = new Message(userDoesntExist, args);
+		Message* msg = new Message(error, args);
 		return msg;
 	}
 	else if (args[1] != u.getPassword())
 	{
 		std::vector<std::string> args = { "Wrong Password" };
-		Message* msg = new Message(wrongPasswordLogin, args);
+		Message* msg = new Message(error, args);
 		return msg;
 	}
 	return new Message("");
+}
+
+Message* Server::caseSignUp(std::vector<std::string> args)
+{
+	if (this->_db->doesUserExist(args[0]))
+	{
+		std::vector<std::string> msg = { "User with this usename already exists" };
+		return new Message(error, msg);
+	}
+	this->_db->createUser(args[0], args[1], args[2], std::stoi(args[3));
+	std::vector<std::string> args = { "LoggedIn Successfully" };
+	return new Message(success, args);
 }
 
 void Server::messagesHandler()
@@ -87,6 +99,7 @@ void Server::messagesHandler()
 		this->_messagesCv.wait(lock, [this] {return !this->_messagesQueue.empty(); });
 		std::pair<SOCKET, Message> m = this->_messagesQueue.front();
 		this->_messagesQueue.pop();
+		Message* msg = nullptr;
 		lock.unlock();
 		if (!m.second.validateArgumentLength())
 			std::cout << "Invalid Message" << std::endl;
@@ -96,12 +109,16 @@ void Server::messagesHandler()
 			switch (m.second.getMessageType())
 			{
 			case logIn:
-				
-
+				msg = caseLogin(args);
+				break;
+			case signUp:
+				msg = caseSignUp(args);
 				break;
 			default:
 				break;
 			}
+			if(msg)
+				h.sendData(m.first, msg->buildMessage());
 		}
 
 		//if (m.getCode() == USER_LOGGED_IN) {

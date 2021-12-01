@@ -65,7 +65,7 @@ bool Message::validateArgumentLength()
 		if (this->_args.size() != 4)
 			return false;
 		break;
-	case signIn:
+	case signUp:
 		if (this->_args.size() != 4)
 			return false;
 		break;

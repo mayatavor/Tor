@@ -4,9 +4,11 @@ enum MessageType
 {
 	secondaryServerConnected = 100,
 	logIn = 101,
-	signIn = 102,
+	signUp = 102,
 	ghostLogIn = 103,
-	sendChatMessage = 200,
-	wrongPasswordLogin = 400,
-	userDoesntExist = 401,
+	sendChatMessage = 300,
+	error = 400,
+	success = 200,
+	/*userDoesntExist = 401,
+	userAlreadyExists = 402,*/
 };
