@@ -53,14 +53,18 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBox
-                    Margin="20,-10,20,3" 
+                    Margin="20,0,0,3" 
                     Name="SearchText"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                     materialDesign:HintAssist.Hint="SEARCH" 
-                    FontSize="18"
+                    FontSize="13"
+                    KeyDown="SearchInText_KeyDown"
                     materialDesign:BottomDashedLineAdorner.Brush="White"
                     materialDesign:BottomDashedLineAdorner.Thickness="3"
-                    Foreground="White"/>
+                    Height="40"
+                    Foreground="White" HorizontalAlignment="Left" Width="190"
+                    />
+
 
                 <Button 
                     BorderBrush="{x:Null}"
@@ -70,8 +74,9 @@
                     Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
                     Grid.ColumnSpan="2" 
                     Click="search_Click"
-                    Margin="215,-1,0,3">
-                    <Image Source="Assets/copy.png" Width="25" Height="25"/>
+                    Tag="search"
+                    Margin="215,-1,2,-5">
+                    <Image Name="SearchBackground" Source="Assets/copy.png" Width="20" Height="20"/>
                 </Button>
             </Grid>
 
