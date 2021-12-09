@@ -18,10 +18,18 @@ public:
 
 
 	//users
-	void createUser(const User& user);
+	//void createUser(const User& user);
+	void createUser(std::string username, std::string password, std::string ip, std::string port);
 	void deleteUser(const int& userId);
-	bool doesUserExist(const int& userId);
-	User getUser(const int& userId);
+	bool doesUserExist(const std::string& username);
+	User getUser(const std::string& username);
+	void updateUsersIpAndPort(std::string usrname, std::string ip, std::string port);
+
+
+	//chats
+	std::list<Chat> getChats();
+	void createChat(int firstUserId, int secondUserId);
+	Chat getChat(int chatId);
 
 private:
 	sqlite3* _db;
@@ -38,6 +46,6 @@ private:
 	* input: The sql statement
 	* output: True if the query succeeded, false if not.
 	*/
-	bool exec(const char* sqlStatement);
+	bool exec(const char* sqlStatement, int(*callback)(void*, int, char**, char**), void* data);
 };
 

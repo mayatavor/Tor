@@ -1,12 +1,20 @@
 #include "User.h"
 
-User::User(int id, std::string username, std::string password, std::string ipAddress)
+User::User()
+{
+	this->_userId = -1;
+}
+
+User::User(int id, std::string username, std::string password, std::string ipAddress, int port)
 {
 	this->_userId = id;
 	this->_username = username;
 	this->_password = password;
 	this->_ipAddress = ipAddress;
+	this->_port = port;
 }
+
+
 
 int User::getId() const
 {
@@ -46,4 +54,9 @@ void User::setPassword(const std::string& password)
 void User::setIpAddress(const std::string& ip)
 {
 	this->_ipAddress = ip;
+}
+
+void User::setPort(const int& port)
+{
+	this->_port = port;
 }

@@ -1,34 +1,25 @@
-#pragma once
-#include <iostream>
-#include <WinSock2.h>
-#include <Windows.h>
+﻿#pragma once
+#include "MessageType.h"
+#include <vector>
 #include <string>
+#include <numeric>
+#define DELIMITER "≡"
+
+
 class Message
 {
 public:
-	Message(int code, std::string sender, std::string sendTo, std::string messageConent, SOCKET& senderSocket);  //constructor
-	~Message(); //destructor
+	Message(std::string allMsg);
+	Message(MessageType type, std::vector<std::string> args);
+	~Message() = default;
 
-	//retruns the sender
-	std::string getSender() const;
-
-	//returns the name of the user to send to
-	std::string getSendTo() const;
-
-	//returns the message content
-	std::string GetMessageContent() const;
-
-	//returns the code of the message
-	int getCode();
-
-	//returns the socket connection between the senderand the client
-	SOCKET& getSocket();
+	std::vector<std::string> getArgs() const;
+	MessageType getMessageType() const;
+	bool validateArgumentLength();
+	std::string buildMessage();
 
 private:
-	int _code;
-	std::string _sender;
-	std::string _sendTo;
-	std::string _messageContent;
-	SOCKET _senderSocket;
-};
+	MessageType _mt;
+	std::vector<std::string> _args;
 
+};
