@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Chat.cpp" />
     <ClCompile Include="DatabaseAccess.cpp" />
     <ClCompile Include="IDataAccess.cpp" />
     <ClCompile Include="LoginMessage.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="WSAInitializer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Chat.h" />
     <ClInclude Include="DatabaseAccess.h" />
     <ClInclude Include="IDataAccess.h" />
     <ClInclude Include="LoginMessage.h" />
