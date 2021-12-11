@@ -55,7 +55,7 @@ namespace gui
 
                 string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);
 
-                Response r = JsonConvert.DeserializeObject<Response>(res);
+                Response r = new Response(res);
                 return r;
             }
             catch (Exception w)
