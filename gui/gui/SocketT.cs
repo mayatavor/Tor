@@ -36,15 +36,6 @@ namespace gui
             }
         }
 
-        public Response TalkToServer(Request req, string code)
-        {
-            string json = JsonConvert.SerializeObject(req, Formatting.Indented);
-            int len = json.Length;
-            string paddedLen = this.getPaddedNumber(len, 3);
-            string v = code + paddedLen + json;
-            return TalkToServer(v);
-        }
-
         public Response TalkToServer(string mas)
         {
             try
@@ -56,11 +47,7 @@ namespace gui
                 //recive the data from the socket
                 byte[] bytesArr = new byte[3];
                 int bytesRec = this.sender.Receive(bytesArr);
-
-                byte[] bytesArr2 = new byte[4];
-                bytesRec = this.sender.Receive(bytesArr2);
-
-                string t = System.Text.Encoding.UTF8.GetString(bytesArr2, 0, bytesArr2.Length);
+                string t = System.Text.Encoding.UTF8.GetString(bytesArr, 0, bytesArr.Length);
 
                 int len = int.Parse(t);
                 byte[] bytesArr3 = new byte[len];
@@ -73,7 +60,7 @@ namespace gui
             }
             catch (Exception w)
             {
-
+                w.ToString();
             }
             return null;
         }

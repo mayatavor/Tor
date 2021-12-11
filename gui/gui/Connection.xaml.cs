@@ -70,7 +70,7 @@ namespace gui
 
                 if (res == false)
                 {
-                    this.ErrorSignUp.Text = "The user can't be logged";
+                    this.ErrorSignUp.Text = "The user can't be signed up";
                 }
                 else
                 {

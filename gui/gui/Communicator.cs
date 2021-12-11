@@ -9,25 +9,21 @@ namespace gui
     public class Communicator
     {
         private SocketT _socket;
-        private string userName;
+        private string DIVIDER = "≡";
 
         public Communicator()
         {
             this._socket = new SocketT();
             this._socket.startSocket();
-            this.userName = "";
         }
 
-        public void SetUserName(string userName)
-        {
-            this.userName = userName;
-        }
-
+        
         public bool SendMessage(string msg)
         {
-            Request newReq = new Request(msg);
+            string reqInfo = "200" + DIVIDER + msg;
+            string len = getPaddedNumber(reqInfo.Length, 5);
 
-            Response res = this._socket.TalkToServer(newReq, "200");
+            Response res = this._socket.TalkToServer(len+reqInfo);
             if (res == null)
                 return false;
             else if (res.status == 0)
@@ -37,9 +33,10 @@ namespace gui
 
         public bool Login(string username, string password)
         {
-            Request newReq = new Request(username, password);
+            string reqInfo = "101" + DIVIDER + username + DIVIDER + password;
+            string len = getPaddedNumber(reqInfo.Length, 5);
 
-            Response res = this._socket.TalkToServer(newReq, "101");
+            Response res = this._socket.TalkToServer(len + reqInfo);
 
             if (res == null)
                 return false;
@@ -50,9 +47,10 @@ namespace gui
 
         public bool SignUp(string username, string password)
         {
-            Request newReq = new Request(username, password);
+            string reqInfo = "102" + DIVIDER + username + DIVIDER + password;
+            string len = getPaddedNumber(reqInfo.Length, 5);
 
-            Response res = this._socket.TalkToServer(newReq, "102");
+            Response res = this._socket.TalkToServer(len + reqInfo);
 
             if (res == null)
                 return false;
@@ -61,13 +59,31 @@ namespace gui
             return true;
         }
 
-        public Message GetMessages(string username1, string username2)
+        public Message GetMessages(string username1, string username2, string msg)
         {
-            Request newReq = new Request(username1, username2, " ");
+            string reqInfo = "103?" + DIVIDER + username1 + DIVIDER + username2 + DIVIDER + msg;
+            string len = getPaddedNumber(reqInfo.Length, 5);
 
-            Response res = this._socket.TalkToServer(newReq, "102");
+            Response res = this._socket.TalkToServer(len + reqInfo);
 
             return new Message();
+        }
+
+
+
+
+        //helpers
+
+
+        // return string after padding zeros if necessary
+        private string getPaddedNumber(int num, int digits)
+        {
+            string number = num.ToString();
+            for (int i = number.Length; i < digits; i++)
+            {
+                number = "0" + number;
+            }
+            return number;
         }
 
     }

@@ -32,6 +32,8 @@ namespace gui
             this.UsersList.Items.Add(user);
             UserInfo user2 = new UserInfo(false, "yoni");
             this.UsersList.Items.Add(user2);
+            UserInfo user3 = new UserInfo(false, "adi");
+            this.UsersList.Items.Add(user3);
         }
 
         private void SendMsg(string text)
@@ -102,6 +104,8 @@ namespace gui
             this.UsersList.Items.Add(user);
             UserInfo user2 = new UserInfo(false, "yoni");
             this.UsersList.Items.Add(user2);
+            UserInfo user3 = new UserInfo(false, "adi");
+            this.UsersList.Items.Add(user3);
 
             this.SearchBackground.Source = GetImage("Assets/copy.png");
             this.SearchText.Text = "";
