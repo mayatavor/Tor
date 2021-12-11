@@ -50,3 +50,11 @@ C:\magshimim\seniorYear\haifa-1002-ourthor\gui\gui\obj\Debug\MessageRecived.g.cs
 C:\magshimim\seniorYear\haifa-1002-ourthor\gui\gui\obj\Debug\MessageSent.g.cs
 C:\magshimim\seniorYear\haifa-1002-ourthor\gui\gui\obj\Debug\MessageRecived.baml
 C:\magshimim\seniorYear\haifa-1002-ourthor\gui\gui\obj\Debug\MessageSent.baml
+C:\magshimim\OurTor\haifa-1002-ourthor\gui\gui\obj\Debug\Connection.g.cs
+C:\magshimim\OurTor\haifa-1002-ourthor\gui\gui\obj\Debug\Connection.baml
+C:\magshimim\OurTor\haifa-1002-ourthor\gui\gui\bin\Debug\Newtonsoft.Json.dll
+C:\magshimim\OurTor\haifa-1002-ourthor\gui\gui\bin\Debug\Newtonsoft.Json.xml
+C:\magshimim\OurTor\haifa-1002-ourthor\gui\gui\obj\Debug\MessageError.g.cs
+C:\magshimim\OurTor\haifa-1002-ourthor\gui\gui\obj\Debug\MessageError.baml
+C:\magshimim\OurTor\haifa-1002-ourthor\gui\gui\obj\Debug\UserInfo.g.cs
+C:\magshimim\OurTor\haifa-1002-ourthor\gui\gui\obj\Debug\UserInfo.baml
