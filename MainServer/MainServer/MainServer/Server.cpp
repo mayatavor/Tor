@@ -142,6 +142,15 @@ void Server::accept()
 
 	// this accepts the client and create a specific socket from server to this client
 	SOCKET client_socket = ::accept(_serverSocket, NULL, NULL);
+	
+	
+	// Construct sockaddr struct from the current SOCKET
+	struct sockaddr_in localAddress;
+	int addrSize = sizeof(localAddress);
+
+	// Get the sockaddr information from the peer (not the sock)
+	getpeername(client_socket, (struct sockaddr*)&localAddress, &addrSize);
+	std::cout << "Client's port " << ntohs(localAddress.sin_port) << std::endl;
 
 	if (client_socket == INVALID_SOCKET)
 		throw std::exception(__FUNCTION__);

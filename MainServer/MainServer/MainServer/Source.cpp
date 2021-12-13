@@ -16,8 +16,8 @@ int main()
 		WSAInitializer wsaInit;
 		Server myServer;
 
-		std::vector<std::string> args = { "username", "password", "127.0.1.1", "5755" };
-		Message* m = myServer.caseLogin(args);
+		/*std::vector<std::string> args = { "username", "password", "127.0.1.1", "5755" };
+		Message* m = myServer.caseLogin(args);*/
 		myServer.serve(5678);
 	}
 	catch (std::exception& e)
