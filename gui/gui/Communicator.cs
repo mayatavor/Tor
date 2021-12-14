@@ -36,7 +36,7 @@ namespace gui
             string reqInfo = "101" + DIVIDER + username + DIVIDER + password;
             string len = getPaddedNumber(reqInfo.Length, 5);
 
-            Response res = this._socket.TalkToServer(len + reqInfo);
+            Response res = this._socket.FirstTalkWithServer(len + reqInfo);
 
             if (res == null)
                 return false;
@@ -50,7 +50,7 @@ namespace gui
             string reqInfo = "102" + DIVIDER + username + DIVIDER + password;
             string len = getPaddedNumber(reqInfo.Length, 5);
 
-            Response res = this._socket.TalkToServer(len + reqInfo);
+            Response res = this._socket.FirstTalkWithServer(len + reqInfo);
 
             if (res == null)
                 return false;
