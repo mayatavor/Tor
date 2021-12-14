@@ -17,6 +17,7 @@ namespace gui
         private byte[] bytes;
         private Socket sender;
         const string SPACER = "::::";
+        const string DIVIDER = "≡";
 
         public SocketT()
         {
@@ -34,6 +35,47 @@ namespace gui
             {
                 string s = e.Message;
             }
+        }
+
+        
+        /*
+         * if the client is just connecting to the server (logging in, signing up or in as a ghost)
+         * we want the client IP to be saved in the main server.
+         * this function sends the message in the same way as the origin function
+         * but it also sends the IP as the first parameter
+         */
+        public Response FirstTalkWithServer(string mas)
+        {
+            try
+            {
+                IPAddress d = LocalIPAddress();
+                string ds = d.ToString();
+
+                mas = ds + DIVIDER + mas;
+
+                byte[] msg = Encoding.ASCII.GetBytes(mas);
+                // Send the data through the socket.
+                int bytesSent = this.sender.Send(msg);
+
+                //recive the data from the socket
+                byte[] bytesArr = new byte[3];
+                int bytesRec = this.sender.Receive(bytesArr);
+                string t = System.Text.Encoding.UTF8.GetString(bytesArr, 0, bytesArr.Length);
+
+                int len = int.Parse(t);
+                byte[] bytesArr3 = new byte[len];
+                bytesRec = this.sender.Receive(bytesArr3);
+
+                string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);
+
+                Response r = new Response(res);
+                return r;
+            }
+            catch (Exception w)
+            {
+                w.ToString();
+            }
+            return null;
         }
 
         public Response TalkToServer(string mas)
@@ -91,8 +133,6 @@ namespace gui
                 // Socket Class Costructor
                 Socket sender = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 this.sender = sender;
-                IPAddress d = LocalIPAddress();
-                string ds = d.ToString();
                 
                 // Connect the socket to the remote endpoint. Catch any errors.    
                 try
