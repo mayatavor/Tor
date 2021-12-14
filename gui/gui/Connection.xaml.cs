@@ -47,9 +47,9 @@ namespace gui
                 }
                 else
                 {
-                    //MainWindow wnd = new MainWindow(this._communicator);
-                    //this.Close();
-                    //wnd.ShowDialog();
+                    MainWindow wnd = new MainWindow(this._communicator);
+                    this.Close();
+                    wnd.ShowDialog();
                 }
             }
         }
@@ -74,9 +74,9 @@ namespace gui
                 }
                 else
                 {
-                    //MainWindow wnd = new MainWindow(this._communicator);
-                    //this.Close();
-                    //wnd.ShowDialog();
+                    MainWindow wnd = new MainWindow(this._communicator);
+                    this.Close();
+                    wnd.ShowDialog();
                 }
             }
         }

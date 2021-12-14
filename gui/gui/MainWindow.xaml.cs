@@ -21,10 +21,10 @@ namespace gui
     public partial class MainWindow : Window
     { 
         private Communicator _communicator;
-        public MainWindow(/*Communicator c*/)
+        public MainWindow(Communicator c)
         {
             InitializeComponent();
-            //this._communicator = c;
+            this._communicator = c;
             this._communicator = new Communicator();
 
             //get users from the server
@@ -38,8 +38,7 @@ namespace gui
 
         private void SendMsg(string text)
         {
-            //bool answer = this._communicator.SendMessage(text);
-            bool answer = false;
+            bool answer = this._communicator.SendMessage(text);
             if (answer == false)
             {
                 MessageError error = new MessageError(text);

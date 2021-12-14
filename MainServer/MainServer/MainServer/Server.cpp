@@ -173,7 +173,7 @@ void Server::clientHandler(SOCKET socket)
 				std::string msg = h.getStringPartFromSocket(socket, len);
 				addMessageToMessagesQueue(SEND_MESSAGE, "", "", msg, socket);
 			}*/
-			int len = h.getIntPartFromSocket(socket, 3);
+			int len = h.getIntPartFromSocket(socket, 5);
 			std::string message = h.getStringPartFromSocket(socket, len);
 			addMessageToMessagesQueue(message, socket);
 		}
