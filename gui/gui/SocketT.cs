@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace gui
 {
-    
+
     class SocketT
     {
         private byte[] bytes;
         private Socket sender;
         const string SPACER = "::::";
-        const string DIVIDER = "≡";
+        const string DIVIDER = "~";
 
         public SocketT()
         {
@@ -60,7 +60,7 @@ namespace gui
                 int bytesSent = this.sender.Send(msg);
 
                 //recive the data from the socket
-                byte[] bytesArr = new byte[3];
+                byte[] bytesArr = new byte[5];
                 int bytesRec = this.sender.Receive(bytesArr);
                 string t = System.Text.Encoding.UTF8.GetString(bytesArr, 0, bytesArr.Length);
 
@@ -89,7 +89,7 @@ namespace gui
                 int bytesSent = this.sender.Send(msg);
 
                 //recive the data from the socket
-                byte[] bytesArr = new byte[3];
+                byte[] bytesArr = new byte[5];
                 int bytesRec = this.sender.Receive(bytesArr);
                 string t = System.Text.Encoding.UTF8.GetString(bytesArr, 0, bytesArr.Length);
 

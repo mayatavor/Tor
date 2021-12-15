@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include <numeric>
-#define DELIMITER "≡"
+#define DELIMITER "~"
 
 
 class Message

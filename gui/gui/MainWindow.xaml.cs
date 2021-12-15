@@ -30,7 +30,7 @@ namespace gui
             //get users from the server
             UserInfo user = new UserInfo(true, "maya");
             this.UsersList.Items.Add(user);
-            UserInfo user2 = new UserInfo(false, "yoni");
+            UserInfo user2 = new UserInfo(false, "lihi");
             this.UsersList.Items.Add(user2);
             UserInfo user3 = new UserInfo(false, "adi");
             this.UsersList.Items.Add(user3);
@@ -101,7 +101,7 @@ namespace gui
 
             UserInfo user = new UserInfo(true, "maya");
             this.UsersList.Items.Add(user);
-            UserInfo user2 = new UserInfo(false, "yoni");
+            UserInfo user2 = new UserInfo(false, "lihi");
             this.UsersList.Items.Add(user2);
             UserInfo user3 = new UserInfo(false, "adi");
             this.UsersList.Items.Add(user3);

@@ -33,17 +33,17 @@ namespace gui
 
         private void EnterLogIn_Click(object sender, RoutedEventArgs e)
         {
-            if (this.PasswordLogIn.Text == " " || this.UserNameSignUp.Text == " ")
+            if (this.PasswordLogIn.Text == " " || this.UserNameLogIn.Text == " ")
             {
                 this.ErrorLogIn.Text = "Please enter all needed values";
             }
             else
             {
-                bool res = this._communicator.Login(this.UserNameSignUp.Text, this.PasswordSignUp.Text);
+                string res = this._communicator.Login(this.UserNameLogIn.Text, this.PasswordLogIn.Text);
 
-                if (res == false)
+                if (res != "")
                 {
-                    this.ErrorLogIn.Text = "The user can't be logged";
+                    this.ErrorLogIn.Text = res;
                 }
                 else
                 {
@@ -66,11 +66,11 @@ namespace gui
             }
             else
             {
-                bool res = this._communicator.SignUp(this.UserNameSignUp.Text, this.PasswordSignUp.Text);
+                string res = this._communicator.SignUp(this.UserNameSignUp.Text, this.PasswordSignUp.Text);
 
-                if (res == false)
+                if (res != "")
                 {
-                    this.ErrorSignUp.Text = "The user can't be signed up";
+                    this.ErrorSignUp.Text = res;
                 }
                 else
                 {

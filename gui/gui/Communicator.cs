@@ -9,7 +9,7 @@ namespace gui
     public class Communicator
     {
         private SocketT _socket;
-        private string DIVIDER = "≡";
+        private string DIVIDER = "~";
 
         public Communicator()
         {
@@ -31,30 +31,26 @@ namespace gui
             return true;
         }
 
-        public bool Login(string username, string password)
+        public string Login(string username, string password)
         {
             string reqInfo = "101" + DIVIDER + username + DIVIDER + password;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
 
-            if (res == null)
-                return false;
-            else if (res.code == 0)
-                return false;
-            return true;
+            if (res.code == 400)
+                return res.objects[1];
+            return "";
         }
 
-        public bool SignUp(string username, string password)
+        public string SignUp(string username, string password)
         {
             string reqInfo = "102" + DIVIDER + username + DIVIDER + password;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
 
-            if (res == null)
-                return false;
-            else if (res.code == 400)
-                return false;
-            return true;
+            if (res.code == 400)
+                return res.objects[1];
+            return "";
         }
 
         public Message GetMessages(string username1, string username2, string msg)

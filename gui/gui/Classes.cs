@@ -14,7 +14,7 @@ namespace gui
 
         public Response(string msg)
         {
-            this.objects = msg.Split('≡').ToList();
+            this.objects = msg.Split('~').ToList();
             this.code = int.Parse(this.objects[0]);
         }
     }

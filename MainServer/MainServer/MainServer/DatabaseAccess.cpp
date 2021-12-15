@@ -63,8 +63,8 @@ int getUsersCallback(void* data, int argc, char** argv, char** azColName)
 			user.setPassword(argv[i]);
 		else if (std::string(azColName[i]) == "ipAddress")
 			user.setIpAddress(argv[i]);
-		else if (std::string(azColName[i]) == "port")
-			user.setPort(std::atoi(argv[i]));
+		/*else if (std::string(azColName[i]) == "port")
+			user.setPort(std::atoi(argv[i]));*/
 	}
 	users->push_back(user);
 	return 0;

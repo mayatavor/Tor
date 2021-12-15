@@ -90,10 +90,10 @@ std::string Message::buildMessage()
 
 	std::string msgcontent = std::to_string(this->_mt) + DELIMITER + msg;
 	std::string len =  std::to_string(msgcontent.length() + 1);
-	len.insert(len.begin(), 3 - len.length(), '0');
+	len.insert(len.begin(), 5 - len.length(), '0');
 	/*len += DELIMITER;
 	len += msgcontent;*/
 	std::stringstream ss;
-	ss << len << DELIMITER << msgcontent;
+	ss << len << msgcontent;
 	return  ss.str();
 }
