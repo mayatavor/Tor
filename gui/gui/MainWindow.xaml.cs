@@ -21,11 +21,13 @@ namespace gui
     public partial class MainWindow : Window
     { 
         private Communicator _communicator;
+        private string username;
         public MainWindow(Communicator c)
         {
             InitializeComponent();
             this._communicator = c;
             this._communicator = new Communicator();
+            this.username = "maya";
 
             //get users from the server
             UserInfo user = new UserInfo(true, "maya");
@@ -136,7 +138,18 @@ namespace gui
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
-            //do log out
+            bool res = this._communicator.Logout(this.username);
+
+            if(!res)
+            {
+                //add popup
+            }
+            else
+            {
+                MainWindow wnd = new MainWindow(this._communicator);
+                this.Close();
+                wnd.ShowDialog();
+            }
         }
     }
 }
