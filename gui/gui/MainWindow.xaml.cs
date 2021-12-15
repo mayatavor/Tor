@@ -133,5 +133,10 @@ namespace gui
 
             return bitmapImage;
         }
+
+        private void LogOut_Click(object sender, RoutedEventArgs e)
+        {
+            //do log out
+        }
     }
 }

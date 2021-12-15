@@ -39,8 +39,10 @@
                         VerticalAlignment="Bottom" 
                         Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
                         Grid.ColumnSpan="2" 
+                        Name="LogOut"
+                        Click="LogOut_Click"
                         Margin="225,0,0,3">
-                        <Image Source="Assets/settings.png" Width="25" Height="25"/>
+                        <Image Source="Assets/logout.png" Width="25" Height="25"/>
                     </Button>
                 </Grid>
             </StackPanel>
