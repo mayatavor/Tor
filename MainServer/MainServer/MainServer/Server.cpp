@@ -87,7 +87,8 @@ Message* Server::caseSignUp(std::vector<std::string> args)
 		std::vector<std::string> msg = { "User with this usename already exists" };
 		return new Message(error, msg);
 	}
-	this->_db->createUser(args[0], args[1], args[2],args[3]);
+	std::cout << args[0] << "::::" << args[1] << "::::" << args[2] << std::endl;
+	this->_db->createUser(args[0], args[1], args[2]/*,args[3]*/);
 	std::vector<std::string> answerArgs = { "SignedUp Successfully" };
 	return new Message(success, answerArgs);
 }
@@ -103,26 +104,26 @@ void Server::messagesHandler()
 		this->_messagesQueue.pop();
 		Message* msg = nullptr;
 		lock.unlock();
-		if (!m.second.validateArgumentLength())
+		/*if (!m.second.validateArgumentLength())
 			std::cout << "Invalid Message" << std::endl;
 		else
+		{*/
+		std::vector<std::string> args = m.second.getArgs();
+		switch (m.second.getMessageType())
 		{
-			std::vector<std::string> args = m.second.getArgs();
-			switch (m.second.getMessageType())
-			{
-			case logIn:
-				msg = caseLogin(args);
-				break;
-			case signUp:
-				msg = caseSignUp(args);
-				break;
+		case logIn:
+			msg = caseLogin(args);
+			break;
+		case signUp:
+			msg = caseSignUp(args);
+			break;
 
-			default:
-				break;
-			}
-			if(msg)
-				h.sendData(m.first, msg->buildMessage());
+		default:
+			break;
 		}
+		if(msg)
+			h.sendData(m.first, msg->buildMessage());
+		/*}*/
 
 		//if (m.getCode() == USER_LOGGED_IN) {
 		//	

@@ -8,16 +8,14 @@ namespace gui
 {
     public class Response
     {
-        private string DIVIDER = "≡";
-        public int status { get; set; }
         public string message { get; set; }
-
         public int code { get; set; }
         public List<string> objects { get; set; }
 
         public Response(string msg)
         {
             this.objects = msg.Split('≡').ToList();
+            this.code = int.Parse(this.objects[0]);
         }
     }
 

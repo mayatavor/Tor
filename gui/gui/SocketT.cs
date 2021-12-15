@@ -51,9 +51,11 @@ namespace gui
                 IPAddress d = LocalIPAddress();
                 string ds = d.ToString();
 
-                mas = ds + DIVIDER + mas;
+                mas = mas + DIVIDER + ds;
 
-                byte[] msg = Encoding.ASCII.GetBytes(mas);
+                string len = getPaddedNumber(mas.Length, 5);
+
+                byte[] msg = Encoding.ASCII.GetBytes(len + mas);
                 // Send the data through the socket.
                 int bytesSent = this.sender.Send(msg);
 
@@ -62,8 +64,8 @@ namespace gui
                 int bytesRec = this.sender.Receive(bytesArr);
                 string t = System.Text.Encoding.UTF8.GetString(bytesArr, 0, bytesArr.Length);
 
-                int len = int.Parse(t);
-                byte[] bytesArr3 = new byte[len];
+                int lenMsg = int.Parse(t);
+                byte[] bytesArr3 = new byte[lenMsg];
                 bytesRec = this.sender.Receive(bytesArr3);
 
                 string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);

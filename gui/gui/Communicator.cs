@@ -26,7 +26,7 @@ namespace gui
             Response res = this._socket.TalkToServer(len+reqInfo);
             if (res == null)
                 return false;
-            else if (res.status == 0)
+            else if (res.code == 0)
                 return false;
             return true;
         }
@@ -34,13 +34,12 @@ namespace gui
         public bool Login(string username, string password)
         {
             string reqInfo = "101" + DIVIDER + username + DIVIDER + password;
-            string len = getPaddedNumber(reqInfo.Length, 5);
 
-            Response res = this._socket.FirstTalkWithServer(len + reqInfo);
+            Response res = this._socket.FirstTalkWithServer(reqInfo);
 
             if (res == null)
                 return false;
-            else if (res.status == 0)
+            else if (res.code == 0)
                 return false;
             return true;
         }
@@ -48,13 +47,12 @@ namespace gui
         public bool SignUp(string username, string password)
         {
             string reqInfo = "102" + DIVIDER + username + DIVIDER + password;
-            string len = getPaddedNumber(reqInfo.Length, 5);
 
-            Response res = this._socket.FirstTalkWithServer(len + reqInfo);
+            Response res = this._socket.FirstTalkWithServer(reqInfo);
 
             if (res == null)
                 return false;
-            else if (res.status == 0)
+            else if (res.code == 400)
                 return false;
             return true;
         }
