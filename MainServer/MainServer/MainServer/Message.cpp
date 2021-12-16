@@ -2,29 +2,8 @@
 #include <iostream>
 #include <sstream>
 
-//
-//Message::Message(int code, SOCKET socket)
-//{
-//	this->m_code = code;
-//	this->m_senderSocket = socket;
-//}
-//
-// int Message::getCode() 
-//{
-//	return this->m_code();
-//}
-//
-// SOCKET Message::getSocket()
-// {
-//	 return this->m_senderSocket;
-// }
-//
-// Message::Message(std::string allMsg)
-// {
-// }
 
-
-Message::Message(std::string allMsg) 
+Message::Message(std::string allMsg, int port) 
 {
 	int pos = allMsg.find(DELIMITER);
 	std::string token = allMsg.substr(0, pos);
@@ -39,6 +18,8 @@ Message::Message(std::string allMsg)
 		this->_args.push_back(token);
 	}
 	this->_args.push_back(allMsg);
+	if (this->_mt == MessageType::logIn || this->_mt == MessageType::signUp)
+		this->_args.push_back(std::to_string(port));
 }
 
 Message::Message(MessageType type, std::vector<std::string> args)

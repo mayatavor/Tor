@@ -71,7 +71,7 @@ int getUsersCallback(void* data, int argc, char** argv, char** azColName)
 }
 
 
-void DatabaseAccess::createUser(std::string username, std::string password, std::string ip/*, std::string port*/)
+void DatabaseAccess::createUser(std::string username, std::string password, std::string ip, std::string port)
 {
 	std::string str = "INSERT INTO Users (username, password, ipAddress) VALUES('" + username + "', '" + password + "', '" + ip + "');";
 	try

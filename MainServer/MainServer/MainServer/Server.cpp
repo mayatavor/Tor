@@ -87,8 +87,7 @@ Message* Server::caseSignUp(std::vector<std::string> args)
 		std::vector<std::string> msg = { "User with this usename already exists" };
 		return new Message(error, msg);
 	}
-	std::cout << args[0] << "::::" << args[1] << "::::" << args[2] << std::endl;
-	this->_db->createUser(args[0], args[1], args[2]/*,args[3]*/);
+	this->_db->createUser(args[0], args[1], args[2], args[3]);
 	std::vector<std::string> answerArgs = { "SignedUp Successfully" };
 	return new Message(success, answerArgs);
 }
@@ -104,35 +103,26 @@ void Server::messagesHandler()
 		this->_messagesQueue.pop();
 		Message* msg = nullptr;
 		lock.unlock();
-		/*if (!m.second.validateArgumentLength())
+		if (!m.second.validateArgumentLength())
 			std::cout << "Invalid Message" << std::endl;
 		else
-		{*/
-		std::vector<std::string> args = m.second.getArgs();
-		switch (m.second.getMessageType())
 		{
-		case logIn:
-			msg = caseLogin(args);
-			break;
-		case signUp:
-			msg = caseSignUp(args);
-			break;
+			std::vector<std::string> args = m.second.getArgs();
+			switch (m.second.getMessageType())
+			{
+			case logIn:
+				msg = caseLogin(args);
+				break;
+			case signUp:
+				msg = caseSignUp(args);
+				break;
 
-		default:
-			break;
+			default:
+				break;
+			}
+			if(msg)
+				h.sendData(m.first, msg->buildMessage());
 		}
-		if(msg)
-			h.sendData(m.first, msg->buildMessage());
-		/*}*/
-
-		//if (m.getCode() == USER_LOGGED_IN) {
-		//	
-		//}
-
-		//int len = m.GetMessageContent().length();
-		//std::string msg = "200" + len + m.GetMessageContent();
-		//h.sendData(m.getSocket(), msg);
-		////this->_clients.insert(std::pair<std::string, SOCKET>("", m.getSocket())); ///if login or signUpMessage
 	}
 }
 
@@ -159,50 +149,32 @@ void Server::accept()
 	std::cout << "Client accepted. Server and client can speak" << std::endl;
 
 	// the function that handle the conversation with the client
-	std::thread t(&Server::clientHandler, this, client_socket);
+	std::thread t(&Server::clientHandler, this, client_socket, localAddress.sin_port);
 	t.detach();
 }
 
-void Server::clientHandler(SOCKET socket)
+void Server::clientHandler(SOCKET socket, int port)
 {
 	try
 	{
 		Helper h;
 		while (true)
 		{
-			/*int code = h.getIntPartFromSocket(socket, 3);
-			if (code == SECONDARY_SERVER_CONNECTED)
-			{
-				int len = h.getIntPartFromSocket(socket, 2);
-				int serverId = h.getIntPartFromSocket(socket, len);
-				addSecondaryServer(socket, serverId);
-			}
-			else if(code == SEND_MESSAGE)
-			{
-				int len = h.getIntPartFromSocket(socket, 3);
-				std::string msg = h.getStringPartFromSocket(socket, len);
-				addMessageToMessagesQueue(SEND_MESSAGE, "", "", msg, socket);
-			}*/
 			int len = h.getIntPartFromSocket(socket, 5);
 			std::string message = h.getStringPartFromSocket(socket, len);
-			addMessageToMessagesQueue(message, socket);
+			addMessageToMessagesQueue(message, socket, port);
 		}
 	}
 	catch (const std::exception& e)
 	{
-		/*std::unique_lock<std::mutex> lock(this->_messagesMutex);
-		this->_messagesQueue.push(*new Message(-1, "", "", "", socket));
-		lock.unlock();
-		this->_messagesCv.notify_one();*/
 		std::cout << e.what() << std::endl;
 	}
 }
 
-void Server::addMessageToMessagesQueue(std::string allMsg, SOCKET socket)
+void Server::addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port)
 {
 	std::unique_lock<std::mutex> lock(this->_messagesMutex);
-	//this->_messagesQueue.push(*new Message(code, sender, reciever, content, clientSocket));
-	this->_messagesQueue.push(*new std::pair<SOCKET, Message>(socket, *new Message(allMsg)));
+	this->_messagesQueue.push(*new std::pair<SOCKET, Message>(socket, *new Message(allMsg, port)));
 	lock.unlock();
 	this->_messagesCv.notify_one();
 }
