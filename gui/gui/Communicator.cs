@@ -17,6 +17,63 @@ namespace gui
             this._socket.startSocket();
         }
 
+        ~Communicator()
+        {
+
+        }
+
+
+        public string Login(string username, string password)
+        {
+            string reqInfo = "101" + DIVIDER + username + DIVIDER + password;
+
+            Response res = this._socket.FirstTalkWithServer(reqInfo);
+
+            if (res.code == 400)
+                return res.objects[1];
+            return "";
+        }
+        public string SignUp(string username, string password)
+        {
+            string reqInfo = "102" + DIVIDER + username + DIVIDER + password;
+
+            Response res = this._socket.FirstTalkWithServer(reqInfo);
+
+            if (res.code == 400)
+                return res.objects[1];
+            return "";
+        }
+        public string Ghost()
+        {
+            string reqInfo = "103" + DIVIDER + "adding a ghost name or not";
+
+            Response res = this._socket.FirstTalkWithServer(reqInfo);
+
+            if (res.code == 400)
+                return res.objects[1];
+            return "";
+        }
+
+        public Message GetMessages(string username1, string username2, string msg)
+        {
+            string reqInfo = "code" + DIVIDER + username1 + DIVIDER + username2 + DIVIDER + msg;
+            string len = getPaddedNumber(reqInfo.Length, 5);
+
+            Response res = this._socket.TalkToServer(len + reqInfo);
+
+            return new Message();
+        }
+
+        public bool Logout(string username)
+        {
+            string reqInfo = "212" + DIVIDER + username;
+            string len = getPaddedNumber(reqInfo.Length, 5);
+
+            Response res = this._socket.TalkToServer(len + reqInfo);
+
+            return res.code == 200;
+        }
+
         
         public bool SendMessage(string msg)
         {
@@ -30,39 +87,6 @@ namespace gui
                 return false;
             return true;
         }
-
-        public string Login(string username, string password)
-        {
-            string reqInfo = "101" + DIVIDER + username + DIVIDER + password;
-
-            Response res = this._socket.FirstTalkWithServer(reqInfo);
-
-            if (res.code == 400)
-                return res.objects[1];
-            return "";
-        }
-
-        public string SignUp(string username, string password)
-        {
-            string reqInfo = "102" + DIVIDER + username + DIVIDER + password;
-
-            Response res = this._socket.FirstTalkWithServer(reqInfo);
-
-            if (res.code == 400)
-                return res.objects[1];
-            return "";
-        }
-
-        public Message GetMessages(string username1, string username2, string msg)
-        {
-            string reqInfo = "103?" + DIVIDER + username1 + DIVIDER + username2 + DIVIDER + msg;
-            string len = getPaddedNumber(reqInfo.Length, 5);
-
-            Response res = this._socket.TalkToServer(len + reqInfo);
-
-            return new Message();
-        }
-
 
 
 

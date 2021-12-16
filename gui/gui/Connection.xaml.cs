@@ -28,7 +28,18 @@ namespace gui
 
         private void EnterGhost_Click(object sender, RoutedEventArgs e)
         {
+            string res = this._communicator.Ghost();
 
+            if (res != "")
+            {
+                this.ErrorGhost.Text = res;
+            }
+            else
+            {
+                MainWindow wnd = new MainWindow(this._communicator);
+                this.Close();
+                wnd.ShowDialog();
+            }
         }
 
         private void EnterLogIn_Click(object sender, RoutedEventArgs e)
