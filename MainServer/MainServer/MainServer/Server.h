@@ -13,14 +13,10 @@
 #include <list>
 #include <map>
 #include "DatabaseAccess.h"
+#include "User.h"
 
-#define SECONDARY_SERVER_CONNECTED 100
-#define USER_LOGGED_IN 101
-#define USER_SIGNED_UP 102
-#define GHOST_LOGGED_IN 103
-#define SEND_MESSAGE 200
 
-#define DELIMITER "≡"
+#define DELIMITER "~"
 
 class Server
 {
@@ -50,8 +46,8 @@ private:
 
 
 	void accept();
-	void clientHandler(SOCKET clientSocket);
-	void addMessageToMessagesQueue(std::string allMsg, SOCKET socket);
+	void clientHandler(SOCKET clientSocket, int port);
+	void addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port);
 	void addSecondaryServer(SOCKET socket, int id);
 
 };

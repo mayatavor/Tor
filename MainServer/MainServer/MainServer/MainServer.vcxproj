@@ -142,7 +142,6 @@
     <ClCompile Include="Chat.cpp" />
     <ClCompile Include="DatabaseAccess.cpp" />
     <ClCompile Include="IDataAccess.cpp" />
-    <ClCompile Include="LoginMessage.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="ChatMessage.cpp" />
     <ClCompile Include="Helper.cpp" />
@@ -157,7 +156,6 @@
     <ClInclude Include="Chat.h" />
     <ClInclude Include="DatabaseAccess.h" />
     <ClInclude Include="IDataAccess.h" />
-    <ClInclude Include="LoginMessage.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="ChatMessage.h" />
     <ClInclude Include="Helper.h" />
