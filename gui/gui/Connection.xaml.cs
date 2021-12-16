@@ -23,20 +23,21 @@ namespace gui
         public Connection()
         {
             InitializeComponent();
-            this._communicator = new Communicator();
+            Application.Current.Properties["Com"] = new Communicator();
+            this._communicator = (Communicator)Application.Current.Properties["Com"];
         }
 
         private void EnterGhost_Click(object sender, RoutedEventArgs e)
         {
-            string res = this._communicator.Ghost();
+            (int code, string msg) res = this._communicator.Ghost();
 
-            if (res != "")
+            if (res.code == 400)
             {
-                this.ErrorGhost.Text = res;
+                this.ErrorGhost.Text = res.msg;
             }
             else
             {
-                MainWindow wnd = new MainWindow(this._communicator);
+                MainWindow wnd = new MainWindow(res.msg);
                 this.Close();
                 wnd.ShowDialog();
             }
@@ -48,6 +49,10 @@ namespace gui
             {
                 this.ErrorLogIn.Text = "Please enter all needed values";
             }
+            if(this.PasswordLogIn.Text.Contains('~') || this.UserNameLogIn.Text.Contains('~'))
+            {
+                this.ErrorLogIn.Text = "Please do not enter username or password that contains '~'";
+            }
             else
             {
                 string res = this._communicator.Login(this.UserNameLogIn.Text, this.PasswordLogIn.Text);
@@ -58,7 +63,7 @@ namespace gui
                 }
                 else
                 {
-                    MainWindow wnd = new MainWindow(this._communicator);
+                    MainWindow wnd = new MainWindow(this.UserNameLogIn.Text);
                     this.Close();
                     wnd.ShowDialog();
                 }
@@ -75,6 +80,11 @@ namespace gui
             {
                 this.ErrorSignUp.Text = "Passwords does not match";
             }
+
+            if (this.PasswordSignUp.Text.Contains('~') || this.UserNameSignUp.Text.Contains('~'))
+            {
+                this.ErrorSignUp.Text = "Please do not enter username or password that contains '~'";
+            }
             else
             {
                 string res = this._communicator.SignUp(this.UserNameSignUp.Text, this.PasswordSignUp.Text);
@@ -85,7 +95,7 @@ namespace gui
                 }
                 else
                 {
-                    MainWindow wnd = new MainWindow(this._communicator);
+                    MainWindow wnd = new MainWindow(this.UserNameSignUp.Text);
                     this.Close();
                     wnd.ShowDialog();
                 }

@@ -33,6 +33,7 @@
                     x:Name="UserNameSignUp"
                     materialDesign:HintAssist.Hint="Enter User Name"
                     BorderThickness="0"
+                    HorizontalAlignment="Center"
                     BorderBrush="Transparent"
                     Foreground="Black"
                     FontSize="20"
@@ -48,6 +49,7 @@
                 Background="#fffafa">
                 <TextBox 
                     x:Name="PasswordSignUp"
+                    HorizontalAlignment="Center"
                     BorderThickness="0"
                     materialDesign:HintAssist.Hint="Enter Password"
                     BorderBrush="Transparent"
@@ -65,6 +67,7 @@
                 Background="#fffafa">
                 <TextBox 
                     x:Name="PasswordConfirmSignUp"
+                    HorizontalAlignment="Center"
                     BorderThickness="0"
                     materialDesign:HintAssist.Hint="Enter Password"
                     Foreground="Black"
@@ -81,7 +84,7 @@
                 Margin="32,300,32,142"
                 Background="#fffafa">
                 <Button
-                     x:Name="EnterSignUp"
+                    x:Name="EnterSignUp"
                     Content="Enter"
                     BorderThickness="0"
                     Background="Transparent"
@@ -91,6 +94,10 @@
             <TextBlock Text=" " 
                        Name="ErrorSignUp"
                        FontSize="12" 
+                       MaxWidth="200"
+                       HorizontalAlignment="Center"
+                       Width="auto"
+                       TextWrapping="Wrap"
                        Foreground="#b30000"
                        Margin="32,370,32,90"/>
 
@@ -114,6 +121,7 @@
                 <TextBox 
                     x:Name="UserNameLogIn"
                     materialDesign:HintAssist.Hint="Enter User Name"
+                    HorizontalAlignment="Center"
                     BorderThickness="0"
                     Foreground="Black"
                     BorderBrush="Transparent"
@@ -133,6 +141,7 @@
                     BorderThickness="0"
                     BorderBrush="Transparent"
                     materialDesign:HintAssist.Hint="Enter Password"
+                    HorizontalAlignment="Center"
                     Foreground="Black"
                     FontSize="20"
                     Margin="5 0 0 0"
@@ -147,6 +156,7 @@
                 Background="#fffafa">
                 <Button
                     x:Name="EnterLogIn"
+                    HorizontalAlignment="Center"
                     Content="Enter"
                     BorderThickness="0"
                     Background="Transparent"
@@ -155,6 +165,7 @@
 
             <TextBlock Text=" " 
                        Name="ErrorLogIn"
+                       HorizontalAlignment="Center"
                        FontSize="12" 
                        Foreground="#b30000"
                        Margin="32,370,32,90"/>

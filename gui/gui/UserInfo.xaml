@@ -24,7 +24,7 @@
             <TextBlock 
                 Foreground="White"
                 x:Name="UserName_Name"
-                Text="Rayhan Alvarado" 
+                Text="Maya Tavor" 
                 Margin="10 0"/>
             <TextBlock 
                 Foreground="White"

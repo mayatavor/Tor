@@ -21,13 +21,15 @@ namespace gui
     public partial class MainWindow : Window
     { 
         private Communicator _communicator;
+        private string myUserName;
         private string username;
-        public MainWindow(Communicator c)
+
+        public MainWindow(string username)
         {
             InitializeComponent();
-            this._communicator = c;
-            this._communicator = new Communicator();
-            this.username = "maya";
+            this._communicator = (Communicator)Application.Current.Properties["Com"];
+            this.myUserName = username;
+            this.username = "";
 
             //get users from the server
             UserInfo user = new UserInfo(true, "maya");
@@ -40,7 +42,7 @@ namespace gui
 
         private void SendMsg(string text)
         {
-            bool answer = this._communicator.SendMessage(text);
+            bool answer = this._communicator.SendMessage(text,this.username, this.myUserName);
             if (answer == false)
             {
                 MessageError error = new MessageError(text);
@@ -74,9 +76,8 @@ namespace gui
             {
                 UserInfo user = (UserInfo)item;
                 this.UserName.Text = user.GetUsername();
+                this.username = user.GetUsername();
             }
-
-            
         }
 
 
@@ -146,7 +147,7 @@ namespace gui
             }
             else
             {
-                MainWindow wnd = new MainWindow(this._communicator);
+                MainWindow wnd = new MainWindow(username);
                 this.Close();
                 wnd.ShowDialog();
             }

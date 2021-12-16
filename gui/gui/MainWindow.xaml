@@ -97,14 +97,14 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock 
-                    x:Name="UserName" 
-                    Text="UserName" 
-                    FontSize="30"
+                    x:Name="UserName"
+                    Text="Click on the user you want to chat with" 
+                    FontSize="29"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" 
                     TextAlignment="Center" 
                     Width="522" 
-                    Height="55" 
+                    Height="55"
                     Background="#fffafa"/>
 
                 <ListView Grid.Row="1" Name="MessagesList" VerticalAlignment="Bottom" HorizontalContentAlignment="Stretch">

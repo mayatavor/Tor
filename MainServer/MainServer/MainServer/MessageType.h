@@ -10,6 +10,7 @@ enum MessageType
 	sendChatMessage = 300,
 	error = 400,
 	success = 200,
-	/*userDoesntExist = 401,
-	userAlreadyExists = 402,*/
+	ghostName = 201,
+	favoriteUser = 110,
+	/*userAlreadyExists = 402,*/
 };
