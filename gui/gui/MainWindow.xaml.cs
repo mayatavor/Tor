@@ -143,7 +143,7 @@ namespace gui
 
             if(!res)
             {
-                //add popup
+                MessageBoxResult result = MessageBox.Show("Could not log out, please try again -> " + res, "LogOut Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
