@@ -139,7 +139,7 @@ namespace gui
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
-            bool res = this._communicator.Logout(this.username);
+            bool res = false;// this._communicator.Logout(this.username);
 
             if(!res)
             {
