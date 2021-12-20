@@ -141,7 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Chat.cpp" />
     <ClCompile Include="DatabaseAccess.cpp" />
-    <ClCompile Include="IDataAccess.cpp" />
+    <ClCompile Include="FavoritesItem.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="ChatMessage.cpp" />
     <ClCompile Include="Helper.cpp" />
@@ -155,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="Chat.h" />
     <ClInclude Include="DatabaseAccess.h" />
+    <ClInclude Include="FavoritesItem.h" />
     <ClInclude Include="IDataAccess.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="ChatMessage.h" />
