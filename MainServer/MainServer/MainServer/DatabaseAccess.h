@@ -31,11 +31,12 @@ public:
 	void createChat(int firstUserId, int secondUserId);
 	Chat getChat(int chatId);
 	//The function gets two usernames and returns the chat id that belongsto these users.
-	Chat getChatByUsers(std::string firstUser, std::string secondUser);
+	Chat getChatByUsers(std::string firstUser, std::string secondUser); ////Needs to be checked - not sure that working correctlly.
 	
 
 	//Favorites
-	virtual void addFavorite(std::string username) = 0;
+	//The function adds a row to the favorites table.
+	void addFavorite(std::string addsUsername, std::string usernameToAdd);
 
 private:
 	sqlite3* _db;

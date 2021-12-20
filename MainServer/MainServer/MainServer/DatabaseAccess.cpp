@@ -181,13 +181,34 @@ Chat DatabaseAccess::getChatByUsers(std::string firstUser, std::string secondUse
 {
 	User user1 = getUser(firstUser);
 	User user2 = getUser(secondUser);
-	std::string statement = "SELECT * FORM Chats WHERE firstUserId = " + std::to_string(user1.getId()) + " OR firstUserId = " + std::to_string(user2.getId()) + " secondUserId = " + std::to_string(user1.getId()) + " OR secondUserId = " + std::to_string(user2.getId());
+	std::string statement = "SELECT * FORM Chats WHERE ((firstUserId = " + std::to_string(user1.getId())  + " AND secondUserId = " + std::to_string(user2.getId()) + ") OR (firstUserId = " + std::to_string(user2.getId()) + " AND secondUserId = " + std::to_string(user1.getId())  + "));";
 	std::list<Chat> chats;
-	exec(statement.c_str(), getChatsCallback, &chats);
+	try
+	{
+		exec(statement.c_str(), getChatsCallback, &chats);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
 	if (!chats.empty())
 		return *chats.begin();
 	else
 		return Chat();
+}
+void DatabaseAccess::addFavorite(std::string addsUsername, std::string usernameToAdd)
+{
+	User u = getUser(addsUsername);
+	Chat chat = getChatByUsers(addsUsername, usernameToAdd);
+	std::string statement = "INSERT INTO Favorites (userId, chatId) VALUES(" + std::to_string(u.getId()) + ", " + std::to_string(chat.getChatId()) + ");";
+	try
+	{
+		exec(statement.c_str(), nullptr, nullptr);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
 }
 bool DatabaseAccess::createDBstructure()
 {
