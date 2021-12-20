@@ -134,7 +134,7 @@ void Server::messagesHandler()
 				break;
 
 			case MessageType::logout:
-
+				caseLogout(args);
 				break;
 			default:
 				break;
