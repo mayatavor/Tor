@@ -30,6 +30,12 @@ public:
 	std::list<Chat> getChats();
 	void createChat(int firstUserId, int secondUserId);
 	Chat getChat(int chatId);
+	//The function gets two usernames and returns the chat id that belongsto these users.
+	Chat getChatByUsers(std::string firstUser, std::string secondUser);
+	
+
+	//Favorites
+	virtual void addFavorite(std::string username) = 0;
 
 private:
 	sqlite3* _db;

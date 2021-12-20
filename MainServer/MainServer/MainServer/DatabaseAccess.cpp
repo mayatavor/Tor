@@ -63,8 +63,8 @@ int getUsersCallback(void* data, int argc, char** argv, char** azColName)
 			user.setPassword(argv[i]);
 		else if (std::string(azColName[i]) == "ipAddress")
 			user.setIpAddress(argv[i]);
-		/*else if (std::string(azColName[i]) == "port")
-			user.setPort(std::atoi(argv[i]));*/
+		else if (std::string(azColName[i]) == "port")
+			user.setPort(std::atoi(argv[i]));
 	}
 	users->push_back(user);
 	return 0;
@@ -176,6 +176,18 @@ void DatabaseAccess::createChat(int firstUserId, int secondUserId)
 Chat DatabaseAccess::getChat(int chatId)
 {
 	return Chat();
+}
+Chat DatabaseAccess::getChatByUsers(std::string firstUser, std::string secondUser)
+{
+	User user1 = getUser(firstUser);
+	User user2 = getUser(secondUser);
+	std::string statement = "SELECT * FORM Chats WHERE firstUserId = " + std::to_string(user1.getId()) + " OR firstUserId = " + std::to_string(user2.getId()) + " secondUserId = " + std::to_string(user1.getId()) + " OR secondUserId = " + std::to_string(user2.getId());
+	std::list<Chat> chats;
+	exec(statement.c_str(), getChatsCallback, &chats);
+	if (!chats.empty())
+		return *chats.begin();
+	else
+		return Chat();
 }
 bool DatabaseAccess::createDBstructure()
 {
