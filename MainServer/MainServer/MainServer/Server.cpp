@@ -92,6 +92,22 @@ Message* Server::caseSignUp(std::vector<std::string> args)
 	return new Message(success, answerArgs);
 }
 
+Message* Server::caseLogout(std::vector<std::string> args)
+{
+	if (!this->_db->doesUserExist(args[0])) {
+		std::vector<std::string> msg = { "User doesn't exist" };
+		return new Message(error, msg);
+	}
+	std::map<std::string, SOCKET>::iterator it = this->_clients.find(args[0]);
+	if (it == this->_clients.end()) {
+		std::vector<std::string> msg = { "User doesn't connected so he can't be logged out" };
+		return new Message(error, msg);
+	}
+	this->_clients.erase(it);
+	std::vector<std::string> msg = { "User logged out successfuly" };
+	return new Message(success, msg);
+}
+
 void Server::messagesHandler()
 {
 	Helper h;
@@ -110,13 +126,16 @@ void Server::messagesHandler()
 			std::vector<std::string> args = m.second.getArgs();
 			switch (m.second.getMessageType())
 			{
-			case logIn:
+			case MessageType::logIn:
 				msg = caseLogin(args);
 				break;
-			case signUp:
+			case MessageType::signUp:
 				msg = caseSignUp(args);
 				break;
 
+			case MessageType::logout:
+
+				break;
 			default:
 				break;
 			}

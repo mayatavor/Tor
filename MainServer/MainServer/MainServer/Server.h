@@ -26,12 +26,7 @@ public:
 
 	void serve(int port);
 
-	/*
-	* The function supposed to deal with the messages that are inthe queue. Now it can only handle client's login, needto fix it later.
-	*/
 	void messagesHandler();
-	Message* caseLogin(std::vector<std::string> args);
-	Message* caseSignUp(std::vector<std::string> args);
 
 private:
 	std::map<std::string, SOCKET> _clients;
@@ -44,7 +39,9 @@ private:
 	std::condition_variable _secondayServersCv;
 	DatabaseAccess* _db;
 
-
+	Message* caseLogin(std::vector<std::string> args);
+	Message* caseSignUp(std::vector<std::string> args);
+	Message* caseLogout(std::vector<std::string> args);
 	void accept();
 	void clientHandler(SOCKET clientSocket, int port);
 	void addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port);
