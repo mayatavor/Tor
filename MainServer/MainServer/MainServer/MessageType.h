@@ -12,5 +12,7 @@ enum MessageType
 	success = 200,
 	ghostName = 201,
 	favoriteUser = 110,
+	removeFavoriteUser = 111,
+	getUsers = 302,
 	/*userAlreadyExists = 402,*/
 };

@@ -1,6 +1,7 @@
 #include "DatabaseAccess.h"
 #include <io.h>
 #include <list>
+#include <map>
 
 bool DatabaseAccess::open()
 {
@@ -224,9 +225,36 @@ void DatabaseAccess::addFavorite(std::string addsUsername, std::string usernameT
 		std::cout << e.what() << std::endl;
 	}
 }
+
+
+int getFirstAndSeondUsersIdCallback(void* data, int argc, char** argv, char** azColName)
+{
+	std::map<int, int> users;
+	std::pair<int, int> p;
+	for (int i = 0; i < argc; i++) {
+		if (std::string(azColName[i]) == "firstUserId")
+			p.first = std::atoi(argv[i]);
+		else if (std::string(azColName[i]) == "secondUserId")
+			p.second = std::atoi(argv[i]);
+	}
+	users.insert(p);
+	return 0;
+}
+
 std::list<std::string> DatabaseAccess::getFavortitesOfUser(std::string username)
 {
-	return std::list<std::string>();
+	std::map<int, int> firstAndSecondUsers;
+	User u = getUser(username);
+	std::string statement = "select chats.firstUserId, chats.secondUserId FROM Favorites INNER JOIN Chats on Favorites.chatId=chats.chatId WHERE Favorites.userId=" + std::to_string(u.getId()) + ";" ;
+	try
+	{
+		exec(statement.c_str(), getFirstAndSeondUsersIdCallback, &firstAndSecondUsers);
+
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
 }
 bool DatabaseAccess::createDBstructure()
 {

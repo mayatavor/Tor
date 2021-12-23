@@ -165,6 +165,7 @@
     <ClInclude Include="Server.h" />
     <ClInclude Include="socket.h" />
     <ClInclude Include="sqlite3.h" />
+    <ClInclude Include="Structs.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="WSAInitializer.h" />
   </ItemGroup>
