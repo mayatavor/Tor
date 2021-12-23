@@ -175,7 +175,21 @@ void DatabaseAccess::createChat(int firstUserId, int secondUserId)
 }
 Chat DatabaseAccess::getChat(int chatId)
 {
-	return Chat();
+	std::list<Chat> chats;
+	std::string statement = "SELECT * FROM Chats;";
+	char* errMessage = nullptr;
+	try
+	{
+		exec(statement.c_str(), getChatsCallback, &chats);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	if (!chats.empty())
+		return *chats.begin();
+	else
+		return Chat();
 }
 Chat DatabaseAccess::getChatByUsers(std::string firstUser, std::string secondUser)
 {
@@ -209,6 +223,10 @@ void DatabaseAccess::addFavorite(std::string addsUsername, std::string usernameT
 	{
 		std::cout << e.what() << std::endl;
 	}
+}
+std::list<std::string> DatabaseAccess::getFavortitesOfUser(std::string username)
+{
+	return std::list<std::string>();
 }
 bool DatabaseAccess::createDBstructure()
 {
