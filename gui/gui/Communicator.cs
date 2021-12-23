@@ -17,6 +17,8 @@ public enum MessageCodes
     success = 200,
     ghostName = 201,
     favoriteUser = 110,
+    removeFavoriteUser = 111,
+    getUsers = 302,
 }
 
 namespace gui
@@ -25,7 +27,7 @@ namespace gui
     {
         private SocketT _socket;
         private string DIVIDER = "~";
-        private MessageCodes codes;
+        private string myUsername;
 
         public Communicator()
         {
@@ -38,6 +40,15 @@ namespace gui
 
         }
 
+        public void SetUserName(string u)
+        {
+            this.myUsername = u;
+        }
+
+        public string GetUserName()
+        {
+            return this.myUsername;
+        }
 
         public string Login(string username, string password)
         {
@@ -101,7 +112,31 @@ namespace gui
             return true;
         }
 
+        public bool AddToFavorites(string myUsername, string otherUsername)
+        {
+            string reqInfo = (int)MessageCodes.favoriteUser + DIVIDER + myUsername + DIVIDER + otherUsername;
+            string len = getPaddedNumber(reqInfo.Length, 5);
 
+            Response res = this._socket.TalkToServer(len + reqInfo);
+            if (res == null)
+                return false;
+            else if (res.code == 0)
+                return false;
+            return true;
+        }
+
+        public bool RemoveFromFavorites(string myUsername, string otherUsername)
+        {
+            string reqInfo = (int)MessageCodes.removeFavoriteUser + DIVIDER + myUsername + DIVIDER + otherUsername;
+            string len = getPaddedNumber(reqInfo.Length, 5);
+
+            Response res = this._socket.TalkToServer(len + reqInfo);
+            if (res == null)
+                return false;
+            else if (res.code == 0)
+                return false;
+            return true;
+        }
 
         //helpers
 

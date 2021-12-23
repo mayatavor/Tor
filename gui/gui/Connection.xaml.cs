@@ -37,6 +37,7 @@ namespace gui
             }
             else
             {
+                this._communicator.SetUserName(res.msg);
                 MainWindow wnd = new MainWindow(res.msg);
                 this.Close();
                 wnd.ShowDialog();
@@ -63,6 +64,7 @@ namespace gui
                 }
                 else
                 {
+                    this._communicator.SetUserName(this.UserNameLogIn.Text);
                     MainWindow wnd = new MainWindow(this.UserNameLogIn.Text);
                     this.Close();
                     wnd.ShowDialog();
@@ -95,6 +97,7 @@ namespace gui
                 }
                 else
                 {
+                    this._communicator.SetUserName(UserNameSignUp.Text);
                     MainWindow wnd = new MainWindow(this.UserNameSignUp.Text);
                     this.Close();
                     wnd.ShowDialog();

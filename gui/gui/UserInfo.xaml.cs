@@ -22,10 +22,13 @@ namespace gui
     {
         private bool star;
         private string username;
+        private Communicator _communicator;
         public UserInfo(bool isStar, string username)
         {
             this.star = isStar;
             this.username = username;
+
+            this._communicator = (Communicator)Application.Current.Properties["Com"];
             InitializeComponent();
 
             if (this.star == true)
@@ -44,15 +47,25 @@ namespace gui
 
         private void StarOrNot_Click(object sender, RoutedEventArgs e)
         {
-            if(this.star == true)
+            if (this.star == true)
             {
-                this.StarBackGround.Source = new BitmapImage(new Uri("Assets/fullHeart.png", UriKind.Relative));
-                this.star = false;
+                if (this._communicator.RemoveFromFavorites(this._communicator.GetUserName(), this.username))
+                {
+                    this.StarBackGround.Source = new BitmapImage(new Uri("Assets/fullHeart.png", UriKind.Relative));
+                    this.star = false;
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Could not add to favorites", "Favorites Error", MessageBoxButton.OK);
+                }
             }
             else
             {
-                this.StarBackGround.Source = new BitmapImage(new Uri("Assets/emptyHeart.png", UriKind.Relative));
-                this.star = true;
+                if (this._communicator.AddToFavorites(this._communicator.GetUserName(), this.username))
+                { 
+                    this.StarBackGround.Source = new BitmapImage(new Uri("Assets/emptyHeart.png", UriKind.Relative));
+                    this.star = true;
+                }
             }
 
         }
