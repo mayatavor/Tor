@@ -79,14 +79,44 @@ namespace gui
             return (res.code, res.objects[1]);
         }
 
-        public Message GetMessages(string username1, string username2, string msg)
+        public List<Message> GetMessages(string username1, string username2, string msg)
         {
             string reqInfo = (int)MessageCodes.getChatHistory + DIVIDER + username1 + DIVIDER + username2 + DIVIDER + msg;
             string len = getPaddedNumber(reqInfo.Length, 5);
 
             Response res = this._socket.TalkToServer(len + reqInfo);
 
-            return new Message();
+            List<Message> messages = new List<Message>();
+            string[] sep = new string[] { "::::" };
+            string[] userInfo;
+
+            for (int i = 1; i < res.objects.Count() - 1; i++)
+            {
+                userInfo = res.objects[i].Split(sep, StringSplitOptions.RemoveEmptyEntries);
+                messages.Add(new Message(userInfo[0], userInfo[1]));
+            }
+
+            return messages;
+        }
+
+        public List<user> GetUsers()
+        {
+            string reqInfo = (int)MessageCodes.getUsers + "";
+            string len = getPaddedNumber(reqInfo.Length, 5);
+
+            Response res = this._socket.TalkToServer(len + reqInfo);
+
+            List<user> users = new List<user>();
+            string[] sep = new string[] { "::::" };
+            string[] userInfo;
+
+            for (int i = 1; i < res.objects.Count() - 1; i++)
+            {
+                userInfo = res.objects[i].Split(sep, StringSplitOptions.RemoveEmptyEntries);
+                users.Add(new user(userInfo[0], Convert.ToBoolean(userInfo[1]), Convert.ToBoolean(userInfo[2])));
+            }
+
+            return users;
         }
 
         public bool Logout(string username)
