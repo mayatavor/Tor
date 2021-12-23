@@ -66,6 +66,10 @@ namespace gui
                     this.StarBackGround.Source = new BitmapImage(new Uri("Assets/emptyHeart.png", UriKind.Relative));
                     this.star = true;
                 }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Could not remove from favorites", "Favorites Error", MessageBoxButton.OK);
+                }
             }
 
         }
