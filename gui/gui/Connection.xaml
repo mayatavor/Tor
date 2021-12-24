@@ -14,7 +14,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Background="#94553D" Height="490" Width="264">
+        <Grid Grid.Column="0" Background="#ecd5e3" Height="490" Width="264">
             <TextBlock 
                 Text="Sign Up" 
                 Foreground="White" 
@@ -103,7 +103,7 @@
 
         </Grid>
 
-        <Grid Grid.Column="1" Background="#C4AC95" Height="490" Width="264">
+        <Grid Grid.Column="1" Background="#DDE3fd" Height="490" Width="264">
             <TextBlock 
                 Text="Log In"
                 Foreground="White"
@@ -172,7 +172,7 @@
 
         </Grid>
 
-        <Grid Grid.Column="2" Background="#F3ECDA" Height="490" Width="264">
+        <Grid Grid.Column="2" Background="#bffcc6" Height="490" Width="264">
             <TextBlock 
                 Text="Ghost"
                 Foreground="White"
