@@ -127,7 +127,7 @@ Message* Server::getFavorites(std::vector<std::string> args)
 		return new Message(error, msg);
 	}*/
 	this->_db->getFavoritesOfUser(args[0]);
-	std::list<std::string> users = this->_db->getUsers();
+	std::list<std::string> usersList = this->_db->getUsers();
 }
 
 
