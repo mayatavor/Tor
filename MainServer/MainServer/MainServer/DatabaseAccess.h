@@ -25,6 +25,9 @@ public:
 	bool doesUserExist(const std::string& username);
 	User getUser(const std::string& username);
 	void updateUsersIpAndPort(std::string usrname, std::string ip, std::string port);
+	//The function returns list of all of the users
+	std::list<std::string> getUsers();
+	
 	std::list<UsersListItem> getUserToSend(std::string username);
 
 

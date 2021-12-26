@@ -1,6 +1,7 @@
 #include "Server.h"
 #include "MessageType.h"
 #include "DatabaseAccess.h"
+#include "Structs.h"
 
 #define USER_EXISTS(id, content) \
  if (this->_db->doesUserExist(id))\
@@ -121,11 +122,12 @@ Message* Server::caseLogout(std::vector<std::string> args)
 Message* Server::getFavorites(std::vector<std::string> args)
 {
 	
-	if (!this->_db->doesUserExist(args[0])) {
+	/*if (!this->_db->doesUserExist(args[0])) {
 		std::vector<std::string> msg = { "User doesn't exist" };
 		return new Message(error, msg);
-	}
+	}*/
 	this->_db->getFavoritesOfUser(args[0]);
+	std::list<std::string> users = this->_db->getUsers();
 }
 
 

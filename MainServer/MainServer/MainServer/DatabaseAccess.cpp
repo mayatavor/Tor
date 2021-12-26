@@ -130,6 +130,31 @@ void DatabaseAccess::updateUsersIpAndPort(std::string username, std::string ip, 
 	}
 }
 
+int getUsersNames(void* data, int argc, char** argv, char** azColName)
+{
+	std::list<std::string>* users = (std::list<std::string>*)data;
+	User user;
+	for (int i = 0; i < argc; i++) {
+		users->push_back(argv[0]);		
+	}
+	return 0;
+}
+
+
+std::list<std::string> DatabaseAccess::getUsers()
+{
+	std::string statement = "SELECT * FORM Users;";
+	std::list<std::string> users;
+	try
+	{
+		exec(statement.c_str(), getUsersNames, &users);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+}
+
 int getChatsCallback(void* data, int argc, char** argv, char** azColName)
 {
 	std::list<Chat>* chats = (std::list<Chat>*)data;
