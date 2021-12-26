@@ -227,34 +227,53 @@ void DatabaseAccess::addFavorite(std::string addsUsername, std::string usernameT
 }
 
 
-int getFirstAndSeondUsersIdCallback(void* data, int argc, char** argv, char** azColName)
+int getFavoritesUsernames(void* data, int argc, char** argv, char** azColName)
 {
-	std::map<int, int> users;
-	std::pair<int, int> p;
+	std::list<std::string>* usernames = (std::list<std::string>*)data;
 	for (int i = 0; i < argc; i++) {
-		if (std::string(azColName[i]) == "firstUserId")
-			p.first = std::atoi(argv[i]);
-		else if (std::string(azColName[i]) == "secondUserId")
-			p.second = std::atoi(argv[i]);
+		usernames->push_back(std::string(argv[0]));
 	}
-	users.insert(p);
 	return 0;
 }
 
-std::list<std::string> DatabaseAccess::getFavortitesOfUser(std::string username)
+std::list<std::string> DatabaseAccess::getFavoritesOfUser(std::string username)
 {
-	std::map<int, int> firstAndSecondUsers;
+	//std::map<int, int> firstAndSecondUsers;
+	std::list<std::string> usernames;
 	User u = getUser(username);
-	std::string statement = "select chats.firstUserId, chats.secondUserId FROM Favorites INNER JOIN Chats on Favorites.chatId=chats.chatId WHERE Favorites.userId=" + std::to_string(u.getId()) + ";" ;
+	//std::string statement = "select chats.firstUserId, chats.secondUserId FROM Favorites INNER JOIN Chats on Favorites.chatId=chats.chatId WHERE Favorites.userId=" + std::to_string(u.getId()) + ";" ;
+	/*std::string statement = "SELECT \
+		CASE WHEN chats.firstUserId = " + std::to_string(u.getId()) + "THEN secondUserId \
+		ELSE firstUserId END\
+		AS user \
+		FROM chats\
+		WHERE chats.chatId\
+		IN(\
+			SELECT Favorites.chatId\
+			from Favorites\
+		); ";*/
+
+	std::string statement = "with query_1 AS (SELECT CASE WHEN chats.firstUserId =" + std::to_string(u.getId()) +
+		"THEN secondUserId\
+		ELSE firstUserId END\
+		AS user\
+		FROM chats\
+		WHERE chats.chatId\
+		IN(\
+			SELECT Favorites.chatId\
+			from Favorites\
+		))\
+		SELECT Users.username FROM query_1 INNER JOIN Users ON Users.userId = user; ";
 	try
 	{
-		exec(statement.c_str(), getFirstAndSeondUsersIdCallback, &firstAndSecondUsers);
+		exec(statement.c_str(), getFavoritesUsernames, &usernames);
 
 	}
 	catch (const std::exception& e)
 	{
 		std::cout << e.what() << std::endl;
 	}
+	return usernames;
 }
 bool DatabaseAccess::createDBstructure()
 {

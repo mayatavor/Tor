@@ -2,6 +2,13 @@
 #include "MessageType.h"
 #include "DatabaseAccess.h"
 
+#define USER_EXISTS(id, content) \
+ if (this->_db->doesUserExist(id))\
+{ \
+	std::vector<std::string> msg = { content }; \
+	return new Message(error, msg); \
+}
+
 Server::Server()
 {
 	this->_db = new DatabaseAccess();
@@ -82,11 +89,12 @@ Message* Server::caseLogin(std::vector<std::string> args)
 
 Message* Server::caseSignUp(std::vector<std::string> args)
 {
-	if (this->_db->doesUserExist(args[0]))
+	/*if (this->_db->doesUserExist(args[0]))
 	{
 		std::vector<std::string> msg = { "User with this usename already exists" };
 		return new Message(error, msg);
-	}
+	}*/
+	USER_EXISTS(args[0], "User with this usename already exists");
 	this->_db->createUser(args[0], args[1], args[2], args[3]);
 	std::vector<std::string> answerArgs = { "SignedUp Successfully" };
 	return new Message(success, answerArgs);
@@ -94,10 +102,11 @@ Message* Server::caseSignUp(std::vector<std::string> args)
 
 Message* Server::caseLogout(std::vector<std::string> args)
 {
-	if (!this->_db->doesUserExist(args[0])) {
+	/*if (!this->_db->doesUserExist(args[0])) {
 		std::vector<std::string> msg = { "User doesn't exist" };
 		return new Message(error, msg);
-	}
+	}*/
+	USER_EXISTS(args[0], "User doesn't exist");
 	std::map<std::string, SOCKET>::iterator it = this->_clients.find(args[0]);
 	if (it == this->_clients.end()) {
 		std::vector<std::string> msg = { "User doesn't connected so he can't be logged out" };
@@ -107,6 +116,18 @@ Message* Server::caseLogout(std::vector<std::string> args)
 	std::vector<std::string> msg = { "User logged out successfuly" };
 	return new Message(success, msg);
 }
+
+
+Message* Server::getFavorites(std::vector<std::string> args)
+{
+	
+	if (!this->_db->doesUserExist(args[0])) {
+		std::vector<std::string> msg = { "User doesn't exist" };
+		return new Message(error, msg);
+	}
+	this->_db->getFavoritesOfUser(args[0]);
+}
+
 
 void Server::messagesHandler()
 {
@@ -144,6 +165,7 @@ void Server::messagesHandler()
 		}
 	}
 }
+
 
 void Server::accept()
 {
