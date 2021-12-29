@@ -72,7 +72,7 @@ namespace gui
         }
         public (int, string) Ghost()
         {
-            string reqInfo = (int)MessageCodes.ghostLogIn + DIVIDER + "adding a ghost name or not";
+            string reqInfo = (int)MessageCodes.ghostLogIn;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
 
