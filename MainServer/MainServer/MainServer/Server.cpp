@@ -119,16 +119,16 @@ Message* Server::caseLogout(std::vector<std::string> args)
 }
 
 
-Message* Server::getFavorites(std::vector<std::string> args)
-{
-	
-	/*if (!this->_db->doesUserExist(args[0])) {
-		std::vector<std::string> msg = { "User doesn't exist" };
-		return new Message(error, msg);
-	}*/
-	this->_db->getFavoritesOfUser(args[0]);
-	std::list<std::string> usersList = this->_db->getUsers();
-}
+//Message* Server::getFavorites(std::vector<std::string> args)
+//{
+//	
+//	/*if (!this->_db->doesUserExist(args[0])) {
+//		std::vector<std::string> msg = { "User doesn't exist" };
+//		return new Message(error, msg);
+//	}*/
+//	this->_db->getFavoritesOfUser(args[0]);
+//	std::list<std::string> usersList = this->_db->getUsers();
+//}
 
 
 void Server::messagesHandler()

@@ -153,6 +153,7 @@ std::list<std::string> DatabaseAccess::getUsers()
 	{
 		std::cout << e.what() << std::endl;
 	}
+	return users;
 }
 
 int getChatsCallback(void* data, int argc, char** argv, char** azColName)
@@ -263,7 +264,6 @@ int getFavoritesUsernames(void* data, int argc, char** argv, char** azColName)
 
 std::list<std::string> DatabaseAccess::getFavoritesOfUser(std::string username)
 {
-	//std::map<int, int> firstAndSecondUsers;
 	std::list<std::string> usernames;
 	User u = getUser(username);
 	//std::string statement = "select chats.firstUserId, chats.secondUserId FROM Favorites INNER JOIN Chats on Favorites.chatId=chats.chatId WHERE Favorites.userId=" + std::to_string(u.getId()) + ";" ;
@@ -278,17 +278,7 @@ std::list<std::string> DatabaseAccess::getFavoritesOfUser(std::string username)
 			from Favorites\
 		); ";*/
 
-	std::string statement = "with query_1 AS (SELECT CASE WHEN chats.firstUserId =" + std::to_string(u.getId()) +
-		"THEN secondUserId\
-		ELSE firstUserId END\
-		AS user\
-		FROM chats\
-		WHERE chats.chatId\
-		IN(\
-			SELECT Favorites.chatId\
-			from Favorites\
-		))\
-		SELECT Users.username FROM query_1 INNER JOIN Users ON Users.userId = user; ";
+	std::string statement = "with query_1 AS (SELECT CASE WHEN chats.firstUserId =" + std::to_string(u.getId()) + " THEN secondUserId ELSE firstUserId END AS user FROM chats WHERE chats.chatId IN(SELECT Favorites.chatId from Favorites)) SELECT Users.username FROM query_1 INNER JOIN Users ON Users.userId = user; ";
 	try
 	{
 		exec(statement.c_str(), getFavoritesUsernames, &usernames);
