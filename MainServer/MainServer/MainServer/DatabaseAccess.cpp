@@ -237,7 +237,7 @@ Chat DatabaseAccess::getChatByUsers(std::string firstUser, std::string secondUse
 	else
 		return Chat();
 }
-void DatabaseAccess::addFavorite(std::string addsUsername, std::string usernameToAdd)
+bool DatabaseAccess::addFavorite(std::string addsUsername, std::string usernameToAdd)
 {
 	User u = getUser(addsUsername);
 	Chat chat = getChatByUsers(addsUsername, usernameToAdd);
@@ -249,7 +249,9 @@ void DatabaseAccess::addFavorite(std::string addsUsername, std::string usernameT
 	catch (const std::exception& e)
 	{
 		std::cout << e.what() << std::endl;
+		return false;
 	}
+	return true;
 }
 
 

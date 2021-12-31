@@ -3,8 +3,8 @@
 #include "DatabaseAccess.h"
 #include "Structs.h"
 
-#define USER_EXISTS(id, content) \
- if (this->_db->doesUserExist(id))\
+#define USER_EXISTS(id, content, existsOrNot) \
+ if (this->_db->doesUserExist(id) == existsOrNot)\
 { \
 	std::vector<std::string> msg = { content }; \
 	return new Message(error, msg); \
@@ -95,7 +95,7 @@ Message* Server::caseSignUp(std::vector<std::string> args)
 		std::vector<std::string> msg = { "User with this usename already exists" };
 		return new Message(error, msg);
 	}*/
-	USER_EXISTS(args[0], "User with this usename already exists");
+	USER_EXISTS(args[0], "User with this usename already exists", true);
 	this->_db->createUser(args[0], args[1], args[2], args[3]);
 	std::vector<std::string> answerArgs = { "SignedUp Successfully" };
 	return new Message(success, answerArgs);
@@ -107,7 +107,7 @@ Message* Server::caseLogout(std::vector<std::string> args)
 		std::vector<std::string> msg = { "User doesn't exist" };
 		return new Message(error, msg);
 	}*/
-	USER_EXISTS(args[0], "User doesn't exist");
+	USER_EXISTS(args[0], "User doesn't exist", false);
 	std::map<std::string, SOCKET>::iterator it = this->_clients.find(args[0]);
 	if (it == this->_clients.end()) {
 		std::vector<std::string> msg = { "User doesn't connected so he can't be logged out" };
@@ -116,6 +116,19 @@ Message* Server::caseLogout(std::vector<std::string> args)
 	this->_clients.erase(it);
 	std::vector<std::string> msg = { "User logged out successfuly" };
 	return new Message(success, msg);
+}
+
+Message* Server::caseAddFavorites(std::vector<std::string> args)
+{
+	USER_EXISTS(args[0], "User doesn't exist", false);
+	bool succedded = this->_db->addFavorite(args[0], args[1]);
+	if (succedded)
+	{
+		std::vector<std::string> answerArgs = { "Added successfully" };
+		return new Message(success, answerArgs);
+	}
+	std::vector<std::string> answerArgs = { "User can't be added to favorites." };
+	return new Message(MessageType::error, answerArgs);
 }
 
 
@@ -159,6 +172,10 @@ void Server::messagesHandler()
 			case MessageType::logout:
 				caseLogout(args);
 				break;
+			case MessageType::favoriteUser:
+				caseAddFavorites(args);
+			case MessageType::getUsers:
+				caseGetUsers(args);
 			default:
 				break;
 			}

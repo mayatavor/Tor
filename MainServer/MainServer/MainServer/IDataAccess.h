@@ -35,7 +35,7 @@ public:
 
 
 	//Favorites
-	virtual void addFavorite(std::string addsUsername, std::string usernameToAdd) = 0;
+	virtual bool addFavorite(std::string addsUsername, std::string usernameToAdd) = 0;
 	//virtual std::list<
 
 };

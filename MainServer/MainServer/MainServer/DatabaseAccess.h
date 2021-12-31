@@ -41,7 +41,7 @@ public:
 
 	//Favorites
 	//The function adds a row to the favorites table.
-	void addFavorite(std::string addsUsername, std::string usernameToAdd);
+	bool addFavorite(std::string addsUsername, std::string usernameToAdd);
 	//The function returns a list of all the usernamames that the user marked as favortites.
 	std::list<std::string> getFavoritesOfUser(std::string username);
 
