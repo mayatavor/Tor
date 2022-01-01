@@ -1,6 +1,15 @@
 #include "Server.h"
 #include "MessageType.h"
 #include "DatabaseAccess.h"
+#include "Structs.h"
+#include "serialize.h"
+
+#define USER_EXISTS(id, content, existsOrNot) \
+ if (this->_db->doesUserExist(id) == existsOrNot)\
+{ \
+	std::vector<std::string> msg = { content }; \
+	return new Message(error, msg); \
+}
 
 Server::Server()
 {
@@ -82,11 +91,12 @@ Message* Server::caseLogin(std::vector<std::string> args)
 
 Message* Server::caseSignUp(std::vector<std::string> args)
 {
-	if (this->_db->doesUserExist(args[0]))
+	/*if (this->_db->doesUserExist(args[0]))
 	{
 		std::vector<std::string> msg = { "User with this usename already exists" };
 		return new Message(error, msg);
-	}
+	}*/
+	USER_EXISTS(args[0], "User with this usename already exists", true);
 	this->_db->createUser(args[0], args[1], args[2], args[3]);
 	std::vector<std::string> answerArgs = { "SignedUp Successfully" };
 	return new Message(success, answerArgs);
@@ -94,10 +104,11 @@ Message* Server::caseSignUp(std::vector<std::string> args)
 
 Message* Server::caseLogout(std::vector<std::string> args)
 {
-	if (!this->_db->doesUserExist(args[0])) {
+	/*if (!this->_db->doesUserExist(args[0])) {
 		std::vector<std::string> msg = { "User doesn't exist" };
 		return new Message(error, msg);
-	}
+	}*/
+	USER_EXISTS(args[0], "User doesn't exist", false);
 	std::map<std::string, SOCKET>::iterator it = this->_clients.find(args[0]);
 	if (it == this->_clients.end()) {
 		std::vector<std::string> msg = { "User doesn't connected so he can't be logged out" };
@@ -107,6 +118,32 @@ Message* Server::caseLogout(std::vector<std::string> args)
 	std::vector<std::string> msg = { "User logged out successfuly" };
 	return new Message(success, msg);
 }
+
+Message* Server::caseAddFavorites(std::vector<std::string> args)
+{
+	USER_EXISTS(args[0], "User doesn't exist", false);
+	bool succedded = this->_db->addFavorite(args[0], args[1]);
+	if (succedded)
+	{
+		std::vector<std::string> answerArgs = { "Added successfully" };
+		return new Message(success, answerArgs);
+	}
+	std::vector<std::string> answerArgs = { "User can't be added to favorites." };
+	return new Message(MessageType::error, answerArgs);
+}
+
+
+//Message* Server::getFavorites(std::vector<std::string> args)
+//{
+//	
+//	/*if (!this->_db->doesUserExist(args[0])) {
+//		std::vector<std::string> msg = { "User doesn't exist" };
+//		return new Message(error, msg);
+//	}*/
+//	this->_db->getFavoritesOfUser(args[0]);
+//	std::list<std::string> usersList = this->_db->getUsers();
+//}
+
 
 void Server::messagesHandler()
 {
@@ -136,6 +173,11 @@ void Server::messagesHandler()
 			case MessageType::logout:
 				caseLogout(args);
 				break;
+			case MessageType::favoriteUser:
+				caseAddFavorites(args);
+			case MessageType::getUsers:
+				caseGetUsers(args);
+				break;
 			default:
 				break;
 			}
@@ -143,6 +185,15 @@ void Server::messagesHandler()
 				h.sendData(m.first, msg->buildMessage());
 		}
 	}
+}
+
+
+Message* Server::caseGetUsers(std::vector<std::string> args)
+{
+	std::list<std::string> allUsers = this->_db->getUsers();
+	std::list<std::string> favorites = this->_db->getFavoritesOfUser(args[0]);
+	std::vector<std::string> msg = serialize::serializeUsers(allUsers, favorites);
+	return new Message(MessageType::getUsers, msg);
 }
 
 void Server::accept()

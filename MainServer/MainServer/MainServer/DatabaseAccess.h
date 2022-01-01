@@ -3,6 +3,7 @@
 #include "sqlite3.h"
 #include <iostream>
 #include <string>
+#include "Structs.h"
 
 const std::string DB_FILE_NAME = "TorDb.sqlite";
 
@@ -24,12 +25,25 @@ public:
 	bool doesUserExist(const std::string& username);
 	User getUser(const std::string& username);
 	void updateUsersIpAndPort(std::string usrname, std::string ip, std::string port);
+	//The function returns list of all of the users
+	std::list<std::string> getUsers();
+	
+	std::list<UsersListItem> getUserToSend(std::string username);
 
 
 	//chats
 	std::list<Chat> getChats();
 	void createChat(int firstUserId, int secondUserId);
 	Chat getChat(int chatId);
+	//The function gets two usernames and returns the chat id that belongsto these users.
+	Chat getChatByUsers(std::string firstUser, std::string secondUser); ////Needs to be checked - not sure that working correctlly.
+	
+
+	//Favorites
+	//The function adds a row to the favorites table.
+	bool addFavorite(std::string addsUsername, std::string usernameToAdd);
+	//The function returns a list of all the usernamames that the user marked as favortites.
+	std::list<std::string> getFavoritesOfUser(std::string username);
 
 private:
 	sqlite3* _db;
