@@ -31,6 +31,7 @@ public:
 
 
 	//Messages
+	virtual bool addMessage(std::string msgContent, std::string senderUsername, std::string otherUsername) = 0;
 	
 
 

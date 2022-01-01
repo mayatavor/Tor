@@ -1,6 +1,7 @@
 #include "DatabaseAccess.h"
-#include <io.h>
+#include <ctime>
 #include <list>
+#include <io.h>
 #include <map>
 
 bool DatabaseAccess::open()
@@ -292,6 +293,27 @@ std::list<std::string> DatabaseAccess::getFavoritesOfUser(std::string username)
 	}
 	return usernames;
 }
+
+bool DatabaseAccess::addMessage(std::string msgContent, std::string senderUsername, std::string otherUsername)
+{
+	Chat chat = getChatByUsers(senderUsername, otherUsername);
+	User sender = this->getUser(senderUsername);
+	std::time_t timestamp = std::time(nullptr);
+	long int t = static_cast<long int>(timestamp);
+	std::string statement = "INSERT INTO Messages (chatId, senderId, time) VALUES (" + std::to_string(chat.getChatId()) + ", " + std::to_string(sender.getId()) + ", " + std::to_string(t) + ");";
+	try
+	{
+		exec(statement.c_str(), nullptr, nullptr);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+		return false;
+	}
+	return true;
+}
+
+
 bool DatabaseAccess::createDBstructure()
 {
 	char usersTable[] = "CREATE TABLE IF NOT EXISTS Users(userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, ipAddress TEXT NOT NULL, port INTEGER); ";

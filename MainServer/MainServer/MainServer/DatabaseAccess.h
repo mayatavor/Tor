@@ -28,7 +28,7 @@ public:
 	//The function returns list of all of the users
 	std::list<std::string> getUsers();
 	
-	std::list<UsersListItem> getUserToSend(std::string username);
+	//std::list<UsersListItem> getUserToSend(std::string username);
 
 
 	//chats
@@ -44,6 +44,11 @@ public:
 	bool addFavorite(std::string addsUsername, std::string usernameToAdd);
 	//The function returns a list of all the usernamames that the user marked as favortites.
 	std::list<std::string> getFavoritesOfUser(std::string username);
+
+
+	//Messages 
+	//The function adds a message to the messages table, it returns true if th message was added successfully and false if not.
+	bool addMessage(std::string msgContent, std::string senderUsername, std::string otherUsername) ;
 
 private:
 	sqlite3* _db;
