@@ -43,7 +43,8 @@ private:
 	Message* caseSignUp(std::vector<std::string> args);
 	Message* caseLogout(std::vector<std::string> args);
 	Message* caseAddFavorites(std::vector<std::string> args);
-	Message* getFavorites(std::vector<std::string> args);
+	//Message* getFavorites(std::vector<std::string> args);
+	Message* caseGetUsers(std::vector<std::string> args);
 	void accept();
 	void clientHandler(SOCKET clientSocket, int port);
 	void addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port);

@@ -2,6 +2,7 @@
 #include "MessageType.h"
 #include "DatabaseAccess.h"
 #include "Structs.h"
+#include "serialize.h"
 
 #define USER_EXISTS(id, content, existsOrNot) \
  if (this->_db->doesUserExist(id) == existsOrNot)\
@@ -176,6 +177,7 @@ void Server::messagesHandler()
 				caseAddFavorites(args);
 			case MessageType::getUsers:
 				caseGetUsers(args);
+				break;
 			default:
 				break;
 			}
@@ -185,6 +187,14 @@ void Server::messagesHandler()
 	}
 }
 
+
+Message* Server::caseGetUsers(std::vector<std::string> args)
+{
+	std::list<std::string> allUsers = this->_db->getUsers();
+	std::list<std::string> favorites = this->_db->getFavoritesOfUser(args[0]);
+	std::vector<std::string> msg = serialize::serializeUsers(allUsers, favorites);
+	return new Message(MessageType::getUsers, msg);
+}
 
 void Server::accept()
 {

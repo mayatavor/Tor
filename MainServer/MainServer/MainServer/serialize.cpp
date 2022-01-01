@@ -5,7 +5,7 @@
 #define IN_USER_DELIMITER "::::"
 #define BETWEEN_USERS_DELIMITER "~"
 
-std::string serialize::serializeUsers(std::list<std::string> allUsers, std::list<std::string> favorites)
+std::vector<std::string> serialize::serializeUsers(std::list<std::string> allUsers, std::list<std::string> favorites)
 {
     std::list<std::string>::iterator it;
     std::list<UsersListItem> users;
@@ -21,10 +21,12 @@ std::string serialize::serializeUsers(std::list<std::string> allUsers, std::list
     }
     std::list<UsersListItem>::iterator usersIt;
     std::string message = "";
+    std::vector<std::string> msg;
     for (usersIt = users.begin(); usersIt != users.end(); usersIt++) {
         std::string user = (*usersIt).usernameOther + IN_USER_DELIMITER + std::to_string((*usersIt).isFavorite) + IN_USER_DELIMITER + std::to_string((*usersIt).isGhost) + BETWEEN_USERS_DELIMITER;
-        message += user;
+        //message += user;
+        msg.push_back(user);
     }
-    message = message.substr(0, message.length() - 1);
-    return message;
+    //message = message.substr(0, message.length() - 1);
+    return msg;
 }
