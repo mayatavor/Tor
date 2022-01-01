@@ -21,8 +21,33 @@ namespace gui
 
     public class Message
     {
-        public string username1 { get; set; }
-        public string username2 { get; set; }
+        public string username { get; set; }
         public string message { get; set; }
+        public bool AmITheSender { get; set; }
+
+        public Message(string u, string m, bool i)
+        {
+            this.username = u;
+            this.message = m;
+            this.AmITheSender = i;
+        }
+            
     }
+
+    public class user
+    {
+        public string username { get; set; }
+        public bool isFavorite { get; set; }
+        public bool isGhost { get; set; }
+
+        public user(string u, bool ghost, bool f)
+        {
+            this.username = u;
+            this.isFavorite = f;
+            this.isGhost = ghost;
+        }
+    }
+
+
+
 }

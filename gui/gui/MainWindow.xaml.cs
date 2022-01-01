@@ -32,6 +32,7 @@ namespace gui
             this.username = "";
 
             //get users from the server
+            List<user> users = this._communicator.GetUsers();
             UserInfo user = new UserInfo(true, "maya");
             this.UsersList.Items.Add(user);
             UserInfo user2 = new UserInfo(false, "lihi");
@@ -139,11 +140,11 @@ namespace gui
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
-            bool res = false;// this._communicator.Logout(this.username);
+            bool res = false;//this._communicator.Logout(this.username);
 
             if(!res)
             {
-                MessageBoxResult result = MessageBox.Show("Could not log out, please try again -> " + res, "LogOut Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBoxResult result = MessageBox.Show("Could not log out, please try again", "LogOut Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {

@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+*.sqlite
+
 # Distribution / packaging
 .Python
 build/
@@ -530,4 +532,3 @@ MigrationBackup/
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,c++
 
 
-*.sqlite
