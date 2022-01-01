@@ -1,35 +1,80 @@
-#include "Message.h"
+﻿#include "Message.h"
+#include <iostream>
+#include <sstream>
 
-Message::Message(int code, std::string sender, std::string sendTo, std::string messageConent, SOCKET& senderSocket)
+
+Message::Message(std::string allMsg, int port) 
 {
-	this->_code = code;
-	this->_sender = sender;
-	this->_sendTo = sendTo;
-	this->_messageContent = messageConent;
-	this->_senderSocket = senderSocket;
+	int pos = allMsg.find(DELIMITER);
+	std::string token = allMsg.substr(0, pos);
+	std::cout << token << std::endl;
+	allMsg.erase(0, pos + 1);
+	this->_mt = (MessageType)std::stoi(token.substr(0, token.length() ));
+	while ((pos = allMsg.find(DELIMITER)) != std::string::npos)
+	{
+		token = allMsg.substr(0, pos);
+		std::cout << token << std::endl;
+		allMsg.erase(0, pos + 1);
+		this->_args.push_back(token);
+	}
+	this->_args.push_back(allMsg);
+	if (this->_mt == MessageType::logIn || this->_mt == MessageType::signUp)
+		this->_args.push_back(std::to_string(port));
 }
 
-Message::~Message() = default;
-
-std::string Message::getSender() const
+Message::Message(MessageType type, std::vector<std::string> args)
 {
-	return this->_sender;
+	this->_mt = type;
+	this->_args = args;
 }
 
-std::string Message::getSendTo() const
+std::vector<std::string> Message::getArgs() const
 {
-	return this->_sendTo;
+	return this->_args;
 }
 
-std::string Message::GetMessageContent() const
+MessageType Message::getMessageType() const
 {
-	return this->_messageContent;
+	return this->_mt;
 }
-int Message::getCode()
+
+bool Message::validateArgumentLength()
 {
-	return this->_code;
+	switch (this->_mt)
+	{
+	case logIn:
+		if (this->_args.size() != 4)
+			return false;
+		break;
+	case signUp:
+		if (this->_args.size() != 4)
+			return false;
+		break;
+	case ghostLogIn:
+		return true;
+		break;
+	case sendChatMessage:
+		if (this->_args.size() != 3)
+			return false;
+	default:
+		break;
+	}
+	return true;
 }
-SOCKET& Message::getSocket()
+
+std::string Message::buildMessage()
 {
-	return this->_senderSocket;
+	std::string msg = std::accumulate(std::begin(this->_args), std::end(this->_args), std::string(),
+		[](std::string& ss, std::string& s) {
+			return ss.empty() ? s : ss + DELIMITER + s;
+		});
+
+	std::string msgcontent = std::to_string(this->_mt) + DELIMITER + msg;
+	std::string len =  std::to_string(msgcontent.length() + 1);
+	len.insert(len.begin(), 5 - len.length(), '0');
+	/*len += DELIMITER;
+	len += msgcontent;*/
+	std::stringstream ss;
+	ss << len << msgcontent;
+	return  ss.str();
 }

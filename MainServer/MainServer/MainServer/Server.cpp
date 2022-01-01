@@ -1,7 +1,21 @@
 #include "Server.h"
+#include "MessageType.h"
+#include "DatabaseAccess.h"
+#include "Structs.h"
+#include "serialize.h"
+
+#define USER_EXISTS(id, content, existsOrNot) \
+ if (this->_db->doesUserExist(id) == existsOrNot)\
+{ \
+	std::vector<std::string> msg = { content }; \
+	return new Message(error, msg); \
+}
 
 Server::Server()
 {
+	this->_db = new DatabaseAccess();
+	this->_db->open();
+	
 	// this server use TCP. that why SOCK_STREAM & IPPROTO_TCP
 	// if the server use UDP we will use: SOCK_DGRAM & IPPROTO_UDP
 	_serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -12,8 +26,9 @@ Server::Server()
 
 Server::~Server()
 {
-		this->_secondaryServers.clear();
-		delete &this->_secondaryServers;
+	delete this->_db;
+	this->_secondaryServers.clear();
+	//delete &this->_secondaryServers;
 	try
 	{
 		//Nedd to be added: free the queues memory
@@ -55,6 +70,81 @@ void Server::serve(int port)
 	}
 }
 
+Message* Server::caseLogin(std::vector<std::string> args)
+{
+	User u = this->_db->getUser(args[0]);
+	if (u.getId() == -1)
+	{
+		std::vector<std::string> args = { "User doesn't exist" };
+		Message* msg = new Message(error, args);
+		return msg;
+	}
+	else if (args[1] != u.getPassword())
+	{
+		std::vector<std::string> args = { "Wrong Password" };
+		Message* msg = new Message(error, args);
+		return msg;
+	}
+	this->_db->updateUsersIpAndPort(args[0], args[2], args[3]);
+	return new Message(success, { "LoggedIn successfully" });
+}
+
+Message* Server::caseSignUp(std::vector<std::string> args)
+{
+	/*if (this->_db->doesUserExist(args[0]))
+	{
+		std::vector<std::string> msg = { "User with this usename already exists" };
+		return new Message(error, msg);
+	}*/
+	USER_EXISTS(args[0], "User with this usename already exists", true);
+	this->_db->createUser(args[0], args[1], args[2], args[3]);
+	std::vector<std::string> answerArgs = { "SignedUp Successfully" };
+	return new Message(success, answerArgs);
+}
+
+Message* Server::caseLogout(std::vector<std::string> args)
+{
+	/*if (!this->_db->doesUserExist(args[0])) {
+		std::vector<std::string> msg = { "User doesn't exist" };
+		return new Message(error, msg);
+	}*/
+	USER_EXISTS(args[0], "User doesn't exist", false);
+	std::map<std::string, SOCKET>::iterator it = this->_clients.find(args[0]);
+	if (it == this->_clients.end()) {
+		std::vector<std::string> msg = { "User doesn't connected so he can't be logged out" };
+		return new Message(error, msg);
+	}
+	this->_clients.erase(it);
+	std::vector<std::string> msg = { "User logged out successfuly" };
+	return new Message(success, msg);
+}
+
+Message* Server::caseAddFavorites(std::vector<std::string> args)
+{
+	USER_EXISTS(args[0], "User doesn't exist", false);
+	bool succedded = this->_db->addFavorite(args[0], args[1]);
+	if (succedded)
+	{
+		std::vector<std::string> answerArgs = { "Added successfully" };
+		return new Message(success, answerArgs);
+	}
+	std::vector<std::string> answerArgs = { "User can't be added to favorites." };
+	return new Message(MessageType::error, answerArgs);
+}
+
+
+//Message* Server::getFavorites(std::vector<std::string> args)
+//{
+//	
+//	/*if (!this->_db->doesUserExist(args[0])) {
+//		std::vector<std::string> msg = { "User doesn't exist" };
+//		return new Message(error, msg);
+//	}*/
+//	this->_db->getFavoritesOfUser(args[0]);
+//	std::list<std::string> usersList = this->_db->getUsers();
+//}
+
+
 void Server::messagesHandler()
 {
 	Helper h;
@@ -62,14 +152,48 @@ void Server::messagesHandler()
 	{
 		std::unique_lock<std::mutex> lock(this->_messagesMutex);
 		this->_messagesCv.wait(lock, [this] {return !this->_messagesQueue.empty(); });
-		Message m = this->_messagesQueue.front();
+		std::pair<SOCKET, Message> m = this->_messagesQueue.front();
 		this->_messagesQueue.pop();
+		Message* msg = nullptr;
 		lock.unlock();
-		int len = m.GetMessageContent().length();
-		std::string msg = "200" + len + m.GetMessageContent();
-		h.sendData(m.getSocket(), msg);
-		//this->_clients.insert(std::pair<std::string, SOCKET>("", m.getSocket())); ///if login or signUpMessage
+		if (!m.second.validateArgumentLength())
+			std::cout << "Invalid Message" << std::endl;
+		else
+		{
+			std::vector<std::string> args = m.second.getArgs();
+			switch (m.second.getMessageType())
+			{
+			case MessageType::logIn:
+				msg = caseLogin(args);
+				break;
+			case MessageType::signUp:
+				msg = caseSignUp(args);
+				break;
+
+			case MessageType::logout:
+				caseLogout(args);
+				break;
+			case MessageType::favoriteUser:
+				caseAddFavorites(args);
+			case MessageType::getUsers:
+				caseGetUsers(args);
+				break;
+			default:
+				break;
+			}
+			if(msg)
+				h.sendData(m.first, msg->buildMessage());
+		}
 	}
+}
+
+
+Message* Server::caseGetUsers(std::vector<std::string> args)
+{
+	std::list<std::string> allUsers = this->_db->getUsers();
+	std::list<std::string> favorites = this->_db->getFavoritesOfUser(args[0]);
+	std::vector<std::string> msg = serialize::serializeUsers(allUsers, favorites);
+	return new Message(MessageType::getUsers, msg);
 }
 
 void Server::accept()
@@ -79,6 +203,15 @@ void Server::accept()
 
 	// this accepts the client and create a specific socket from server to this client
 	SOCKET client_socket = ::accept(_serverSocket, NULL, NULL);
+	
+	
+	// Construct sockaddr struct from the current SOCKET
+	struct sockaddr_in localAddress;
+	int addrSize = sizeof(localAddress);
+
+	// Get the sockaddr information from the peer (not the sock)
+	getpeername(client_socket, (struct sockaddr*)&localAddress, &addrSize);
+	std::cout << "Client's port " << ntohs(localAddress.sin_port) << std::endl;
 
 	if (client_socket == INVALID_SOCKET)
 		throw std::exception(__FUNCTION__);
@@ -86,46 +219,32 @@ void Server::accept()
 	std::cout << "Client accepted. Server and client can speak" << std::endl;
 
 	// the function that handle the conversation with the client
-	std::thread t(&Server::clientHandler, this, client_socket);
+	std::thread t(&Server::clientHandler, this, client_socket, localAddress.sin_port);
 	t.detach();
 }
 
-void Server::clientHandler(SOCKET socket)
+void Server::clientHandler(SOCKET socket, int port)
 {
 	try
 	{
 		Helper h;
 		while (true)
 		{
-			int code = h.getIntPartFromSocket(socket, 3);
-			if (code == SECONDARY_SERVER_CONNECTED)
-			{
-				int len = h.getIntPartFromSocket(socket, 2);
-				int serverId = h.getIntPartFromSocket(socket, len);
-				addSecondaryServer(socket, serverId);
-			}
-			else if(code == SEND_MESSAGE)
-			{
-				int len = h.getIntPartFromSocket(socket, 3);
-				std::string msg = h.getStringPartFromSocket(socket, len);
-				addMessageToMessagesQueue(SEND_MESSAGE, "", "", msg, socket);
-			}
+			int len = h.getIntPartFromSocket(socket, 5);
+			std::string message = h.getStringPartFromSocket(socket, len);
+			addMessageToMessagesQueue(message, socket, port);
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::unique_lock<std::mutex> lock(this->_messagesMutex);
-		this->_messagesQueue.push(*new Message(-1, "", "", "", socket));
-		lock.unlock();
-		this->_messagesCv.notify_one();
 		std::cout << e.what() << std::endl;
 	}
 }
 
-void Server::addMessageToMessagesQueue(int code, std::string sender, std::string reciever, std::string content, SOCKET clientSocket)
+void Server::addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port)
 {
 	std::unique_lock<std::mutex> lock(this->_messagesMutex);
-	this->_messagesQueue.push(*new Message(code, sender, reciever, content, clientSocket));
+	this->_messagesQueue.push(*new std::pair<SOCKET, Message>(socket, *new Message(allMsg, port)));
 	lock.unlock();
 	this->_messagesCv.notify_one();
 }

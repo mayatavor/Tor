@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,12 +11,13 @@ using System.Threading.Tasks;
 
 namespace gui
 {
-    
+
     class SocketT
     {
         private byte[] bytes;
         private Socket sender;
         const string SPACER = "::::";
+        const string DIVIDER = "~";
 
         public SocketT()
         {
@@ -35,13 +37,50 @@ namespace gui
             }
         }
 
-        public string TalkToServer(string req, string code)
+        
+        /*
+         * if the client is just connecting to the server (logging in, signing up or in as a ghost)
+         * we want the client IP to be saved in the main server.
+         * this function sends the message in the same way as the origin function
+         * but it also sends the IP as the first parameter
+         */
+        public Response FirstTalkWithServer(string mas)
         {
-            string v = code + getPaddedNumber(req.Length, 3) + req;
-            return TalkToServer(v);
+            try
+            {
+                IPAddress d = LocalIPAddress();
+                string ds = d.ToString();
+
+                mas = mas + DIVIDER + ds;
+
+                string len = getPaddedNumber(mas.Length, 5);
+
+                byte[] msg = Encoding.ASCII.GetBytes(len + mas);
+                // Send the data through the socket.
+                int bytesSent = this.sender.Send(msg);
+
+                //recive the data from the socket
+                byte[] bytesArr = new byte[5];
+                int bytesRec = this.sender.Receive(bytesArr);
+                string t = System.Text.Encoding.UTF8.GetString(bytesArr, 0, bytesArr.Length);
+
+                int lenMsg = int.Parse(t);
+                byte[] bytesArr3 = new byte[lenMsg];
+                bytesRec = this.sender.Receive(bytesArr3);
+
+                string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);
+
+                Response r = new Response(res);
+                return r;
+            }
+            catch (Exception w)
+            {
+                w.ToString();
+            }
+            return null;
         }
 
-        public string TalkToServer(string mas)
+        public Response TalkToServer(string mas)
         {
             try
             {
@@ -49,28 +88,39 @@ namespace gui
                 // Send the data through the socket.
                 int bytesSent = this.sender.Send(msg);
 
-                byte[] bytesArr = new byte[3];
+                //recive the data from the socket
+                byte[] bytesArr = new byte[5];
                 int bytesRec = this.sender.Receive(bytesArr);
-
                 string t = System.Text.Encoding.UTF8.GetString(bytesArr, 0, bytesArr.Length);
 
-                int len2 = int.Parse(t);
+                int len = int.Parse(t);
+                byte[] bytesArr3 = new byte[len];
+                bytesRec = this.sender.Receive(bytesArr3);
 
-                byte[] bytesArr2 = new byte[len2];
-                bytesRec = this.sender.Receive(bytesArr2);
-                //int len = int.Parse(t);
-                //byte[] bytesArr3 = new byte[len];
-                //bytesRec = this.sender.Receive(bytesArr3);
+                string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);
 
-                string res = System.Text.Encoding.UTF8.GetString(bytesArr2, 0, bytesArr2.Length);
-
-                return res;
+                Response r = new Response(res);
+                return r;
             }
             catch (Exception w)
             {
-
+                w.ToString();
             }
             return null;
+        }
+
+        private IPAddress LocalIPAddress()
+        {
+            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                return null;
+            }
+
+            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+
+            return host
+                .AddressList
+                .FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
         }
 
         public bool startSocket()
@@ -85,6 +135,7 @@ namespace gui
                 // Socket Class Costructor
                 Socket sender = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 this.sender = sender;
+                
                 // Connect the socket to the remote endpoint. Catch any errors.    
                 try
                 {
