@@ -49,13 +49,13 @@ public:
 
 	//Messages 
 	//The function adds a message to the messages table, it returns true if th message was added successfully and false if not.
-	bool addMessage(std::string msgContent, std::string senderUsername, std::string otherUsername) ;
+	bool addMessage(std::string msgContent, int chatId, int senderId) ;
 	/*
 	* The function reuturns a list of all of the messages in a chat.
-	* input: The usernames of the users of the chat.
+	* input: The ID of the chat,
 	* output: List of the messageds.
 	*/
-	std::list<MessagesListItem> getChatHistory(std::string username1, std::string username2);
+	std::list<MessagesListItem> getChatHistory(int chatId);
 
 private:
 	sqlite3* _db;

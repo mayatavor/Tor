@@ -305,13 +305,11 @@ std::list<std::string> DatabaseAccess::getFavoritesOfUser(std::string username)
 	return usernames;
 }
 
-bool DatabaseAccess::addMessage(std::string msgContent, std::string senderUsername, std::string otherUsername)
+bool DatabaseAccess::addMessage(std::string msgContent, int chatId, int senderId)
 {
-	Chat chat = getChatByUsers(senderUsername, otherUsername);
-	User sender = this->getUser(senderUsername);
 	std::time_t timestamp = std::time(nullptr);
 	long int t = static_cast<long int>(timestamp);
-	std::string statement = "INSERT INTO Messages (chatId, senderId, time) VALUES (" + std::to_string(chat.getChatId()) + ", " + std::to_string(sender.getId()) + ", " + std::to_string(t) + ");";
+	std::string statement = "INSERT INTO Messages (chatId, senderId, time) VALUES (" + std::to_string(chatId) + ", " + std::to_string(senderId) + ", " + std::to_string(t) + ");";
 	try
 	{
 		exec(statement.c_str(), nullptr, nullptr);
@@ -346,11 +344,10 @@ int getChatHistoryCallback(void* data, int argc, char** argv, char** azColName)
 	return 0;
 }
 
-std::list<MessagesListItem> DatabaseAccess::getChatHistory(std::string username1, std::string username2)
+std::list<MessagesListItem> DatabaseAccess::getChatHistory(int chatId)
 {
 	std::list<MessagesListItem> messages;
-	Chat chat = getChatByUsers(username1, username2);
-	std::string statement = "SELECT messageContent, sendeId from Messages WHERE chatId = " + std::to_string(chat.getChatId()) + ";";
+	std::string statement = "SELECT messageContent, sendeId from Messages WHERE chatId = " + std::to_string(chatId) + ";";
 	try
 	{
 		exec(statement.c_str(), getChatHistoryCallback, &messages);

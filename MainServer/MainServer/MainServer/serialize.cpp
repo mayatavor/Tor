@@ -20,7 +20,6 @@ std::vector<std::string> serialize::serializeUsers(std::list<std::string> allUse
         }
     }
     std::list<UsersListItem>::iterator usersIt;
-    std::string message = "";
     std::vector<std::string> msg;
     for (usersIt = users.begin(); usersIt != users.end(); usersIt++) {
         std::string user = (*usersIt).usernameOther + IN_USER_DELIMITER + std::to_string((*usersIt).isFavorite) + IN_USER_DELIMITER + std::to_string((*usersIt).isGhost) + BETWEEN_USERS_DELIMITER;
@@ -29,4 +28,15 @@ std::vector<std::string> serialize::serializeUsers(std::list<std::string> allUse
     }
     //message = message.substr(0, message.length() - 1);
     return msg;
+}
+
+std::vector<std::string> serialize::serializeChatHistory(std::list<MessagesListItem> messages)
+{
+    std::vector<std::string> result;
+    for (auto it = messages.begin(); it != messages.end(); it++)
+    {
+        std::string msg = it->msg + IN_USER_DELIMITER + it->username;
+        result.push_back(msg);
+    }
+    return result;
 }

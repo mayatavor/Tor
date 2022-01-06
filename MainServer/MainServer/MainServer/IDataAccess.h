@@ -32,8 +32,8 @@ public:
 
 
 	//Messages
-	virtual bool addMessage(std::string msgContent, std::string senderUsername, std::string otherUsername) = 0;
-	virtual std::list<MessagesListItem> getChatHistory(std::string username1, std::string username2) = 0;
+	virtual bool addMessage(std::string msgContent, int chatId, int senderId) = 0;
+	virtual std::list<MessagesListItem> getChatHistory(int chatId) = 0;
 
 
 	//Favorites

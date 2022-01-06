@@ -8,6 +8,7 @@ enum MessageType
 	logout = 212,
 	ghostLogIn = 103,
 	sendChatMessage = 300,
+	getChatHistory = 301,
 	error = 400,
 	success = 200,
 	ghostName = 201,
