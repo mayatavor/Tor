@@ -24,6 +24,7 @@ public:
 	void deleteUser(const int& userId);
 	bool doesUserExist(const std::string& username);
 	User getUser(const std::string& username);
+	std::string getUsernameById(int id);
 	void updateUsersIpAndPort(std::string usrname, std::string ip, std::string port);
 	//The function returns list of all of the users
 	std::list<std::string> getUsers();
@@ -49,6 +50,12 @@ public:
 	//Messages 
 	//The function adds a message to the messages table, it returns true if th message was added successfully and false if not.
 	bool addMessage(std::string msgContent, std::string senderUsername, std::string otherUsername) ;
+	/*
+	* The function reuturns a list of all of the messages in a chat.
+	* input: The usernames of the users of the chat.
+	* output: List of the messageds.
+	*/
+	std::list<MessagesListItem> getChatHistory(std::string username1, std::string username2);
 
 private:
 	sqlite3* _db;

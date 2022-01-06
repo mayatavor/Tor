@@ -10,6 +10,6 @@ struct UsersListItem
 
 struct MessagesListItem
 {
-	std::string usernameOther;
+	std::string username;
 	std::string msg;
 };
