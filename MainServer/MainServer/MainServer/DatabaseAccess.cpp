@@ -355,13 +355,14 @@ std::list<MessagesListItem> DatabaseAccess::getChatHistory(std::string username1
 	{
 		exec(statement.c_str(), getChatHistoryCallback, &messages);
 		for (auto it = messages.begin(); it != messages.end(); it++) {
-			//it->username = this->us
+			it->username = this->getUsernameById(atoi(it->username.c_str()));
 		}
 	}
-	catch (const std::exception&)
+	catch (const std::exception& e)
 	{
-
+		std::cout << e.what() << std::endl;
 	}
+	return messages;
 }
 
 
