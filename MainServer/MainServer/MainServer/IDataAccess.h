@@ -27,6 +27,7 @@ public:
 	virtual std::list<Chat> getChats() = 0;
 	virtual void createChat(int firstUserId, int secondUserId) = 0;
 	virtual Chat getChat(int chatId) = 0;
+	virtual Chat getChatByUsers(std::string firstUser, std::string secondUser) = 0;
 
 
 	//Messages
@@ -34,7 +35,8 @@ public:
 
 
 	//Favorites
-
+	virtual bool addFavorite(std::string addsUsername, std::string usernameToAdd) = 0;
+	//virtual std::list<
 
 };
 

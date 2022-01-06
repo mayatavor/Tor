@@ -1,6 +1,7 @@
 #include "DatabaseAccess.h"
 #include <io.h>
 #include <list>
+#include <map>
 
 bool DatabaseAccess::open()
 {
@@ -63,8 +64,8 @@ int getUsersCallback(void* data, int argc, char** argv, char** azColName)
 			user.setPassword(argv[i]);
 		else if (std::string(azColName[i]) == "ipAddress")
 			user.setIpAddress(argv[i]);
-		/*else if (std::string(azColName[i]) == "port")
-			user.setPort(std::atoi(argv[i]));*/
+		else if (std::string(azColName[i]) == "port")
+			user.setPort(std::atoi(argv[i]));
 	}
 	users->push_back(user);
 	return 0;
@@ -129,6 +130,32 @@ void DatabaseAccess::updateUsersIpAndPort(std::string username, std::string ip, 
 	}
 }
 
+int getUsersNames(void* data, int argc, char** argv, char** azColName)
+{
+	std::list<std::string>* users = (std::list<std::string>*)data;
+	User user;
+	for (int i = 0; i < argc; i++) {
+		users->push_back(argv[0]);		
+	}
+	return 0;
+}
+
+
+std::list<std::string> DatabaseAccess::getUsers()
+{
+	std::string statement = "SELECT * FORM Users;";
+	std::list<std::string> users;
+	try
+	{
+		exec(statement.c_str(), getUsersNames, &users);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	return users;
+}
+
 int getChatsCallback(void* data, int argc, char** argv, char** azColName)
 {
 	std::list<Chat>* chats = (std::list<Chat>*)data;
@@ -175,7 +202,95 @@ void DatabaseAccess::createChat(int firstUserId, int secondUserId)
 }
 Chat DatabaseAccess::getChat(int chatId)
 {
-	return Chat();
+	std::list<Chat> chats;
+	std::string statement = "SELECT * FROM Chats;";
+	char* errMessage = nullptr;
+	try
+	{
+		exec(statement.c_str(), getChatsCallback, &chats);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	if (!chats.empty())
+		return *chats.begin();
+	else
+		return Chat();
+}
+Chat DatabaseAccess::getChatByUsers(std::string firstUser, std::string secondUser)
+{
+	User user1 = getUser(firstUser);
+	User user2 = getUser(secondUser);
+	std::string statement = "SELECT * FORM Chats WHERE ((firstUserId = " + std::to_string(user1.getId())  + " AND secondUserId = " + std::to_string(user2.getId()) + ") OR (firstUserId = " + std::to_string(user2.getId()) + " AND secondUserId = " + std::to_string(user1.getId())  + "));";
+	std::list<Chat> chats;
+	try
+	{
+		exec(statement.c_str(), getChatsCallback, &chats);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	if (!chats.empty())
+		return *chats.begin();
+	else
+		return Chat();
+}
+bool DatabaseAccess::addFavorite(std::string addsUsername, std::string usernameToAdd)
+{
+	User u = getUser(addsUsername);
+	Chat chat = getChatByUsers(addsUsername, usernameToAdd);
+	std::string statement = "INSERT INTO Favorites (userId, chatId) VALUES(" + std::to_string(u.getId()) + ", " + std::to_string(chat.getChatId()) + ");";
+	try
+	{
+		exec(statement.c_str(), nullptr, nullptr);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+		return false;
+	}
+	return true;
+}
+
+
+int getFavoritesUsernames(void* data, int argc, char** argv, char** azColName)
+{
+	std::list<std::string>* usernames = (std::list<std::string>*)data;
+	for (int i = 0; i < argc; i++) {
+		usernames->push_back(std::string(argv[0]));
+	}
+	return 0;
+}
+
+std::list<std::string> DatabaseAccess::getFavoritesOfUser(std::string username)
+{
+	std::list<std::string> usernames;
+	User u = getUser(username);
+	//std::string statement = "select chats.firstUserId, chats.secondUserId FROM Favorites INNER JOIN Chats on Favorites.chatId=chats.chatId WHERE Favorites.userId=" + std::to_string(u.getId()) + ";" ;
+	/*std::string statement = "SELECT \
+		CASE WHEN chats.firstUserId = " + std::to_string(u.getId()) + "THEN secondUserId \
+		ELSE firstUserId END\
+		AS user \
+		FROM chats\
+		WHERE chats.chatId\
+		IN(\
+			SELECT Favorites.chatId\
+			from Favorites\
+		); ";*/
+
+	std::string statement = "with query_1 AS (SELECT CASE WHEN chats.firstUserId =" + std::to_string(u.getId()) + " THEN secondUserId ELSE firstUserId END AS user FROM chats WHERE chats.chatId IN(SELECT Favorites.chatId from Favorites)) SELECT Users.username FROM query_1 INNER JOIN Users ON Users.userId = user; ";
+	try
+	{
+		exec(statement.c_str(), getFavoritesUsernames, &usernames);
+
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	return usernames;
 }
 bool DatabaseAccess::createDBstructure()
 {
