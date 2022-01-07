@@ -79,19 +79,21 @@ namespace gui
                 this.UserName.Text = user.GetUsername();
                 this.username = user.GetUsername();
 
-<<<<<<< HEAD
+                //get the chat history
                 List<Message> messages = this._communicator.GetMessages(myUserName, user.GetUsername());
                 for (int i = 0; i < messages.Count; i++)
                 {
-                    if(messages[i].username == myUserName)
+                    if (messages[i].username == myUserName)
+                    {
+                        MessageSent m = new MessageSent(messages[i].message);
                         this.MessagesList.Items.Add(messages[i]);
+                    }
                     else
-                        this.MessagesList.Items.Add();
+                    {
+                        MessageRecived m = new MessageRecived(messages[i].message);
+                        this.MessagesList.Items.Add(messages[i]);
+                    }
                 }
-=======
-                //add chat history
-
->>>>>>> 8519084f10fd5b3f81dedaa35631d5c332765ffc
             }
         }
 
