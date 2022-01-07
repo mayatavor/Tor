@@ -79,9 +79,9 @@ namespace gui
             return (res.code, res.objects[1]);
         }
 
-        public List<Message> GetMessages(string username1, string username2, string msg)
+        public List<Message> GetMessages(string username1, string username2)
         {
-            string reqInfo = (int)MessageCodes.getChatHistory + DIVIDER + username1 + DIVIDER + username2 + DIVIDER + msg;
+            string reqInfo = (int)MessageCodes.getChatHistory + DIVIDER + username1 + DIVIDER + username2;
             string len = getPaddedNumber(reqInfo.Length, 5);
 
             Response res = this._socket.TalkToServer(len + reqInfo);

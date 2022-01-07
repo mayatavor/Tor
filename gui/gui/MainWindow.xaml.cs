@@ -33,11 +33,11 @@ namespace gui
 
             //get users from the server
             List<user> users = this._communicator.GetUsers();
-            UserInfo user = new UserInfo(true, "maya");
+            UserInfo user = new UserInfo(true, "maya",true);
             this.UsersList.Items.Add(user);
-            UserInfo user2 = new UserInfo(false, "lihi");
+            UserInfo user2 = new UserInfo(false, "lihi",true);
             this.UsersList.Items.Add(user2);
-            UserInfo user3 = new UserInfo(false, "adi");
+            UserInfo user3 = new UserInfo(false, "adi",false);
             this.UsersList.Items.Add(user3);
         }
 
@@ -78,6 +78,15 @@ namespace gui
                 UserInfo user = (UserInfo)item;
                 this.UserName.Text = user.GetUsername();
                 this.username = user.GetUsername();
+
+                List<Message> messages = this._communicator.GetMessages(myUserName, user.GetUsername());
+                for (int i = 0; i < messages.Count; i++)
+                {
+                    if(messages[i].username == myUserName)
+                        this.MessagesList.Items.Add(messages[i]);
+                    else
+                        this.MessagesList.Items.Add();
+                }
             }
         }
 
@@ -102,12 +111,12 @@ namespace gui
             {
                 this.UsersList.Items.RemoveAt(i);
             }
-
-            UserInfo user = new UserInfo(true, "maya");
+                
+            UserInfo user = new UserInfo(true, "maya", true);
             this.UsersList.Items.Add(user);
-            UserInfo user2 = new UserInfo(false, "lihi");
+            UserInfo user2 = new UserInfo(false, "lihi", true);
             this.UsersList.Items.Add(user2);
-            UserInfo user3 = new UserInfo(false, "adi");
+            UserInfo user3 = new UserInfo(false, "adi", false);
             this.UsersList.Items.Add(user3);
 
             this.SearchBackground.Source = GetImage("Assets/copy.png");
