@@ -79,6 +79,7 @@ namespace gui
                 this.UserName.Text = user.GetUsername();
                 this.username = user.GetUsername();
 
+<<<<<<< HEAD
                 List<Message> messages = this._communicator.GetMessages(myUserName, user.GetUsername());
                 for (int i = 0; i < messages.Count; i++)
                 {
@@ -87,6 +88,10 @@ namespace gui
                     else
                         this.MessagesList.Items.Add();
                 }
+=======
+                //add chat history
+
+>>>>>>> 8519084f10fd5b3f81dedaa35631d5c332765ffc
             }
         }
 

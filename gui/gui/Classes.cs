@@ -23,13 +23,11 @@ namespace gui
     {
         public string username { get; set; }
         public string message { get; set; }
-        public bool AmITheSender { get; set; }
 
-        public Message(string u, string m, bool i)
+        public Message(string u, string m)
         {
             this.username = u;
             this.message = m;
-            this.AmITheSender = i;
         }
             
     }
