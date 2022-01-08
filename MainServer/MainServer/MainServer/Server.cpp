@@ -182,7 +182,7 @@ void Server::messagesHandler()
 				msg = caseSendMessage(args);
 				break;
 			case MessageType::getChatHistory:
-				//msg = 
+				msg = caseGetChatHistory(args);
 
 			default:
 				break;
@@ -190,6 +190,7 @@ void Server::messagesHandler()
 			if(msg)
 				h.sendData(m.first, msg->buildMessage());
 		}
+		delete msg;
 	}
 }
 
@@ -219,6 +220,11 @@ Message* Server::caseSendMessage(std::vector<std::string> args)
 	bool success = this->_db->addMessage(args[2], chat.getChatId(), std::stoi(args[0]));
 	if (success) {
 		msg.push_back("Message added successfully");
+		std::vector<std::string> msgToUser = { args[2] };
+		Message* msgToOtherClient = new Message(MessageType::sendMessageToOtherUser, msgToUser);
+		SOCKET otherUserSock = this->_clients[args[1]];
+		Helper::sendData(otherUserSock, msgToOtherClient->buildMessage());
+		delete msgToOtherClient;
 		return new Message(MessageType::success, msg);
 	}
 	else
@@ -231,6 +237,9 @@ Message* Server::caseSendMessage(std::vector<std::string> args)
 Message* Server::caseGetChatHistory(std::vector<std::string> args)
 {
 	Chat chat = this->_db->getChatByUsers(args[0], args[1]);
+	std::list<MessagesListItem> messages = this->_db->getChatHistory(chat.getChatId());
+	std::vector<std::string> msg = serialize::serializeChatHistory(messages);
+	return new Message(MessageType::success, msg);
 }
 
 void Server::accept()

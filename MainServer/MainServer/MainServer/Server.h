@@ -46,7 +46,7 @@ private:
 	//Message* getFavorites(std::vector<std::string> args);
 	Message* caseGetUsers(std::vector<std::string> args);
 	Message* caseSendMessage(std::vector<std::string> arg);
-	Message* getChatHistory(std::vector<std::string> args);
+	Message* caseGetChatHistory(std::vector<std::string> args);
 
 	void accept();
 	void clientHandler(SOCKET clientSocket, int port);
