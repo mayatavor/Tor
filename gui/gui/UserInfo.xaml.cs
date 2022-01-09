@@ -22,7 +22,6 @@ namespace gui
     {
         private bool star;
         private string username;
-        private bool isGhost;
         private Communicator _communicator;
         public UserInfo(bool isStar, string username, bool g)
         {

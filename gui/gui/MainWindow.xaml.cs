@@ -32,13 +32,7 @@ namespace gui
             this.username = "";
 
             //get users from the server
-            List<user> users = this._communicator.GetUsers();
-            UserInfo user = new UserInfo(true, "maya",true);
-            this.UsersList.Items.Add(user);
-            UserInfo user2 = new UserInfo(false, "lihi",true);
-            this.UsersList.Items.Add(user2);
-            UserInfo user3 = new UserInfo(false, "adi",false);
-            this.UsersList.Items.Add(user3);
+            getUsers();
         }
 
         private void SendMsg(string text)
@@ -118,15 +112,10 @@ namespace gui
             {
                 this.UsersList.Items.RemoveAt(i);
             }
-                
-            UserInfo user = new UserInfo(true, "maya", true);
-            this.UsersList.Items.Add(user);
-            UserInfo user2 = new UserInfo(false, "lihi", true);
-            this.UsersList.Items.Add(user2);
-            UserInfo user3 = new UserInfo(false, "adi", false);
-            this.UsersList.Items.Add(user3);
 
-            this.SearchBackground.Source = GetImage("Assets/copy.png");
+            getUsers();
+
+            this.SearchBackground.Source = GetImage("Assets/search.png");
             this.SearchText.Text = "";
 
         }
@@ -169,5 +158,26 @@ namespace gui
                 wnd.ShowDialog();
             }
         }
+
+
+        private void getUsers()
+        {
+            //List<UserInfo> users = this._communicator.GetUsers();
+
+            //for (int i = 0; i < users.Count; i++)
+            //{
+            //    this.UsersList.Items.Add(users[i]);
+            //}
+
+            UserInfo user = new UserInfo(true, "maya", true);
+            this.UsersList.Items.Add(user);
+            UserInfo user2 = new UserInfo(false, "lihi", true);
+            this.UsersList.Items.Add(user2);
+            UserInfo user3 = new UserInfo(false, "adi", false);
+            this.UsersList.Items.Add(user3);
+        }
+
+
+
     }
 }
