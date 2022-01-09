@@ -79,9 +79,9 @@ namespace gui
             return (res.code, res.objects[1]);
         }
 
-        public List<Message> GetMessages(string username1, string username2, string msg)
+        public List<Message> GetMessages(string username1, string username2)
         {
-            string reqInfo = (int)MessageCodes.getChatHistory + DIVIDER + username1 + DIVIDER + username2 + DIVIDER + msg;
+            string reqInfo = (int)MessageCodes.getChatHistory + DIVIDER + username1 + DIVIDER + username2;
             string len = getPaddedNumber(reqInfo.Length, 5);
 
             Response res = this._socket.TalkToServer(len + reqInfo);
@@ -93,7 +93,7 @@ namespace gui
             for (int i = 1; i < res.objects.Count() - 1; i++)
             {
                 userInfo = res.objects[i].Split(sep, StringSplitOptions.RemoveEmptyEntries);
-                messages.Add(new Message(userInfo[0], userInfo[1], Convert.ToBoolean(userInfo[2])));
+                messages.Add(new Message(userInfo[0], userInfo[1]));
             }
 
             return messages;

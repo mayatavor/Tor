@@ -78,6 +78,9 @@ namespace gui
                 UserInfo user = (UserInfo)item;
                 this.UserName.Text = user.GetUsername();
                 this.username = user.GetUsername();
+
+                //add chat history
+
             }
         }
 
