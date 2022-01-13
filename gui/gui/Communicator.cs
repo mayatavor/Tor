@@ -99,21 +99,23 @@ namespace gui
             return messages;
         }
 
-        public List<user> GetUsers()
+        public List<UserInfo> GetUsers() // username::::isFavorite::::isGhost
         {
             string reqInfo = (int)MessageCodes.getUsers + "";
             string len = getPaddedNumber(reqInfo.Length, 5);
 
             Response res = this._socket.TalkToServer(len + reqInfo);
 
-            List<user> users = new List<user>();
+            List<UserInfo> users = new List<UserInfo>();
             string[] sep = new string[] { "::::" };
             string[] userInfo;
 
-            for (int i = 1; i < res.objects.Count() - 1; i++)
+            for (int i = 1; i < res.objects.Count(); i++)
             {
                 userInfo = res.objects[i].Split(sep, StringSplitOptions.RemoveEmptyEntries);
-                users.Add(new user(userInfo[0], Convert.ToBoolean(userInfo[1]), Convert.ToBoolean(userInfo[2])));
+
+                if(userInfo[0] != myUsername)
+                    users.Add(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo[1])), userInfo[0], Convert.ToBoolean(Convert.ToInt16(userInfo[2]))));
             }
 
             return users;

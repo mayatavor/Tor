@@ -1,6 +1,7 @@
 #include "DatabaseAccess.h"
-#include <io.h>
+#include <ctime>
 #include <list>
+#include <io.h>
 #include <map>
 
 bool DatabaseAccess::open()
@@ -117,6 +118,17 @@ User DatabaseAccess::getUser(const std::string& username)
 		return User();
 }
 
+std::string DatabaseAccess::getUsernameById(int id)
+{
+	std::list<User> users;
+	std::string str = "SELECT * FROM Users WHERE userId = " + std::to_string(id) + ";";
+	exec(str.c_str(), getUsersCallback, &users);
+	if (!users.empty())
+		return (*users.begin()).getUsername();
+	else
+		return NULL;
+}
+
 void DatabaseAccess::updateUsersIpAndPort(std::string username, std::string ip, std::string port)
 {
 	std::string str = "UPDATE Users SET ipAddress = '" + ip + "', port = " + port + ";";
@@ -143,7 +155,7 @@ int getUsersNames(void* data, int argc, char** argv, char** azColName)
 
 std::list<std::string> DatabaseAccess::getUsers()
 {
-	std::string statement = "SELECT * FORM Users;";
+	std::string statement = "SELECT username FROM Users;";
 	std::list<std::string> users;
 	try
 	{
@@ -292,13 +304,72 @@ std::list<std::string> DatabaseAccess::getFavoritesOfUser(std::string username)
 	}
 	return usernames;
 }
+
+bool DatabaseAccess::addMessage(std::string msgContent, int chatId, int senderId)
+{
+	std::time_t timestamp = std::time(nullptr);
+	long int t = static_cast<long int>(timestamp);
+	std::string statement = "INSERT INTO Messages (chatId, senderId, time) VALUES (" + std::to_string(chatId) + ", " + std::to_string(senderId) + ", " + std::to_string(t) + ");";
+	try
+	{
+		exec(statement.c_str(), nullptr, nullptr);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+		return false;
+	}
+	return true;
+}
+
+int getChatHistoryCallback(void* data, int argc, char** argv, char** azColName) 
+{
+	std::list<MessagesListItem>* mesages = (std::list<MessagesListItem>*)data;
+	MessagesListItem message;
+	for (int i = 0; i < argc; i++) {
+		/*if (std::string(azColName[i]) == "chatId")
+			chat.setChatId(std::atoi(argv[i]));
+		else if (std::string(azColName[i]) == "firstUserId")
+			chat.setFirstuser(std::atoi(argv[i]));
+		else if (std::string(azColName[i]) == "secondUserId")
+			chat.setSecondUser(std::atoi(argv[i]));*/
+		if (std::string(azColName[i]) == "messageContent") {
+			message.msg = argv[i];
+		}
+		else if (std::string(azColName[i]) == "senderId") {
+			message.username = std::atoi(argv[i]);
+		}
+	}
+	mesages->push_back(message);
+	return 0;
+}
+
+std::list<MessagesListItem> DatabaseAccess::getChatHistory(int chatId)
+{
+	std::list<MessagesListItem> messages;
+	std::string statement = "SELECT messageContent, sendeId from Messages WHERE chatId = " + std::to_string(chatId) + ";";
+	try
+	{
+		exec(statement.c_str(), getChatHistoryCallback, &messages);
+		for (auto it = messages.begin(); it != messages.end(); it++) {
+			it->username = this->getUsernameById(atoi(it->username.c_str()));
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	return messages;
+}
+
+
 bool DatabaseAccess::createDBstructure()
 {
-	char usersTable[] = "CREATE TABLE IF NOT EXISTS Users(userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, ipAddress TEXT NOT NULL, port INTEGER); ";
+	char usersTable[] = "CREATE TABLE IF NOT EXISTS Users(userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, ipAddress TEXT NOT NULL, port INTEGER DEFAULT 0); ";
 	char SecondaryServersTable[] = "CREATE TABLE IF NOT EXISTS SecondaryServers(serverID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ipAddress TEXT NOT NULL, password TEXT NOT NULL, d INTEGER NOT NULL, e INTEGER NOT NULL); ";
 	char chatsTable[] = "CREATE TABLE IF NOT EXISTS Chats(chatId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, firstUserId INTEGER NOT NULL, secondUserId INTEGER NOT NULL, FOREIGN KEY(firstUserId) REFERENCES Users(userId), FOREIGN KEY(secondUserId) REFERENCES Users(userId)); ";
 	char FavoritesTable[] = "CREATE TABLE IF NOT EXISTS Favorites(userId INTEGER NOT NULL, chatId INTEGER NOT NULL, FOREIGN KEY(userId) REFERENCES Users(useId), FOREIGN KEY(chatId) REFERENCES Chats(chatId)); ";
-	char MessagesTable[] = "CREATE TABLE IF NOT EXISTS Messages(messageId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, chatId INTEGER NOT NULL, senderId INTEGER NOT NULL, time INTEGER NOT NULL, FOREIGN KEY(chatId) REFERENCES Chats(chatId), FOREIGN KEY(senderId) REFERENCES Users(userId)); ";
+	char MessagesTable[] = "CREATE TABLE IF NOT EXISTS Messages(messageId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, chatId INTEGER NOT NULL, messageContent TEXT NOT NULL, senderId INTEGER NOT NULL, time INTEGER NOT NULL, FOREIGN KEY(chatId) REFERENCES Chats(chatId), FOREIGN KEY(senderId) REFERENCES Users(userId)); ";
 	try
 	{
 		exec(usersTable, nullptr, nullptr);

@@ -78,7 +78,7 @@
                     Click="search_Click"
                     Tag="search"
                     Margin="215,-1,2,-5">
-                    <Image Name="SearchBackground" Source="Assets/copy.png" Width="20" Height="20"/>
+                    <Image Name="SearchBackground" Source="Assets/search.png" Width="20" Height="20"/>
                 </Button>
             </Grid>
 

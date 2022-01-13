@@ -32,13 +32,7 @@ namespace gui
             this.username = "";
 
             //get users from the server
-            List<user> users = this._communicator.GetUsers();
-            UserInfo user = new UserInfo(true, "maya");
-            this.UsersList.Items.Add(user);
-            UserInfo user2 = new UserInfo(false, "lihi");
-            this.UsersList.Items.Add(user2);
-            UserInfo user3 = new UserInfo(false, "adi");
-            this.UsersList.Items.Add(user3);
+            getUsers();
         }
 
         private void SendMsg(string text)
@@ -79,8 +73,21 @@ namespace gui
                 this.UserName.Text = user.GetUsername();
                 this.username = user.GetUsername();
 
-                //add chat history
-
+                //get the chat history
+                List<Message> messages = this._communicator.GetMessages(myUserName, user.GetUsername());
+                for (int i = 0; i < messages.Count; i++)
+                {
+                    if (messages[i].username == myUserName)
+                    {
+                        MessageSent m = new MessageSent(messages[i].message);
+                        this.MessagesList.Items.Add(messages[i]);
+                    }
+                    else
+                    {
+                        MessageRecived m = new MessageRecived(messages[i].message);
+                        this.MessagesList.Items.Add(messages[i]);
+                    }
+                }
             }
         }
 
@@ -106,14 +113,9 @@ namespace gui
                 this.UsersList.Items.RemoveAt(i);
             }
 
-            UserInfo user = new UserInfo(true, "maya");
-            this.UsersList.Items.Add(user);
-            UserInfo user2 = new UserInfo(false, "lihi");
-            this.UsersList.Items.Add(user2);
-            UserInfo user3 = new UserInfo(false, "adi");
-            this.UsersList.Items.Add(user3);
+            getUsers();
 
-            this.SearchBackground.Source = GetImage("Assets/copy.png");
+            this.SearchBackground.Source = GetImage("Assets/search.png");
             this.SearchText.Text = "";
 
         }
@@ -156,5 +158,19 @@ namespace gui
                 wnd.ShowDialog();
             }
         }
+
+
+        private void getUsers()
+        {
+            List<UserInfo> users = this._communicator.GetUsers();
+
+            for (int i = 0; i < users.Count; i++)
+            {
+                this.UsersList.Items.Add(users[i]);
+            }
+        }
+
+
+
     }
 }

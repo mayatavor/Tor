@@ -91,12 +91,12 @@ Message* Server::caseLogin(std::vector<std::string> args)
 
 Message* Server::caseSignUp(std::vector<std::string> args)
 {
-	/*if (this->_db->doesUserExist(args[0]))
+	if (this->_db->doesUserExist(args[0]))
 	{
 		std::vector<std::string> msg = { "User with this usename already exists" };
 		return new Message(error, msg);
-	}*/
-	USER_EXISTS(args[0], "User with this usename already exists", true);
+	}
+	//USER_EXISTS(args[0], "User with this usename already exists", true);
 	this->_db->createUser(args[0], args[1], args[2], args[3]);
 	std::vector<std::string> answerArgs = { "SignedUp Successfully" };
 	return new Message(success, answerArgs);
@@ -171,19 +171,26 @@ void Server::messagesHandler()
 				break;
 
 			case MessageType::logout:
-				caseLogout(args);
+				msg = caseLogout(args);
 				break;
 			case MessageType::favoriteUser:
-				caseAddFavorites(args);
+				msg = caseAddFavorites(args);
 			case MessageType::getUsers:
-				caseGetUsers(args);
+				msg = caseGetUsers(args);
 				break;
+			case MessageType::sendChatMessage:
+				msg = caseSendMessage(args);
+				break;
+			case MessageType::getChatHistory:
+				msg = caseGetChatHistory(args);
+
 			default:
 				break;
 			}
 			if(msg)
 				h.sendData(m.first, msg->buildMessage());
 		}
+		delete msg;
 	}
 }
 
@@ -194,6 +201,45 @@ Message* Server::caseGetUsers(std::vector<std::string> args)
 	std::list<std::string> favorites = this->_db->getFavoritesOfUser(args[0]);
 	std::vector<std::string> msg = serialize::serializeUsers(allUsers, favorites);
 	return new Message(MessageType::getUsers, msg);
+}
+
+Message* Server::caseSendMessage(std::vector<std::string> args)
+{
+	User u1 = this->_db->getUser(args[0]);
+	User u2 = this->_db->getUser(args[1]);
+	std::vector<std::string> msg;
+	if (u1.getId() == -1 || u2.getId() == -1)
+	{
+		msg.push_back("One of the users doesn't exist");
+		return new Message(MessageType::error, msg);
+	}
+	Chat chat = this->_db->getChatByUsers(args[0], args[1]);
+	if (chat.getChatId() == -1) 
+		this->_db->createChat(u1.getId(), u2.getId());
+	chat = this->_db->getChatByUsers(args[0], args[1]);
+	bool success = this->_db->addMessage(args[2], chat.getChatId(), std::stoi(args[0]));
+	if (success) {
+		msg.push_back("Message added successfully");
+		std::vector<std::string> msgToUser = { args[2] };
+		Message* msgToOtherClient = new Message(MessageType::sendMessageToOtherUser, msgToUser);
+		SOCKET otherUserSock = this->_clients[args[1]];
+		Helper::sendData(otherUserSock, msgToOtherClient->buildMessage());
+		delete msgToOtherClient;
+		return new Message(MessageType::success, msg);
+	}
+	else
+	{
+		msg.push_back("Couldn't add mesage:(");
+		return new Message(MessageType::success, msg);
+	}
+}
+
+Message* Server::caseGetChatHistory(std::vector<std::string> args)
+{
+	Chat chat = this->_db->getChatByUsers(args[0], args[1]);
+	std::list<MessagesListItem> messages = this->_db->getChatHistory(chat.getChatId());
+	std::vector<std::string> msg = serialize::serializeChatHistory(messages);
+	return new Message(MessageType::success, msg);
 }
 
 void Server::accept()

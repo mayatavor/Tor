@@ -1,4 +1,5 @@
 #pragma once
+#include "Structs.h"
 #include "User.h"
 #include "Chat.h"
 #include <list>
@@ -31,7 +32,8 @@ public:
 
 
 	//Messages
-	
+	virtual bool addMessage(std::string msgContent, int chatId, int senderId) = 0;
+	virtual std::list<MessagesListItem> getChatHistory(int chatId) = 0;
 
 
 	//Favorites
