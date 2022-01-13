@@ -162,19 +162,12 @@ namespace gui
 
         private void getUsers()
         {
-            //List<UserInfo> users = this._communicator.GetUsers();
+            List<UserInfo> users = this._communicator.GetUsers();
 
-            //for (int i = 0; i < users.Count; i++)
-            //{
-            //    this.UsersList.Items.Add(users[i]);
-            //}
-
-            UserInfo user = new UserInfo(true, "maya", true);
-            this.UsersList.Items.Add(user);
-            UserInfo user2 = new UserInfo(false, "lihi", true);
-            this.UsersList.Items.Add(user2);
-            UserInfo user3 = new UserInfo(false, "adi", false);
-            this.UsersList.Items.Add(user3);
+            for (int i = 0; i < users.Count; i++)
+            {
+                this.UsersList.Items.Add(users[i]);
+            }
         }
 
 
