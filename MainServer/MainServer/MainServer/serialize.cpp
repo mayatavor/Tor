@@ -35,7 +35,7 @@ std::vector<std::string> serialize::serializeChatHistory(std::list<MessagesListI
     std::vector<std::string> result;
     for (auto it = messages.begin(); it != messages.end(); it++)
     {
-        std::string msg = it->msg + IN_USER_DELIMITER + it->username;
+        std::string msg = it->username + IN_USER_DELIMITER + it->msg;
         result.push_back(msg);
     }
     return result;
