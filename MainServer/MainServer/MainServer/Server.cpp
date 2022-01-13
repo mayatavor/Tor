@@ -91,12 +91,12 @@ Message* Server::caseLogin(std::vector<std::string> args)
 
 Message* Server::caseSignUp(std::vector<std::string> args)
 {
-	/*if (this->_db->doesUserExist(args[0]))
+	if (this->_db->doesUserExist(args[0]))
 	{
 		std::vector<std::string> msg = { "User with this usename already exists" };
 		return new Message(error, msg);
-	}*/
-	USER_EXISTS(args[0], "User with this usename already exists", true);
+	}
+	//USER_EXISTS(args[0], "User with this usename already exists", true);
 	this->_db->createUser(args[0], args[1], args[2], args[3]);
 	std::vector<std::string> answerArgs = { "SignedUp Successfully" };
 	return new Message(success, answerArgs);

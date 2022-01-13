@@ -10,14 +10,15 @@ std::vector<std::string> serialize::serializeUsers(std::list<std::string> allUse
     std::list<std::string>::iterator it;
     std::list<UsersListItem> users;
     for (it = allUsers.begin(); it != allUsers.end(); it++) {
-        if (std::find(favorites.begin(), favorites.end(), *it) != favorites.end()) {
-            bool isGhost = (*it).find("ghost") != std::string::npos;
             UsersListItem uli;
-            uli.isFavorite = true;
-            uli.isGhost = isGhost;
+            uli.isFavorite = false;
             uli.usernameOther = *it;
-            users.push_back(uli);
+            uli.isGhost = (*it).find("ghost") != std::string::npos;
+        if (std::find(favorites.begin(), favorites.end(), *it) != favorites.end()) {
+            //bool isGhost = (*it).find("ghost") != std::string::npos;
+            uli.isFavorite = true;
         }
+            users.push_back(uli);
     }
     std::list<UsersListItem>::iterator usersIt;
     std::vector<std::string> msg;
@@ -26,6 +27,8 @@ std::vector<std::string> serialize::serializeUsers(std::list<std::string> allUse
         //message += user;
         msg.push_back(user);
     }
+    std::string lastUser = msg[msg.size() - 1];
+    msg[msg.size() - 1] = lastUser.substr(0, lastUser.length() - 1);
     //message = message.substr(0, message.length() - 1);
     return msg;
 }

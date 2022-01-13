@@ -23,13 +23,22 @@ namespace gui
         private bool star;
         private string username;
         private Communicator _communicator;
-        public UserInfo(bool isStar, string username)
+        public UserInfo(bool isStar, string username, bool g)
         {
+            InitializeComponent();
             this.star = isStar;
             this.username = username;
 
+            if (g == true)
+            {
+                this.StarBackGround.Source = new BitmapImage(new Uri("Assets/ghost.png", UriKind.Relative));
+            }
+            else
+            {
+                this.GhostOrPerson.Source = new BitmapImage(new Uri("Assets/face1.png", UriKind.Relative));
+            }
+
             this._communicator = (Communicator)Application.Current.Properties["Com"];
-            InitializeComponent();
 
             if (this.star == true)
             {

@@ -12,12 +12,13 @@
             <ColumnDefinition Width="140"/>
             <ColumnDefinition Width="35"/>
         </Grid.ColumnDefinitions>
-
-        <Border Width="40" Height="40" CornerRadius="25" BorderBrush="Black" BorderThickness="0.6">
-            <Border.Background>
-                <ImageBrush ImageSource="Assets/face1.png"/>
-            </Border.Background>
-        </Border>
+            
+        <Image
+            Source="Assets/ghost.png" 
+            Width="30" 
+            Name="GhostOrPerson"
+            Height="30"
+            Margin="0 0 0 0"/>
         <Image Source="Assets/GreenDot.png" Height="15" Margin="35,30,0,0"/>
 
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1">
