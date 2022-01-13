@@ -8,11 +8,13 @@ enum MessageType
 	logout = 212,
 	ghostLogIn = 103,
 	sendChatMessage = 300,
+	getChatHistory = 301,
+	getUsers = 302,
+	sendMessageToOtherUser = 303,
 	error = 400,
 	success = 200,
 	ghostName = 201,
 	favoriteUser = 110,
 	removeFavoriteUser = 111,
-	getUsers = 302,
 	/*userAlreadyExists = 402,*/
 };
