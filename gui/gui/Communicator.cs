@@ -113,7 +113,9 @@ namespace gui
             for (int i = 1; i < res.objects.Count(); i++)
             {
                 userInfo = res.objects[i].Split(sep, StringSplitOptions.RemoveEmptyEntries);
-                users.Add(new UserInfo(Convert.ToBoolean(userInfo[1]), userInfo[0], Convert.ToBoolean(userInfo[2])));
+
+                if(userInfo[0] != myUsername)
+                    users.Add(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo[1])), userInfo[0], Convert.ToBoolean(Convert.ToInt16(userInfo[2]))));
             }
 
             return users;
