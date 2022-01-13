@@ -99,7 +99,7 @@ namespace gui
             return messages;
         }
 
-        public List<UserInfo> GetUsers() // isFavorite::::username::::isGhost
+        public List<UserInfo> GetUsers() // username::::isFavorite::::isGhost
         {
             string reqInfo = (int)MessageCodes.getUsers + "";
             string len = getPaddedNumber(reqInfo.Length, 5);
@@ -113,7 +113,7 @@ namespace gui
             for (int i = 1; i < res.objects.Count() - 1; i++)
             {
                 userInfo = res.objects[i].Split(sep, StringSplitOptions.RemoveEmptyEntries);
-                users.Add(new UserInfo(Convert.ToBoolean(userInfo[1]),  userInfo[0], Convert.ToBoolean(userInfo[2])));
+                users.Add(new UserInfo(Convert.ToBoolean(userInfo[1]), userInfo[0], Convert.ToBoolean(userInfo[2])));
             }
 
             return users;

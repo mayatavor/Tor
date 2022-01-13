@@ -72,6 +72,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AcceptMessages.cs" />
     <Compile Include="Classes.cs" />
     <Compile Include="Connection.xaml.cs">
       <DependentUpon>Connection.xaml</DependentUpon>
@@ -172,12 +173,6 @@
   <ItemGroup>
     <Resource Include="Assets\emptyHeart.png" />
     <Resource Include="Assets\fullHeart.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\load.gif" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\xSign.png" />
