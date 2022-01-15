@@ -1,0 +1,67 @@
+from random import seed, randint
+
+prime_p=11
+prime_q=17
+
+n=prime_p * prime_q
+
+totient = (prime_q-1)*(prime_p-1)
+
+#seed(1)
+print(totient)
+
+exponent = 3#randint(1,totient)
+
+d = 107 #using online calaulator
+
+
+pub_key = (exponent, n)
+pri_key = (d, n)
+
+print(pub_key)
+print(pri_key)
+
+
+
+def encode_RSA(msg): # d,n
+    cipher = ""
+
+    print("-------------encode----------------")
+
+    for letter in msg:
+        value = ord(letter)
+        print(letter , ": ", value)
+
+        plain_letter = (value**exponent) % n
+        print(plain_letter)
+        cipher += chr(plain_letter)
+
+    print(cipher)
+
+    return cipher
+
+
+def decode_RSA(msg):
+    plain = ""
+
+    print("-------------decode----------------")
+
+    for letter in msg:
+        value = ord(letter)
+        print(letter , ": ", value)
+
+        plain_letter = (value**d) % n
+        print(plain_letter)
+        plain += chr(plain_letter)
+
+    print(plain)
+
+def main():
+    coded = encode_RSA("HELLO")
+    decode_RSA(coded)
+
+
+
+
+if __name__ == "__main__":
+    main()
