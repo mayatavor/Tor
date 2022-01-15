@@ -51,6 +51,9 @@
     <ClCompile Include="serialize.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RSAencryption.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WSAInitializer.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="serialize.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RSAencryption.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

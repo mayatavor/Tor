@@ -1,26 +1,59 @@
 from random import seed, randint
 
-prime_p=11
-prime_q=17
+def find_e(z: int):
+    # e -> gcd(e,z)==1      ; 1 < e < z
+    e = 2
+    while e < z:
+        # check if this is the required `e` value
+        if gcd(e, z)==1:
+            print( "e: ",e)
+            return e
+        # else : increment and continue
+        e += 1
+
+
+
+def find_d(e: int, z: int):
+    # d -> ed = 1(mod z)        ; 1 < d < z
+    d = 2
+    while d < z:
+        # check if this is the required `d` value
+        if ((d*e) % z)==1:
+            print( "d: ",d)
+            return d
+        # else : increment and continue
+        d += 1
+
+
+
+def gcd(x: int, y: int):
+    # GCD by Euclidean method
+    small,large = (x,y) if x<y else (y,x)
+
+    while small != 0:
+        temp = large % small
+        large = small
+        small = temp
+
+    return large
+
+prime_p=103
+prime_q=199
 
 n=prime_p * prime_q
 
 totient = (prime_q-1)*(prime_p-1)
 
-#seed(1)
-print(totient)
+exponent = find_e(totient)
 
-exponent = 3#randint(1,totient)
-
-d = 107 #using online calaulator
+d = find_d(exponent, totient)
 
 
 pub_key = (exponent, n)
 pri_key = (d, n)
 
-print(pub_key)
-print(pri_key)
-
+print( " public : ",pub_key)
+print( " private : ",pri_key)
 
 
 def encode_RSA(msg): # d,n
@@ -57,8 +90,8 @@ def decode_RSA(msg):
     print(plain)
 
 def main():
-    coded = encode_RSA("HELLO")
-    decode_RSA(coded)
+    cipher = encode_RSA("HELLO")
+    decode_RSA(cipher)
 
 
 
