@@ -144,6 +144,7 @@
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="ChatMessage.cpp" />
     <ClCompile Include="Helper.cpp" />
+    <ClCompile Include="RSAencryption.cpp" />
     <ClCompile Include="SecondaryServer.cpp" />
     <ClCompile Include="serialize.cpp" />
     <ClCompile Include="Server.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="ChatMessage.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="MessageType.h" />
+    <ClInclude Include="RSAencryption.h" />
     <ClInclude Include="SecondaryServer.h" />
     <ClInclude Include="serialize.h" />
     <ClInclude Include="Server.h" />

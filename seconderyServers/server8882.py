@@ -2,10 +2,30 @@ import socket
 import threading
 
 HOST = '127.0.0.1'  # Standard loopback interface address
-MY_PORT = 8082         # Port to listen on
+MY_PORT = 8082      # Port to listen on
 MY_ID = 2
 
 MAIN_SERVER_PORT = 5678
+
+public_key = (5, 12319) # expontent, n
+private_key = (9677, 12319) # d, n
+
+
+def decode_RSA(msg):
+    plain = ""
+
+    for letter in msg:
+        value = ord(letter)
+        print(letter , ": ", value)
+
+        plain_letter = (value**private_key[0]) % private_key[1]
+        print(plain_letter)
+        plain += chr(plain_letter)
+
+    print(plain)
+    return plain
+
+
 
 def sentToNextClient(ip, port, msg):
     print("in sendtTONextClient, port = ", port, " ip = ", ip)
@@ -37,8 +57,12 @@ def thread(conn):
         sentToNextClient(next_ip, next_port, "::::".join(list))
     conn.close()
 
+"""
+connects to the main server and sends the public key with the server id
+"""
 def connectToMainServer(s):
-    msg = "100" + "01" + "2"
+    msg = "100" + "~" + str(MY_ID) + "~" + str(public_key[0]) + "~" + str(public_key[1])
+    msg = str(len(msg)).zfill(5) + msg
     s.send(msg.encode())
 
 
