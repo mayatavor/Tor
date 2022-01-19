@@ -5,7 +5,9 @@ class RSAencryption
 {
 public:
 	/*
-	this function gets the msg to encrypt and the public key (exponent and n) of the server
+	* The function gets a message and the elements that create the public key and encrypts the message with this key.
+	* input: The message to encrypt and the public key.
+	* output: The enccrypted message.
 	*/
 	static std::string EncryptRSA(std::string msg, int e, int n);
 

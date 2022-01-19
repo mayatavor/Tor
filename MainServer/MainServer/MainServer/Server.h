@@ -39,13 +39,25 @@ private:
 	std::condition_variable _secondayServersCv;
 	DatabaseAccess* _db;
 
+	//This function handles login request.
 	Message* caseLogin(std::vector<std::string> args);
+
+	//This fucntion handles signup request.
 	Message* caseSignUp(std::vector<std::string> args);
+
+	//This funcion handles logout request.
 	Message* caseLogout(std::vector<std::string> args);
+
+	//This function handles add favorite request.
 	Message* caseAddFavorites(std::vector<std::string> args);
-	//Message* getFavorites(std::vector<std::string> args);
+	
+	//This function handles get users request.
 	Message* caseGetUsers(std::vector<std::string> args);
-	Message* caseSendMessage(std::vector<std::string> arg);
+
+	//This function handles send message request.
+	Message* caseSendMessage(std::vector<std::string> args);
+
+	//This message handles get chat history (get the privious messages of a specific chat) request.
 	Message* caseGetChatHistory(std::vector<std::string> args);
 
 	void accept();
