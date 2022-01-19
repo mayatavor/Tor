@@ -36,10 +36,10 @@ private:
 	DatabaseAccess* _db;
 
 	//This function handles login request.
-	Message* caseLogin(std::vector<std::string> args);
+	Message* caseLogin(std::vector<std::string> args, SOCKET usersSocket);
 
 	//This fucntion handles signup request.
-	Message* caseSignUp(std::vector<std::string> args);
+	Message* caseSignUp(std::vector<std::string> args, SOCKET usersSocket);
 
 	//This function handles login request when the client chose to login as a ghost.
 	Message* caseGhostLogin(std::vector<std::string> args);
