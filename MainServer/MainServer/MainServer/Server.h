@@ -1,19 +1,15 @@
 ﻿#pragma once
 #pragma comment(lib, "Ws2_32.lib")
 #include "SecondaryServer.h"
+#include "DatabaseAccess.h"
 #include <WinSock2.h>
 #include <Windows.h>
 #include "Message.h"
-#include <iostream>
-#include "Helper.h"
 #include <string>
-#include <thread>
 #include <mutex>
 #include <queue>
 #include <list>
 #include <map>
-#include "DatabaseAccess.h"
-#include "User.h"
 
 
 #define DELIMITER "~"
@@ -45,6 +41,9 @@ private:
 	//This fucntion handles signup request.
 	Message* caseSignUp(std::vector<std::string> args);
 
+	//This function handles login request when the client chose to login as a ghost.
+	Message* caseGhostLogin(std::vector<std::string> args);
+
 	//This funcion handles logout request.
 	Message* caseLogout(std::vector<std::string> args);
 
@@ -59,6 +58,7 @@ private:
 
 	//This message handles get chat history (get the privious messages of a specific chat) request.
 	Message* caseGetChatHistory(std::vector<std::string> args);
+
 
 	void accept();
 	void clientHandler(SOCKET clientSocket, int port);

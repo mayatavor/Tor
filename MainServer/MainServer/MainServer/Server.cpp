@@ -1,8 +1,14 @@
 #include "Server.h"
 #include "MessageType.h"
-#include "DatabaseAccess.h"
-#include "Structs.h"
 #include "serialize.h"
+#include "Structs.h"
+#include <iostream>
+#include <stdlib.h>
+#include "Helper.h"
+#include <stdio.h>
+#include <time.h>
+#include <thread>
+#include "User.h"
 
 #define USER_EXISTS(id, content, existsOrNot) \
  if (this->_db->doesUserExist(id) == existsOrNot)\
@@ -15,6 +21,7 @@ Server::Server()
 {
 	this->_db = new DatabaseAccess();
 	this->_db->open();
+	srand(time(0));
 	
 	// this server use TCP. that why SOCK_STREAM & IPPROTO_TCP
 	// if the server use UDP we will use: SOCK_DGRAM & IPPROTO_UDP
@@ -97,9 +104,32 @@ Message* Server::caseSignUp(std::vector<std::string> args)
 		return new Message(error, msg);
 	}
 	//USER_EXISTS(args[0], "User with this usename already exists", true);
-	this->_db->createUser(args[0], args[1], args[2], args[3]);
-	std::vector<std::string> answerArgs = { "SignedUp Successfully" };
-	return new Message(success, answerArgs);
+	if (this->_db->createUser(args[0], args[1], args[2], args[3])) {
+
+		std::vector<std::string> answerArgs = { "SignedUp Successfully" };
+		return new Message(MessageType::success, answerArgs);
+	}
+	else {
+		std::vector<std::string> answerArgs = { "Error accurd while singing up" };
+		return new Message(MessageType::error, answerArgs);
+	}
+}
+
+Message* Server::caseGhostLogin(std::vector<std::string> args)
+{
+	int ghostIdentifier = rand();
+	std::string username = "ghost" + std::to_string(ghostIdentifier);
+	std::vector<std::string> answerArgs;
+	if (this->_db->createUser(username, "", args[2], args[3]))
+	{
+		answerArgs.push_back("Ghost user logged in successfully");
+		return new Message(MessageType::success, answerArgs);
+
+	}
+	else {
+		answerArgs.push_back("Error while logging ghost in");
+		return new Message(MessageType::error, answerArgs);
+	}
 }
 
 Message* Server::caseLogout(std::vector<std::string> args)
@@ -169,7 +199,9 @@ void Server::messagesHandler()
 			case MessageType::signUp:
 				msg = caseSignUp(args);
 				break;
-
+			case MessageType::ghostLogIn:
+				msg = caseGhostLogin(args);
+				break;
 			case MessageType::logout:
 				msg = caseLogout(args);
 				break;

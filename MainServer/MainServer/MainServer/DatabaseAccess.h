@@ -20,7 +20,13 @@ public:
 
 	//users
 	//void createUser(const User& user);
-	void createUser(std::string username, std::string password, std::string ip, std::string port);
+
+	/*
+	* The function adds a user to the users table in the DB.
+	* input: The user's username, password, ip and port.
+	* output: True if the user created successflly and false if not.
+	*/
+	bool createUser(std::string username, std::string password, std::string ip, std::string port);
 	void deleteUser(const int& userId);
 	bool doesUserExist(const std::string& username);
 	User getUser(const std::string& username);

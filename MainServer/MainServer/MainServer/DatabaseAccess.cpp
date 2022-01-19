@@ -73,16 +73,18 @@ int getUsersCallback(void* data, int argc, char** argv, char** azColName)
 }
 
 
-void DatabaseAccess::createUser(std::string username, std::string password, std::string ip, std::string port)
+bool DatabaseAccess::createUser(std::string username, std::string password, std::string ip, std::string port)
 {
 	std::string str = "INSERT INTO Users (username, password, ipAddress) VALUES('" + username + "', '" + password + "', '" + ip + "');";
 	try
 	{
 		exec(str.c_str(), nullptr, nullptr);
+		return true;
 	}
 	catch (const std::exception& e)
 	{
 		std::cout << e.what() << std::endl;
+		return false;
 	}
 }
 
@@ -365,7 +367,7 @@ std::list<MessagesListItem> DatabaseAccess::getChatHistory(int chatId)
 
 bool DatabaseAccess::createDBstructure()
 {
-	char usersTable[] = "CREATE TABLE IF NOT EXISTS Users(userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, ipAddress TEXT NOT NULL, port INTEGER DEFAULT 0); ";
+	char usersTable[] = "CREATE TABLE IF NOT EXISTS Users(userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT, ipAddress TEXT NOT NULL, port INTEGER DEFAULT 0); ";
 	char SecondaryServersTable[] = "CREATE TABLE IF NOT EXISTS SecondaryServers(serverID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ipAddress TEXT NOT NULL, password TEXT NOT NULL, d INTEGER NOT NULL, e INTEGER NOT NULL); ";
 	char chatsTable[] = "CREATE TABLE IF NOT EXISTS Chats(chatId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, firstUserId INTEGER NOT NULL, secondUserId INTEGER NOT NULL, FOREIGN KEY(firstUserId) REFERENCES Users(userId), FOREIGN KEY(secondUserId) REFERENCES Users(userId)); ";
 	char FavoritesTable[] = "CREATE TABLE IF NOT EXISTS Favorites(userId INTEGER NOT NULL, chatId INTEGER NOT NULL, FOREIGN KEY(userId) REFERENCES Users(useId), FOREIGN KEY(chatId) REFERENCES Chats(chatId)); ";
