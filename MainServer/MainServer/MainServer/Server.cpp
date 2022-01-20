@@ -302,7 +302,7 @@ void Server::clientHandler(SOCKET socket, int port)
 		{
 			int len = h.getIntPartFromSocket(socket, 5);
 			std::string message = h.getStringPartFromSocket(socket, len);
-			addMessageToMessagesQueue(message, socket, port);
+			//addMessageToMessagesQueue(message, socket, port);
 		}
 	}
 	catch (const std::exception& e)

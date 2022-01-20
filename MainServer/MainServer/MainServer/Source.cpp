@@ -8,25 +8,23 @@
 
 int main()
 {
-	std::string encr = RSAencryption::EncryptRSA("HELLO", 3, 187);
+	//std::string encr = RSAencryption::EncryptRSA("HELLO", 3, 187);
 	/*DatabaseAccess* db = new DatabaseAccess();
 	db->open();*/
 
+	try
+	{
+		WSAInitializer wsaInit;
+		Server myServer;
 
-
-	//try
-	//{
-	//	WSAInitializer wsaInit;
-	//	Server myServer;
-
-	//	/*std::vector<std::string> args = { "username", "password", "127.0.1.1", "5755" };
-	//	Message* m = myServer.caseLogin(args);*/
-	//	myServer.serve(5678);
-	//}
-	//catch (std::exception& e)
-	//{
-	//	std::cout << "Error occured: " << e.what() << std::endl;
-	//}
+		/*std::vector<std::string> args = { "username", "password", "127.0.1.1", "5755" };
+		Message* m = myServer.caseLogin(args);*/
+		myServer.serve(5678);
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "Error occured: " << e.what() << std::endl;
+	}
 
 	/*std::vector<std::string> vec = { "username", "password","ip", "port"};
 	Message* newMessage = new Message(logIn, vec);

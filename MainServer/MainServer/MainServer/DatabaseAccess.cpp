@@ -75,7 +75,7 @@ int getUsersCallback(void* data, int argc, char** argv, char** azColName)
 
 bool DatabaseAccess::createUser(std::string username, std::string password, std::string ip, std::string port)
 {
-	std::string str = "INSERT INTO Users (username, password, ipAddress) VALUES('" + username + "', '" + password + "', '" + ip + "');";
+	std::string str = "INSERT INTO Users (username, password, ipAddress, port) VALUES('" + username + "', '" + password + "', '" + ip + "', '" + port + ");";
 	try
 	{
 		exec(str.c_str(), nullptr, nullptr);
@@ -305,6 +305,23 @@ std::list<std::string> DatabaseAccess::getFavoritesOfUser(std::string username)
 		std::cout << e.what() << std::endl;
 	}
 	return usernames;
+}
+
+bool DatabaseAccess::removeFavorite(std::string username, std::string usernameToRemove)
+{
+	User u = getUser(usernameToRemove);      //userId && chatID
+	Chat chat = getChatByUsers(username, usernameToRemove);
+	std::string statement = "DELETE FROM Favorites WHERE UserID = " + std::to_string(u.getId()) + " AND ChatId = " + std::to_string(chat.getChatId()) + ";";
+	try
+	{
+		exec(statement.c_str(), nullptr, nullptr);
+		return true;
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+		return false;
+	}
 }
 
 bool DatabaseAccess::addMessage(std::string msgContent, int chatId, int senderId)
