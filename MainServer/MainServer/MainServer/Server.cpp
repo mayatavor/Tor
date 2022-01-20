@@ -105,7 +105,7 @@ Message* Server::caseSignUp(std::vector<std::string> args, SOCKET usersSocket)
 		return new Message(error, msg);
 	}
 	//USER_EXISTS(args[0], "User with this usename already exists", true);
-	if (this->_db->createUser(args[0], args[1], args[2], args[3])) {
+	if (this->_db->createUser(args[0], args[1], args[3], args[2])) {
 		std::vector<std::string> answerArgs = { "SignedUp Successfully" };
 		this->_clients.insert(std::pair<std::string, SOCKET>(args[0], usersSocket));   //Add the user's socket to the online cients map.
 		return new Message(MessageType::success, answerArgs);
