@@ -51,6 +51,8 @@ public:
 	bool addFavorite(std::string addsUsername, std::string usernameToAdd);
 	//The function returns a list of all the usernamames that the user marked as favortites.
 	std::list<std::string> getFavoritesOfUser(std::string username);
+	//The function remvoes a specific row from the favorites table.
+	bool removeFavorite(std::string username, std::string usernameToRemove);
 
 
 	//Messages 

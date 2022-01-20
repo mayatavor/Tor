@@ -307,6 +307,23 @@ std::list<std::string> DatabaseAccess::getFavoritesOfUser(std::string username)
 	return usernames;
 }
 
+bool DatabaseAccess::removeFavorite(std::string username, std::string usernameToRemove)
+{
+	User u = getUser(usernameToRemove);      //userId && chatID
+	Chat chat = getChatByUsers(username, usernameToRemove);
+	std::string statement = "DELETE FROM Favorites WHERE UserID = " + std::to_string(u.getId()) + " AND ChatId = " + std::to_string(chat.getChatId()) + ";";
+	try
+	{
+		exec(statement.c_str(), nullptr, nullptr);
+		return true;
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+		return false;
+	}
+}
+
 bool DatabaseAccess::addMessage(std::string msgContent, int chatId, int senderId)
 {
 	std::time_t timestamp = std::time(nullptr);
