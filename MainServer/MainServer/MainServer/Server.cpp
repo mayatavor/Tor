@@ -105,6 +105,7 @@ Message* Server::caseSignUp(std::vector<std::string> args, SOCKET usersSocket)
 		return new Message(error, msg);
 	}
 	//USER_EXISTS(args[0], "User with this usename already exists", true);
+	std::cout << "port " << args[2] << std::endl;
 	if (this->_db->createUser(args[0], args[1], args[3], args[2])) {
 		std::vector<std::string> answerArgs = { "SignedUp Successfully" };
 		this->_clients.insert(std::pair<std::string, SOCKET>(args[0], usersSocket));   //Add the user's socket to the online cients map.
@@ -196,6 +197,7 @@ void Server::messagesHandler()
 				break;
 			case MessageType::favoriteUser:
 				msg = caseAddFavorites(args);
+				break;
 			case MessageType::getUsers:
 				msg = caseGetUsers(args);
 				break;
@@ -204,7 +206,7 @@ void Server::messagesHandler()
 				break;
 			case MessageType::getChatHistory:
 				msg = caseGetChatHistory(args);
-
+				break;
 			default:
 				break;
 			}
@@ -302,7 +304,7 @@ void Server::clientHandler(SOCKET socket, int port)
 		{
 			int len = h.getIntPartFromSocket(socket, 5);
 			std::string message = h.getStringPartFromSocket(socket, len);
-			//addMessageToMessagesQueue(message, socket, port);
+			addMessageToMessagesQueue(message, socket, port);
 		}
 	}
 	catch (const std::exception& e)

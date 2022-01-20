@@ -18,8 +18,8 @@ Message::Message(std::string allMsg, int port)
 		this->_args.push_back(token);
 	}
 	this->_args.push_back(allMsg);
-	if (this->_mt == MessageType::logIn || this->_mt == MessageType::signUp)
-		this->_args.push_back(std::to_string(port));
+	/*if (this->_mt == MessageType::logIn || this->_mt == MessageType::signUp)
+		this->_args.push_back(std::to_string(port));*/
 }
 
 Message::Message(MessageType type, std::vector<std::string> args)
@@ -42,20 +42,38 @@ bool Message::validateArgumentLength()
 {
 	switch (this->_mt)
 	{
-	case logIn:
+	case MessageType::logIn:
 		if (this->_args.size() != 4)
 			return false;
 		break;
-	case signUp:
+	case MessageType::signUp:
 		if (this->_args.size() != 4)
 			return false;
 		break;
-	case ghostLogIn:
-		return true;
+	case MessageType::ghostLogIn:
+		if (this->_args.size() != 1)
+			return false;
 		break;
-	case sendChatMessage:
+	case MessageType::sendChatMessage:
 		if (this->_args.size() != 3)
 			return false;
+		break;
+	case MessageType::logout:
+		if (this->_args.size() != 1)
+			return false;
+		break;
+	case MessageType::favoriteUser:
+		if (this->_args.size() != 2)
+			return false;
+		break;
+	case MessageType::getUsers:
+		if (this->_args.size() != 1)
+			return false;
+		break;
+	case MessageType::getChatHistory:
+		if (this->_args.size() != 2)
+			return false;
+		break;
 	default:
 		break;
 	}
