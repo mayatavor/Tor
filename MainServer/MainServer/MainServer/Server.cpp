@@ -183,10 +183,10 @@ void Server::messagesHandler()
 			switch (m.second.getMessageType())
 			{
 			case MessageType::logIn:
-				msg = caseLogin(args);
+				msg = caseLogin(args, m.first);
 				break;
 			case MessageType::signUp:
-				msg = caseSignUp(args);
+				msg = caseSignUp(args, m.first);
 				break;
 			case MessageType::ghostLogIn:
 				msg = caseGhostLogin(args);
