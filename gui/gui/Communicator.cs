@@ -50,9 +50,9 @@ namespace gui
             return this.myUsername;
         }
 
-        public string Login(string username, string password)
+        public string Login(string username, string password, int port)
         {
-            string reqInfo = "101" + DIVIDER + username + DIVIDER + password;
+            string reqInfo = (int)MessageCodes.logIn + DIVIDER + username + DIVIDER + password + DIVIDER + port;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
 
@@ -60,9 +60,9 @@ namespace gui
                 return res.objects[1];
             return "";
         }
-        public string SignUp(string username, string password)
+        public string SignUp(string username, string password, int port)
         {
-            string reqInfo = "102" + DIVIDER + username + DIVIDER + password;
+            string reqInfo = (int)MessageCodes.signUp + DIVIDER + username + DIVIDER + password + DIVIDER + port;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
 
@@ -70,9 +70,9 @@ namespace gui
                 return res.objects[1];
             return "";
         }
-        public (int, string) Ghost()
+        public (int, string) Ghost(int port)
         {
-            string reqInfo = (int)MessageCodes.ghostLogIn + "";
+            string reqInfo = (int)MessageCodes.ghostLogIn + DIVIDER + port;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
 
