@@ -11,15 +11,25 @@ namespace gui
 {
     class AcceptMessages
     {
-        
-        public static void StartServer()
+        private int port { get; set; }
+        public AcceptMessages()
+        {
+            port = FindPort();
+        }
+
+        public int GetPort()
+        {
+            return port;
+        }
+
+        public void StartServer()
         {
             // Get Host IP Address that is used to establish a connection
             // In this case, we get one IP address of localhost that is IP : 127.0.0.1
             // If a host has multiple addresses, you will get a list of addresses
             IPHostEntry host = Dns.GetHostEntry("localhost");
             IPAddress ipAddress = host.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, FindPort());
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
 
             try
             {
@@ -61,6 +71,9 @@ namespace gui
             Console.WriteLine("\n Press any key to continue...");
             Console.ReadKey();
         }
+
+
+
 
 
 
