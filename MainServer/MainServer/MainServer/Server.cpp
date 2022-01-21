@@ -220,7 +220,8 @@ void Server::messagesHandler()
 
 Message* Server::caseGetUsers(std::vector<std::string> args)
 {
-	std::list<std::string> allUsers = this->_db->getUsers();
+	///std::list<std::string> allUsers = this->_db->getUsers();
+	std::list<std::string> allUsers = this->getOnlineUsernames();
 	std::list<std::string> favorites = this->_db->getFavoritesOfUser(args[0]);
 	std::vector<std::string> msg = serialize::serializeUsers(allUsers, favorites);
 	return new Message(MessageType::getUsers, msg);
