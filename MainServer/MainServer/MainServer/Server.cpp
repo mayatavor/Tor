@@ -268,6 +268,16 @@ Message* Server::caseGetChatHistory(std::vector<std::string> args)
 	return new Message(MessageType::success, msg);
 }
 
+std::list<std::string> Server::getOnlineUsernames()
+{
+	std::map<std::string, SOCKET>::iterator it;
+	std::list<std::string> usernames;
+	for (it = this->_clients.begin(); it != this->_clients.end(); it++) {
+		usernames.push_back(it->first);
+	}
+	return usernames;
+}
+
 void Server::accept()
 {
 	// notice that we step out to the global namespace
