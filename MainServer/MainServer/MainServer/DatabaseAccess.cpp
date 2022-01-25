@@ -75,7 +75,7 @@ int getUsersCallback(void* data, int argc, char** argv, char** azColName)
 
 bool DatabaseAccess::createUser(std::string username, std::string password, std::string ip, std::string port)
 {
-	std::string str = "INSERT INTO Users (username, password, ipAddress, port) VALUES('" + username + "', '" + password + "', '" + ip + "', '" + port + ");";
+	std::string str = "INSERT INTO Users (username, password, ipAddress, port) VALUES('" + username + "', '" + password + "', '" + ip + "', " + port + ");";
 	try
 	{
 		exec(str.c_str(), nullptr, nullptr);
