@@ -32,7 +32,7 @@ namespace gui
             this.username = "";
 
             //get users from the server
-            getUsers();
+            getUsers(username);
         }
 
         private void SendMsg(string text)
@@ -113,7 +113,7 @@ namespace gui
                 this.UsersList.Items.RemoveAt(i);
             }
 
-            getUsers();
+            getUsers(this.myUserName);
 
             this.SearchBackground.Source = GetImage("Assets/search.png");
             this.SearchText.Text = "";
@@ -160,9 +160,9 @@ namespace gui
         }
 
 
-        private void getUsers()
+        private void getUsers(string username)
         {
-            List<UserInfo> users = this._communicator.GetUsers();
+            List<UserInfo> users = this._communicator.GetUsers(username);
 
             for (int i = 0; i < users.Count; i++)
             {

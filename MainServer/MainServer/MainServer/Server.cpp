@@ -93,7 +93,7 @@ Message* Server::caseLogin(std::vector<std::string> args, SOCKET usersSocket)
 		return msg;
 	}
 	this->_clients.insert(std::pair<std::string, SOCKET>(args[0], usersSocket));
-	this->_db->updateUsersIpAndPort(args[0], args[2], args[3]);
+	this->_db->updateUsersIpAndPort(args[0], args[3], args[2]);
 	return new Message(success, { "LoggedIn successfully" });
 }
 
@@ -221,7 +221,7 @@ void Server::messagesHandler()
 Message* Server::caseGetUsers(std::vector<std::string> args)
 {
 	///std::list<std::string> allUsers = this->_db->getUsers();
-	std::list<std::string> allUsers = this->getOnlineUsernames();
+	std::list<std::string> allUsers = this->getOnlineUsernamesExceptMe(args[0]);
 	std::list<std::string> favorites = this->_db->getFavoritesOfUser(args[0]);
 	std::vector<std::string> msg = serialize::serializeUsers(allUsers, favorites);
 	return new Message(MessageType::getUsers, msg);
@@ -269,12 +269,13 @@ Message* Server::caseGetChatHistory(std::vector<std::string> args)
 	return new Message(MessageType::success, msg);
 }
 
-std::list<std::string> Server::getOnlineUsernames()
+std::list<std::string> Server::getOnlineUsernamesExceptMe(std::string myUsername)
 {
 	std::map<std::string, SOCKET>::iterator it;
 	std::list<std::string> usernames;
 	for (it = this->_clients.begin(); it != this->_clients.end(); it++) {
-		usernames.push_back(it->first);
+		if(it->first != myUsername)
+			usernames.push_back(it->first);
 	}
 	return usernames;
 }

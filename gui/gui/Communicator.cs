@@ -99,9 +99,9 @@ namespace gui
             return messages;
         }
 
-        public List<UserInfo> GetUsers() // username::::isFavorite::::isGhost
+        public List<UserInfo> GetUsers(string username) // username::::isFavorite::::isGhost
         {
-            string reqInfo = (int)MessageCodes.getUsers + "";
+            string reqInfo = (int)MessageCodes.getUsers + DIVIDER + username;
             string len = getPaddedNumber(reqInfo.Length, 5);
 
             Response res = this._socket.TalkToServer(len + reqInfo);
