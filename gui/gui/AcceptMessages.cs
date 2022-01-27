@@ -74,26 +74,11 @@ namespace gui
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //helpers
         //find a port to run the server on
         public static int FindPort()
         {
-            for (int i = 49152; i < 65535; i++)
+            for (int i = 11000; i < 65535; i++)
             {
                 if (!PortInUse(i))
                     return i;

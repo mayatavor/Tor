@@ -108,7 +108,7 @@ namespace gui
 
             List<UserInfo> users = new List<UserInfo>();
 
-            if (res.objects.Count() == 1 && res.objects[0] == "::::none::::")
+            if (res.objects.Count() == 2 && res.objects[1] == "::::none::::\0")
                 return users;
 
             string[] sep = new string[] { "::::" };
