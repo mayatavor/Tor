@@ -25,10 +25,13 @@ std::vector<std::string> serialize::serializeUsers(std::list<std::string> allUse
         msg.push_back(user);
     }
 
-    if (msg.size() > 0) {
+    if (msg.size() > 0) 
+    {
         std::string lastUser = msg[msg.size() - 1];
         msg[msg.size() - 1] = lastUser.substr(0, lastUser.length() - 1);
     }
+    else
+        msg.push_back("::::none::::");
     return msg;
 }
 
