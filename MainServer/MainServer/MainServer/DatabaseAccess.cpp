@@ -236,7 +236,7 @@ Chat DatabaseAccess::getChatByUsers(std::string firstUser, std::string secondUse
 {
 	User user1 = getUser(firstUser);
 	User user2 = getUser(secondUser);
-	std::string statement = "SELECT * FORM Chats WHERE ((firstUserId = " + std::to_string(user1.getId())  + " AND secondUserId = " + std::to_string(user2.getId()) + ") OR (firstUserId = " + std::to_string(user2.getId()) + " AND secondUserId = " + std::to_string(user1.getId())  + "));";
+	std::string statement = "SELECT * FROM Chats WHERE ((firstUserId = " + std::to_string(user1.getId())  + " AND secondUserId = " + std::to_string(user2.getId()) + ") OR (firstUserId = " + std::to_string(user2.getId()) + " AND secondUserId = " + std::to_string(user1.getId())  + "));";
 	std::list<Chat> chats;
 	try
 	{
