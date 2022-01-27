@@ -107,6 +107,10 @@ namespace gui
             Response res = this._socket.TalkToServer(len + reqInfo);
 
             List<UserInfo> users = new List<UserInfo>();
+
+            if (res.objects.Count() == 1 && res.objects[0] == "::::none::::")
+                return users;
+
             string[] sep = new string[] { "::::" };
             string[] userInfo;
 
