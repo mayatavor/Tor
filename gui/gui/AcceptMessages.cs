@@ -14,10 +14,13 @@ namespace gui
     class AcceptMessages
     {
         private int port { get; set; }
+        private ConcurrentQueue<Response> responses;
         public AcceptMessages()
         {
             port = FindPort();
             Application.Current.Properties["Responses"] = new ConcurrentStack<Response>();
+
+            this.responses = (ConcurrentQueue<Response>)Application.Current.Properties["Responses"];
         }
 
         public int GetPort()
@@ -58,20 +61,16 @@ namespace gui
                     string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);
 
                     Response r = new Response(res);
+                    this.responses.Enqueue(r);
                 }
 
-                byte[] msg = Encoding.ASCII.GetBytes("fsdg");
-                handler.Send(msg);
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                e.ToString();
             }
-
-            Console.WriteLine("\n Press any key to continue...");
-            Console.ReadKey();
         }
 
 
