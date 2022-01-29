@@ -324,6 +324,36 @@ bool DatabaseAccess::removeFavorite(std::string username, std::string usernameTo
 	}
 }
 
+int isFavoriteCallback(void* data, int argc, char** argv, char** azColName)
+{
+	int* count = (int*)data;
+	*count = std::atoi(argv[0]);
+	return 0;
+}
+
+bool DatabaseAccess::isFavorite(std::string username1, std::string username2)
+{
+	int count = 0;
+	std::string statement = "with q1 as \
+		(select chatId as chatId\
+			from chats\
+			where(firstUserId IN(select users.UserId as firstUserId from users where users.username = '" + username1 + "')\
+				and secondUserId IN(select users.UserId as secondUserId from users where users.username = '" + username2 +"'))\
+			OR(firstUserId IN(select users.UserId as secondUserId from users where users.username = 'shelly')\
+				and secondUserId IN(select users.UserId as firstUserId from users where users.username = '1')))\
+		select count(favorites.chatId) from favorites where favorites.chatId in(select chatId from q1); ";
+
+	try
+	{
+		exec(statement.c_str(), &isFavoriteCallback, &count);
+		return count;
+	}
+	catch (const std::exception& e)
+	{
+		throw e;
+	}
+}
+
 bool DatabaseAccess::addMessage(std::string msgContent, int chatId, int senderId)
 {
 	std::time_t timestamp = std::time(nullptr);

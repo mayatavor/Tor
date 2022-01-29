@@ -92,6 +92,7 @@ Message* Server::caseLogin(std::vector<std::string> args, SOCKET usersSocket)
 		Message* msg = new Message(error, args);
 		return msg;
 	}
+	
 	this->_clients.insert(std::pair<std::string, SOCKET>(args[0], usersSocket));
 	this->_db->updateUsersIpAndPort(args[0], args[3], args[2]);
 	return new Message(success, { "LoggedIn successfully" });
@@ -271,6 +272,26 @@ Message* Server::caseGetChatHistory(std::vector<std::string> args)
 	std::list<MessagesListItem> messages = this->_db->getChatHistory(chat.getChatId());
 	std::vector<std::string> msg = serialize::serializeChatHistory(messages);
 	return new Message(MessageType::success, msg);
+}
+
+void Server::sendBroadcastMessage(Message* msg)
+{
+	std::string messageString = msg->buildMessage();
+	for (auto it = this->_clients.begin(); it != this->_clients.end(); it++) {
+		Helper::sendData(it->second, messageString);
+	}
+	delete msg;
+}
+
+void Server::sendUsersWhenNewJoins(std::string joinedUsername)
+{
+	/*std::list<std::string> allUsers = this->getOnlineUsernamesExceptMe(it->first);
+	std::list<std::string> favorites = this->_db->getFavoritesOfUser(it->first);
+	std::vector<std::string> msg = serialize::serializeUsers(allUsers, favorites);*/
+	for (auto it = this->_clients.begin(); it != this->_clients.end(); it++) 
+	{
+
+	}
 }
 
 std::list<std::string> Server::getOnlineUsernamesExceptMe(std::string myUsername)

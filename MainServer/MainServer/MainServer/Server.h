@@ -59,7 +59,9 @@ private:
 	//This message handles get chat history (get the privious messages of a specific chat) request.
 	Message* caseGetChatHistory(std::vector<std::string> args);
 
-	//Message* sendMessage
+	void sendBroadcastMessage(Message* msg);
+
+	void sendUsersWhenNewJoins(std::string joinedUsername);
 
 	//The function iterates through the map of the clients and creates a list with the online usernames except the given username.
 	std::list<std::string> getOnlineUsernamesExceptMe(std::string myUsername);

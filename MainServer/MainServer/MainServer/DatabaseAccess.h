@@ -53,6 +53,8 @@ public:
 	std::list<std::string> getFavoritesOfUser(std::string username);
 	//The function remvoes a specific row from the favorites table.
 	bool removeFavorite(std::string username, std::string usernameToRemove);
+	//The function returns true is username2 is in the favorites of username1, else it returns false.
+	bool isFavorite(std::string username1, std::string username2);
 
 
 	//Messages 

@@ -40,6 +40,7 @@ public:
 	virtual bool addFavorite(std::string addsUsername, std::string usernameToAdd) = 0;
 	virtual std::list<std::string> getFavoritesOfUser(std::string username) = 0;
 	virtual bool removeFavorite(std::string username, std::string usernameToRemove) = 0;
+	virtual bool isFavorite(std::string username1, std::string username2) = 0;
 
 };
 
