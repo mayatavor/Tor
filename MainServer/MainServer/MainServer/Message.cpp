@@ -3,7 +3,7 @@
 #include <sstream>
 
 
-Message::Message(std::string allMsg, int port) 
+Message::Message(std::string allMsg) 
 {
 	int pos = allMsg.find(DELIMITER);
 	std::string token = allMsg.substr(0, pos);

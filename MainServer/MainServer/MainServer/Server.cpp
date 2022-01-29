@@ -17,6 +17,8 @@
 	return new Message(error, msg); \
 }
 
+#define IN_USER_DELIMITER "::::"
+
 Server::Server()
 {
 	this->_db = new DatabaseAccess();
@@ -285,12 +287,25 @@ void Server::sendBroadcastMessage(Message* msg)
 
 void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 {
-	/*std::list<std::string> allUsers = this->getOnlineUsernamesExceptMe(it->first);
-	std::list<std::string> favorites = this->_db->getFavoritesOfUser(it->first);
-	std::vector<std::string> msg = serialize::serializeUsers(allUsers, favorites);*/
 	for (auto it = this->_clients.begin(); it != this->_clients.end(); it++) 
 	{
-
+		try
+		{
+			UsersListItem uli;
+			uli.isFavorite = this->_db->isFavorite(it->first, joinedUsername);;
+			uli.usernameOther = joinedUsername;
+			uli.isGhost = joinedUsername.find("ghost") != std::string::npos;
+			std::string msg = uli.usernameOther + IN_USER_DELIMITER + std::to_string(uli.isFavorite) + IN_USER_DELIMITER + std::to_string(uli.isGhost);
+			Message* builtMessage = new Message(msg);
+			Helper::sendData(it->second, builtMessage->buildMessage());
+			delete builtMessage;
+		}
+		catch (const std::exception& e)
+		{
+			Message* builtMessage = new Message(e.what());
+			Helper::sendData(it->second, builtMessage->buildMessage());
+			delete builtMessage;
+		}
 	}
 }
 

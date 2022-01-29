@@ -9,7 +9,7 @@
 class Message
 {
 public:
-	Message(std::string allMsg, int port);
+	Message(std::string allMsg);
 	Message(MessageType type, std::vector<std::string> args);
 	~Message() = default;
 
