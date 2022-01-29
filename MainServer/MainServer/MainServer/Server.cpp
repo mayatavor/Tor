@@ -94,7 +94,7 @@ Message* Server::caseLogin(std::vector<std::string> args, SOCKET usersSocket)
 		Message* msg = new Message(error, args);
 		return msg;
 	}
-	
+	this->sendUsersWhenNewJoins(args[0]);
 	this->_clients.insert(std::pair<std::string, SOCKET>(args[0], usersSocket));
 	this->_db->updateUsersIpAndPort(args[0], args[3], args[2]);
 	return new Message(success, { "LoggedIn successfully" });
@@ -111,6 +111,7 @@ Message* Server::caseSignUp(std::vector<std::string> args, SOCKET usersSocket)
 	std::cout << "port " << args[2] << std::endl;
 	if (this->_db->createUser(args[0], args[1], args[3], args[2])) {
 		std::vector<std::string> answerArgs = { "SignedUp Successfully" };
+		this->sendUsersWhenNewJoins(args[0]);
 		this->_clients.insert(std::pair<std::string, SOCKET>(args[0], usersSocket));   //Add the user's socket to the online cients map.
 		return new Message(MessageType::success, answerArgs);
 	}
@@ -120,13 +121,15 @@ Message* Server::caseSignUp(std::vector<std::string> args, SOCKET usersSocket)
 	}
 }
 
-Message* Server::caseGhostLogin(std::vector<std::string> args)
+Message* Server::caseGhostLogin(std::vector<std::string> args, SOCKET usersSocket)
 {
 	int ghostIdentifier = rand();
 	std::string username = "ghost" + std::to_string(ghostIdentifier);
 	std::vector<std::string> answerArgs;
 	if (this->_db->createUser(username, "", args[2], args[3]))
 	{
+		this->sendUsersWhenNewJoins(args[0]);
+		this->_clients.insert(std::pair<std::string, SOCKET>(username, usersSocket));
 		answerArgs.push_back("Ghost user logged in successfully");
 		return new Message(MessageType::success, answerArgs);
 
@@ -193,7 +196,7 @@ void Server::messagesHandler()
 				msg = caseSignUp(args, m.first);
 				break;
 			case MessageType::ghostLogIn:
-				msg = caseGhostLogin(args);
+				msg = caseGhostLogin(args, m.first);
 				break;
 			case MessageType::logout:
 				msg = caseLogout(args);
@@ -368,7 +371,7 @@ void Server::clientHandler(SOCKET socket, int port)
 void Server::addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port)
 {
 	std::unique_lock<std::mutex> lock(this->_messagesMutex);
-	this->_messagesQueue.push(*new std::pair<SOCKET, Message>(socket, *new Message(allMsg, port)));
+	this->_messagesQueue.push(*new std::pair<SOCKET, Message>(socket, *new Message(allMsg)));
 	lock.unlock();
 	this->_messagesCv.notify_one();
 }

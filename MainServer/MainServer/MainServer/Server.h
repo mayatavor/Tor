@@ -42,7 +42,7 @@ private:
 	Message* caseSignUp(std::vector<std::string> args, SOCKET usersSocket);
 
 	//This function handles login request when the client chose to login as a ghost.
-	Message* caseGhostLogin(std::vector<std::string> args);
+	Message* caseGhostLogin(std::vector<std::string> args, SOCKET usersSocket);
 
 	//This funcion handles logout request.
 	Message* caseLogout(std::vector<std::string> args);
