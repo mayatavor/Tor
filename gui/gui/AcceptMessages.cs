@@ -6,15 +6,21 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
+using System.Windows;
+using System.Collections.Concurrent;
 
 namespace gui
 {
     class AcceptMessages
     {
         private int port { get; set; }
+        private ConcurrentQueue<Response> responses;
         public AcceptMessages()
         {
             port = FindPort();
+            Application.Current.Properties["Responses"] = new ConcurrentStack<Response>();
+
+            this.responses = (ConcurrentQueue<Response>)Application.Current.Properties["Responses"];
         }
 
         public int GetPort()
@@ -41,35 +47,30 @@ namespace gui
                 Console.WriteLine("Waiting for a connection...");
                 Socket handler = listener.Accept();
 
-                // Incoming data from the client.
-                string data = null;
-                byte[] bytes = null;
-
                 while (true)
                 {
-                    bytes = new byte[1024];
-                    int bytesRec = handler.Receive(bytes);
-                    data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
-                    if (data.IndexOf("<EOF>") > -1)
-                    {
-                        break;
-                    }
+                    //recive the data from the socket
+                    byte[] bytesArr = new byte[5];
+                    int bytesRec = handler.Receive(bytesArr);
+                    string t = System.Text.Encoding.UTF8.GetString(bytesArr, 0, bytesArr.Length);
+
+                    int lenMsg = int.Parse(t);
+                    byte[] bytesArr3 = new byte[lenMsg];
+                    bytesRec = handler.Receive(bytesArr3);
+
+                    string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);
+
+                    Response r = new Response(res);
+                    this.responses.Enqueue(r);
                 }
 
-                Console.WriteLine("Text received : {0}", data);
-
-                byte[] msg = Encoding.ASCII.GetBytes(data);
-                handler.Send(msg);
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                e.ToString();
             }
-
-            Console.WriteLine("\n Press any key to continue...");
-            Console.ReadKey();
         }
 
 

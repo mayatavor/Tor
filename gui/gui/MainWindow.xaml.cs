@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,16 +25,24 @@ namespace gui
         private Communicator _communicator;
         private string myUserName;
         private string username;
+        private ConcurrentQueue<Response> responses;
+        private Thread t;
+        private bool isOut;
 
         public MainWindow(string username)
         {
             InitializeComponent();
             this._communicator = (Communicator)Application.Current.Properties["Com"];
+            this.responses = (ConcurrentQueue<Response>)Application.Current.Properties["Responses"];
             this.myUserName = username;
             this.username = "";
+            this.isOut = false;
 
             //get users from the server
             getUsers(username);
+
+            this.t = new Thread(this.HandleResponses);
+            t.Start();
         }
 
         private void SendMsg(string text)
@@ -145,9 +155,11 @@ namespace gui
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
-            bool res = false;//this._communicator.Logout(this.username);
+            this.isOut = this._communicator.Logout(this.username);
 
-            if(!res)
+            Task.Delay(200).Wait();
+
+            if(!this.isOut)
             {
                 MessageBoxResult result = MessageBox.Show("Could not log out, please try again", "LogOut Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -169,6 +181,47 @@ namespace gui
                 this.UsersList.Items.Add(users[i]);
             }
         }
+
+
+        private void HandleResponses()
+        {
+            Response r;
+            string[] sep = new string[] { "::::" };
+            while (!this.isOut)
+            {
+                if (this.responses.Count() > 0)
+                {
+                    this.responses.TryDequeue(out r);
+
+                    switch (r.code)
+                    {
+                        case 320:
+                            string[] userInfo;
+                            userInfo = r.objects[1].Split(sep, StringSplitOptions.RemoveEmptyEntries);
+                            this.UsersList.Items.Add(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo[1])), userInfo[0], Convert.ToBoolean(Convert.ToInt16(userInfo[2]))));
+                            break;
+
+                        case 230:
+                            string[] userInfo2;
+                            userInfo2 = r.objects[1].Split(sep, StringSplitOptions.RemoveEmptyEntries);
+                            this.UsersList.Items.Remove(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo2[1])), userInfo2[0], Convert.ToBoolean(Convert.ToInt16(userInfo2[2]))));
+                            break;
+
+                        default:
+                            break;
+                            
+                    }
+                }
+
+                Thread.Sleep(200);
+            }
+
+
+
+        }
+
+
+
 
 
 
