@@ -207,13 +207,19 @@ namespace gui
                         case 320:
                             string[] userInfo;
                             userInfo = r.objects[1].Split(sep, StringSplitOptions.RemoveEmptyEntries);
-                            this.UsersList.Items.Add(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo[1])), userInfo[0], Convert.ToBoolean(Convert.ToInt16(userInfo[2]))));
+                            Dispatcher.BeginInvoke((Action)(() =>
+                            {
+                                this.UsersList.Items.Add(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo[1])), userInfo[0], Convert.ToBoolean(Convert.ToInt16(userInfo[2]))));
+                            }));
                             break;
 
                         case 230:
                             string[] userInfo2;
                             userInfo2 = r.objects[1].Split(sep, StringSplitOptions.RemoveEmptyEntries);
-                            this.UsersList.Items.Remove(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo2[1])), userInfo2[0], Convert.ToBoolean(Convert.ToInt16(userInfo2[2]))));
+                            Dispatcher.BeginInvoke((Action)(() =>
+                            {
+                                this.UsersList.Items.Remove(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo2[1])), userInfo2[0], Convert.ToBoolean(Convert.ToInt16(userInfo2[2]))));
+                            }));
                             break;
 
                         default:

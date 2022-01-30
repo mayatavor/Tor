@@ -304,12 +304,12 @@ void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 			uli.isFavorite = this->_db->isFavorite(it->first, joinedUsername);;
 			uli.usernameOther = joinedUsername;
 			uli.isGhost = joinedUsername.find("ghost") != std::string::npos;
-			std::string msg = uli.usernameOther + IN_USER_DELIMITER + std::to_string(uli.isFavorite) + IN_USER_DELIMITER + std::to_string(uli.isGhost);
+			std::string msg = std::to_string(MessageType::getUsersWhenJoined) + DELIMITER + uli.usernameOther + IN_USER_DELIMITER + std::to_string(uli.isFavorite) + IN_USER_DELIMITER + std::to_string(uli.isGhost);
 			Message* builtMessage = new Message(msg);
 
 			SOCKET clientSocket = createSocket(u.getPort(), u.getIp());
-
-			Helper::sendData(clientSocket, builtMessage->buildMessage());
+			std::string m = builtMessage->buildMessage();
+			Helper::sendData(clientSocket, m);
 			delete builtMessage;
 		}
 		catch (const std::exception& e)
@@ -336,7 +336,7 @@ SOCKET Server::createSocket(int port, std::string ip)
 	int addrLen = sizeof(addr);
 	IN_ADDR ipvalue;
 	memset(&storage, 0, sizeof storage);
-	addr.sin_addr.s_addr = inet_addr(ip.c_str());
+	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	//addr.sin_addr.s_addr = InetPton(PF_INET, PCWSTR(ip.c_str()), &storage);
 	addr.sin_port = htons(port);
 	addr.sin_family = AF_INET;
