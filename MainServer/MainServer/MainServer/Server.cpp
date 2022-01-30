@@ -254,7 +254,7 @@ Message* Server::caseSendMessage(std::vector<std::string> args)
 		if (chat.getChatId() == -1)
 			this->_db->createChat(u1.getId(), u2.getId());
 		chat = this->_db->getChatByUsers(args[0], args[1]);
-		success = this->_db->addMessage(args[2], chat.getChatId(), std::stoi(args[0]));
+		success = this->_db->addMessage(args[2], chat.getChatId(), u1.getId());
 	}
 	if (success) {
 		msg.push_back("Message sent successfully");
@@ -297,27 +297,46 @@ void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 {
 	for (auto it = this->_clients.begin(); it != this->_clients.end(); it++) 
 	{
+		User u = this->_db->getUser(it->first);
+		UsersListItem uli;
+		uli.isFavorite = this->_db->isFavorite(it->first, joinedUsername);;
+		uli.usernameOther = joinedUsername;
+		uli.isGhost = joinedUsername.find("ghost") != std::string::npos;
+		std::string msg = std::to_string(MessageType::getUsersWhenJoined) + DELIMITER + uli.usernameOther + IN_USER_DELIMITER + std::to_string(uli.isFavorite) + IN_USER_DELIMITER + std::to_string(uli.isGhost);
+		Message* builtMessage = new Message(msg);
+
+		SOCKET clientSocket = createSocket(u.getPort(), u.getIp());
+		std::string m = builtMessage->buildMessage();
 		try
 		{
-			User u = this->_db->getUser(it->first);
-			UsersListItem uli;
-			uli.isFavorite = this->_db->isFavorite(it->first, joinedUsername);;
-			uli.usernameOther = joinedUsername;
-			uli.isGhost = joinedUsername.find("ghost") != std::string::npos;
-			std::string msg = std::to_string(MessageType::getUsersWhenJoined) + DELIMITER + uli.usernameOther + IN_USER_DELIMITER + std::to_string(uli.isFavorite) + IN_USER_DELIMITER + std::to_string(uli.isGhost);
-			Message* builtMessage = new Message(msg);
-
-			SOCKET clientSocket = createSocket(u.getPort(), u.getIp());
-			std::string m = builtMessage->buildMessage();
 			Helper::sendData(clientSocket, m);
 			delete builtMessage;
 		}
 		catch (const std::exception& e)
 		{
-			Message* builtMessage = new Message(e.what());
-			Helper::sendData(it->second, builtMessage->buildMessage());
+			builtMessage = new Message(e.what());
+			Helper::sendData(clientSocket, builtMessage->buildMessage());
 			delete builtMessage;
 		}
+	}
+}
+
+void Server::sendUserMessage(std::string username, std::string content, std::string senderUsername)
+{
+	User u = this->_db->getUser(username);
+	SOCKET sock = createSocket(u.getPort(), u.getIp());
+	std::string msg = std::to_string(MessageType::sendMessageToOtherUser) + DELIMITER + senderUsername + DELIMITER + content;
+	Message* builtMessage = new Message(msg);
+	try
+	{
+		Helper::sendData(sock, builtMessage->buildMessage());
+		delete builtMessage;
+	}
+	catch (const std::exception& e)
+	{
+		builtMessage = new Message(e.what());
+		Helper::sendData(sock, builtMessage->buildMessage());
+		delete builtMessage;
 	}
 }
 
@@ -337,7 +356,6 @@ SOCKET Server::createSocket(int port, std::string ip)
 	IN_ADDR ipvalue;
 	memset(&storage, 0, sizeof storage);
 	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-	//addr.sin_addr.s_addr = InetPton(PF_INET, PCWSTR(ip.c_str()), &storage);
 	addr.sin_port = htons(port);
 	addr.sin_family = AF_INET;
 

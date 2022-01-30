@@ -90,7 +90,7 @@ namespace gui
             string[] sep = new string[] { "::::" };
             string[] userInfo;
 
-            for (int i = 1; i < res.objects.Count() - 1; i++)
+            for (int i = 1; i < res.objects.Count(); i++)
             {
                 userInfo = res.objects[i].Split(sep, StringSplitOptions.RemoveEmptyEntries);
                 messages.Add(new Message(userInfo[0], userInfo[1]));
