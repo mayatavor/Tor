@@ -1,6 +1,7 @@
 #include "Server.h"
 #include "MessageType.h"
 #include "serialize.h"
+#include <WS2tcpip.h>
 #include "Structs.h"
 #include <iostream>
 #include <stdlib.h>
@@ -9,6 +10,10 @@
 #include <time.h>
 #include <thread>
 #include "User.h"
+#include <sstream>
+#define _WINSOCK_DEPCRECATED 
+//#include <stdafx.h>
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 
 #define USER_EXISTS(id, content, existsOrNot) \
  if (this->_db->doesUserExist(id) == existsOrNot)\
@@ -294,13 +299,17 @@ void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 	{
 		try
 		{
+			User u = this->_db->getUser(it->first);
 			UsersListItem uli;
 			uli.isFavorite = this->_db->isFavorite(it->first, joinedUsername);;
 			uli.usernameOther = joinedUsername;
 			uli.isGhost = joinedUsername.find("ghost") != std::string::npos;
 			std::string msg = uli.usernameOther + IN_USER_DELIMITER + std::to_string(uli.isFavorite) + IN_USER_DELIMITER + std::to_string(uli.isGhost);
 			Message* builtMessage = new Message(msg);
-			Helper::sendData(it->second, builtMessage->buildMessage());
+
+			SOCKET clientSocket = createSocket(u.getPort(), u.getIp());
+
+			Helper::sendData(clientSocket, builtMessage->buildMessage());
 			delete builtMessage;
 		}
 		catch (const std::exception& e)
@@ -310,6 +319,36 @@ void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 			delete builtMessage;
 		}
 	}
+}
+
+
+SOCKET Server::createSocket(int port, std::string ip)
+{
+	WSAData wsaData;
+	WORD DllVersion = MAKEWORD(2, 1);
+	if (WSAStartup(DllVersion, &wsaData) != 0) {
+		std::cout << "Winsock Connection Failed!" << std::endl;
+		exit(1);
+	}
+
+	SOCKADDR_IN addr;
+	sockaddr_storage storage;
+	int addrLen = sizeof(addr);
+	IN_ADDR ipvalue;
+	memset(&storage, 0, sizeof storage);
+	addr.sin_addr.s_addr = inet_addr(ip.c_str());
+	//addr.sin_addr.s_addr = InetPton(PF_INET, PCWSTR(ip.c_str()), &storage);
+	addr.sin_port = htons(port);
+	addr.sin_family = AF_INET;
+
+	SOCKET connection = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (connect(connection, (SOCKADDR*)&addr, addrLen) == 0) {
+		std::cout << "Connected!" << std::endl;
+		return connection;
+	}
+	else 
+		std::cout << "Error Connecting to Host" << std::endl;
+	return NULL;
 }
 
 std::list<std::string> Server::getOnlineUsernamesExceptMe(std::string myUsername)

@@ -23,15 +23,18 @@ namespace gui
     public partial class MainWindow : Window
     { 
         private Communicator _communicator;
+        private AcceptMessages _server;
         private string myUserName;
         private string username;
         private ConcurrentQueue<Response> responses;
         private Thread t;
+        private Thread t2;
         private bool isOut;
 
         public MainWindow(string username)
         {
             InitializeComponent();
+            this._server = (AcceptMessages)Application.Current.Properties["Server"];
             this._communicator = (Communicator)Application.Current.Properties["Com"];
             this.responses = (ConcurrentQueue<Response>)Application.Current.Properties["Responses"];
             this.myUserName = username;
@@ -40,6 +43,10 @@ namespace gui
 
             //get users from the server
             getUsers(username);
+
+            
+            this.t2 = new Thread(this._server.StartServer);
+            t2.Start();
 
             this.t = new Thread(this.HandleResponses);
             t.Start();
@@ -189,6 +196,8 @@ namespace gui
             string[] sep = new string[] { "::::" };
             while (!this.isOut)
             {
+                this.responses = (ConcurrentQueue<Response>)Application.Current.Properties["Responses"];
+
                 if (this.responses.Count() > 0)
                 {
                     this.responses.TryDequeue(out r);

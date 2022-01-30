@@ -36,6 +36,11 @@ const std::string& User::getIp() const
 	return this->_ipAddress;
 }
 
+const int User::getPort()
+{
+	return this->_port;
+}
+
 void User::setId(int id)
 {
 	this->_userId = id;

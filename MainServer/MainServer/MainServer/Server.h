@@ -63,6 +63,8 @@ private:
 
 	void sendUsersWhenNewJoins(std::string joinedUsername);
 
+	SOCKET createSocket(int port, std::string ip);
+
 	//The function iterates through the map of the clients and creates a list with the online usernames except the given username.
 	std::list<std::string> getOnlineUsernamesExceptMe(std::string myUsername);
 	void accept();
