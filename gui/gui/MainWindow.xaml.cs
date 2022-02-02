@@ -23,15 +23,18 @@ namespace gui
     public partial class MainWindow : Window
     { 
         private Communicator _communicator;
+        private AcceptMessages _server;
         private string myUserName;
         private string username;
         private ConcurrentQueue<Response> responses;
         private Thread t;
+        private Thread t2;
         private bool isOut;
 
         public MainWindow(string username)
         {
             InitializeComponent();
+            this._server = (AcceptMessages)Application.Current.Properties["Server"];
             this._communicator = (Communicator)Application.Current.Properties["Com"];
             this.responses = (ConcurrentQueue<Response>)Application.Current.Properties["Responses"];
             this.myUserName = username;
@@ -40,6 +43,11 @@ namespace gui
 
             //get users from the server
             getUsers(username);
+
+            this.UserNameChats.Text += username;
+
+            this.t2 = new Thread(this._server.StartServer);
+            t2.Start();
 
             this.t = new Thread(this.HandleResponses);
             t.Start();
@@ -83,6 +91,8 @@ namespace gui
                 this.UserName.Text = user.GetUsername();
                 this.username = user.GetUsername();
 
+                user.SetToEmpty();
+
                 //get the chat history
                 List<Message> messages = this._communicator.GetMessages(myUserName, user.GetUsername());
                 for (int i = 0; i < messages.Count; i++)
@@ -90,12 +100,12 @@ namespace gui
                     if (messages[i].username == myUserName)
                     {
                         MessageSent m = new MessageSent(messages[i].message);
-                        this.MessagesList.Items.Add(messages[i]);
+                        this.MessagesList.Items.Add(m);
                     }
                     else
                     {
                         MessageRecived m = new MessageRecived(messages[i].message);
-                        this.MessagesList.Items.Add(messages[i]);
+                        this.MessagesList.Items.Add(m);
                     }
                 }
             }
@@ -189,6 +199,8 @@ namespace gui
             string[] sep = new string[] { "::::" };
             while (!this.isOut)
             {
+                this.responses = (ConcurrentQueue<Response>)Application.Current.Properties["Responses"];
+
                 if (this.responses.Count() > 0)
                 {
                     this.responses.TryDequeue(out r);
@@ -198,13 +210,38 @@ namespace gui
                         case 320:
                             string[] userInfo;
                             userInfo = r.objects[1].Split(sep, StringSplitOptions.RemoveEmptyEntries);
-                            this.UsersList.Items.Add(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo[1])), userInfo[0], Convert.ToBoolean(Convert.ToInt16(userInfo[2]))));
+                            Dispatcher.BeginInvoke((Action)(() =>
+                            {
+                                this.UsersList.Items.Add(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo[1])), userInfo[0], Convert.ToBoolean(Convert.ToInt16(userInfo[2]))));
+                            }));
                             break;
 
                         case 230:
                             string[] userInfo2;
                             userInfo2 = r.objects[1].Split(sep, StringSplitOptions.RemoveEmptyEntries);
-                            this.UsersList.Items.Remove(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo2[1])), userInfo2[0], Convert.ToBoolean(Convert.ToInt16(userInfo2[2]))));
+                            Dispatcher.BeginInvoke((Action)(() =>
+                            {
+                                this.UsersList.Items.Remove(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo2[1])), userInfo2[0], Convert.ToBoolean(Convert.ToInt16(userInfo2[2]))));
+                            }));
+                            break;
+
+                        case 303:
+                            if(this.username == r.objects[1])
+                            {
+                                MessageRecived m = new MessageRecived(r.objects[2]);
+                                this.MessagesList.Items.Add(m);
+                                break;
+                            }
+
+                            for (int i = 0; i < this.UsersList.Items.Count; i++)
+                            {
+                                UserInfo usr = (UserInfo)this.UsersList.Items[i];
+                                if (usr.GetUsername() == r.objects[1])
+                                {
+                                    ((UserInfo)this.UsersList.Items[i]).SetToBlue();
+                                    break;
+                                }
+                            }
                             break;
 
                         default:

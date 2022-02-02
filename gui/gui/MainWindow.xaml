@@ -31,6 +31,7 @@
                         TextAlignment="Center" 
                         Width="270"
                         Height="45" 
+                        x:Name="UserNameChats"
                         Background="White"/>
 
                     <Button 

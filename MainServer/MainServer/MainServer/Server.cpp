@@ -1,6 +1,7 @@
 #include "Server.h"
 #include "MessageType.h"
 #include "serialize.h"
+#include <WS2tcpip.h>
 #include "Structs.h"
 #include <iostream>
 #include <stdlib.h>
@@ -9,6 +10,9 @@
 #include <time.h>
 #include <thread>
 #include "User.h"
+#include <sstream>
+#define _WINSOCK_DEPCRECATED 
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 
 #define USER_EXISTS(id, content, existsOrNot) \
  if (this->_db->doesUserExist(id) == existsOrNot)\
@@ -249,7 +253,7 @@ Message* Server::caseSendMessage(std::vector<std::string> args)
 		if (chat.getChatId() == -1)
 			this->_db->createChat(u1.getId(), u2.getId());
 		chat = this->_db->getChatByUsers(args[0], args[1]);
-		success = this->_db->addMessage(args[2], chat.getChatId(), std::stoi(args[0]));
+		success = this->_db->addMessage(args[2], chat.getChatId(), u1.getId());
 	}
 	if (success) {
 		msg.push_back("Message sent successfully");
@@ -292,24 +296,76 @@ void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 {
 	for (auto it = this->_clients.begin(); it != this->_clients.end(); it++) 
 	{
+		User u = this->_db->getUser(it->first);
+		UsersListItem uli;
+		uli.isFavorite = this->_db->isFavorite(it->first, joinedUsername);;
+		uli.usernameOther = joinedUsername;
+		uli.isGhost = joinedUsername.find("ghost") != std::string::npos;
+		std::string msg = std::to_string(MessageType::getUsersWhenJoined) + DELIMITER + uli.usernameOther + IN_USER_DELIMITER + std::to_string(uli.isFavorite) + IN_USER_DELIMITER + std::to_string(uli.isGhost);
+		Message* builtMessage = new Message(msg);
+
+		SOCKET clientSocket = createSocket(u.getPort(), u.getIp());
+		std::string m = builtMessage->buildMessage();
 		try
 		{
-			UsersListItem uli;
-			uli.isFavorite = this->_db->isFavorite(it->first, joinedUsername);;
-			uli.usernameOther = joinedUsername;
-			uli.isGhost = joinedUsername.find("ghost") != std::string::npos;
-			std::string msg = uli.usernameOther + IN_USER_DELIMITER + std::to_string(uli.isFavorite) + IN_USER_DELIMITER + std::to_string(uli.isGhost);
-			Message* builtMessage = new Message(msg);
-			Helper::sendData(it->second, builtMessage->buildMessage());
+			Helper::sendData(clientSocket, m);
 			delete builtMessage;
 		}
 		catch (const std::exception& e)
 		{
-			Message* builtMessage = new Message(e.what());
-			Helper::sendData(it->second, builtMessage->buildMessage());
+			builtMessage = new Message(e.what());
+			Helper::sendData(clientSocket, builtMessage->buildMessage());
 			delete builtMessage;
 		}
 	}
+}
+
+void Server::sendUserMessage(std::string username, std::string content, std::string senderUsername)
+{
+	User u = this->_db->getUser(username);
+	SOCKET sock = createSocket(u.getPort(), u.getIp());
+	std::string msg = std::to_string(MessageType::sendMessageToOtherUser) + DELIMITER + senderUsername + DELIMITER + content;
+	Message* builtMessage = new Message(msg);
+	try
+	{
+		Helper::sendData(sock, builtMessage->buildMessage());
+		delete builtMessage;
+	}
+	catch (const std::exception& e)
+	{
+		builtMessage = new Message(e.what());
+		Helper::sendData(sock, builtMessage->buildMessage());
+		delete builtMessage;
+	}
+}
+
+
+SOCKET Server::createSocket(int port, std::string ip)
+{
+	WSAData wsaData;
+	WORD DllVersion = MAKEWORD(2, 1);
+	if (WSAStartup(DllVersion, &wsaData) != 0) {
+		std::cout << "Winsock Connection Failed!" << std::endl;
+		exit(1);
+	}
+
+	SOCKADDR_IN addr;
+	sockaddr_storage storage;
+	int addrLen = sizeof(addr);
+	IN_ADDR ipvalue;
+	memset(&storage, 0, sizeof storage);
+	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	addr.sin_port = htons(port);
+	addr.sin_family = AF_INET;
+
+	SOCKET connection = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (connect(connection, (SOCKADDR*)&addr, addrLen) == 0) {
+		std::cout << "Connected!" << std::endl;
+		return connection;
+	}
+	else 
+		std::cout << "Error Connecting to Host" << std::endl;
+	return NULL;
 }
 
 std::list<std::string> Server::getOnlineUsernamesExceptMe(std::string myUsername)

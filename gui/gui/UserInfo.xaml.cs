@@ -83,6 +83,17 @@ namespace gui
 
         }
 
+        public void SetToEmpty()
+        {
+            this.HaveMessages.Source = new BitmapImage(new Uri("Assets/emptyDot.jpeg", UriKind.Relative));
+        }
+        
+
+        public void SetToBlue()
+        {
+            this.HaveMessages.Source = new BitmapImage(new Uri("Assets/blueDot.png", UriKind.Relative));
+        }
+
         public string GetUsername()
         {
             return this.username;

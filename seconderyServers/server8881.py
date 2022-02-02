@@ -76,6 +76,7 @@ def main():
 
     connectToMainServer(s)
 
+
     while True:
         conn, addr = serv.accept()
         x = threading.Thread(target=thread, args=(conn,))
