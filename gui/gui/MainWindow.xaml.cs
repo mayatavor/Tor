@@ -58,6 +58,7 @@ namespace gui
             bool answer = this._communicator.SendMessage(text,this.username, this.myUserName);
             if (answer == false)
             {
+                
                 MessageError error = new MessageError(text);
                 this.MessagesList.Items.Add(error);
             }
@@ -92,6 +93,8 @@ namespace gui
                 this.username = user.GetUsername();
 
                 user.SetToEmpty();
+
+                this.MessagesList.Items.Clear();
 
                 //get the chat history
                 List<Message> messages = this._communicator.GetMessages(myUserName, user.GetUsername());
@@ -237,15 +240,18 @@ namespace gui
                                 break;
                             }
 
-                            for (int i = 0; i < this.UsersList.Items.Count; i++)
+                            Dispatcher.BeginInvoke((Action)(() =>
                             {
-                                UserInfo usr = (UserInfo)this.UsersList.Items[i];
-                                if (usr.GetUsername() == r.objects[1])
+                                for (int i = 0; i < this.UsersList.Items.Count; i++)
                                 {
-                                    ((UserInfo)this.UsersList.Items[i]).SetToBlue();
-                                    break;
+                                    UserInfo usr = (UserInfo)this.UsersList.Items[i];
+                                    if (usr.GetUsername() == r.objects[1])
+                                    {
+                                        ((UserInfo)this.UsersList.Items[i]).SetToBlue();
+                                        break;
+                                    }
                                 }
-                            }
+                            }));
                             break;
 
                         default:
@@ -257,13 +263,7 @@ namespace gui
                 Thread.Sleep(200);
             }
 
-
-
         }
-
-
-
-
 
 
     }
