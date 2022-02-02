@@ -1,3 +1,4 @@
+#pragma warning(disable : 4996)
 #include "Server.h"
 #include "MessageType.h"
 #include "serialize.h"
@@ -223,7 +224,8 @@ void Server::messagesHandler()
 			if(msg)
 				h.sendData(m.first, msg->buildMessage());
 		}
-		delete msg;
+		if(msg)
+			delete msg;
 	}
 }
 
@@ -256,13 +258,15 @@ Message* Server::caseSendMessage(std::vector<std::string> args)
 		success = this->_db->addMessage(args[2], chat.getChatId(), u1.getId());
 	}
 	if (success) {
-		msg.push_back("Message sent successfully");
-		std::vector<std::string> msgToUser = { args[2] };
-		Message* msgToOtherClient = new Message(MessageType::sendMessageToOtherUser, msgToUser);
-		SOCKET otherUserSock = this->_clients[args[1]];
-		Helper::sendData(otherUserSock, msgToOtherClient->buildMessage());   //Send data to the other user in the chat.
-		delete msgToOtherClient;
-		return new Message(MessageType::success, msg);
+		//msg.push_back("Message sent successfully");
+		//std::vector<std::string> msgToUser = { args[2] };
+		//Message* msgToOtherClient = new Message(MessageType::sendMessageToOtherUser, msgToUser);
+		//SOCKET otherUserSock = this->_clients[args[1]];
+		//Helper::sendData(otherUserSock, msgToOtherClient->buildMessage());   //Send data to the other user in the chat.
+		this->sendUserMessage(args[1], args[2], args[0]);
+		/*delete msgToOtherClient;
+		return new Message(MessageType::success, msg);*/
+		return nullptr;
 	}
 	else
 	{

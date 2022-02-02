@@ -44,7 +44,15 @@ namespace gui {
     public partial class MainWindow : System.Windows.Window, System.Windows.Markup.IComponentConnector {
         
         
-        #line 42 "..\..\MainWindow.xaml"
+        #line 34 "..\..\MainWindow.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.TextBlock UserNameChats;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 43 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button LogOut;
         
@@ -52,7 +60,7 @@ namespace gui {
         #line hidden
         
         
-        #line 59 "..\..\MainWindow.xaml"
+        #line 60 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.TextBox SearchText;
         
@@ -60,7 +68,7 @@ namespace gui {
         #line hidden
         
         
-        #line 75 "..\..\MainWindow.xaml"
+        #line 76 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button searchName;
         
@@ -68,7 +76,7 @@ namespace gui {
         #line hidden
         
         
-        #line 81 "..\..\MainWindow.xaml"
+        #line 82 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image SearchBackground;
         
@@ -76,7 +84,7 @@ namespace gui {
         #line hidden
         
         
-        #line 85 "..\..\MainWindow.xaml"
+        #line 86 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.ListView UsersList;
         
@@ -84,7 +92,7 @@ namespace gui {
         #line hidden
         
         
-        #line 100 "..\..\MainWindow.xaml"
+        #line 101 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.TextBlock UserName;
         
@@ -92,7 +100,7 @@ namespace gui {
         #line hidden
         
         
-        #line 110 "..\..\MainWindow.xaml"
+        #line 111 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.ListView MessagesList;
         
@@ -100,7 +108,7 @@ namespace gui {
         #line hidden
         
         
-        #line 126 "..\..\MainWindow.xaml"
+        #line 127 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.TextBox Message;
         
@@ -138,62 +146,65 @@ namespace gui {
             switch (connectionId)
             {
             case 1:
+            this.UserNameChats = ((System.Windows.Controls.TextBlock)(target));
+            return;
+            case 2:
             this.LogOut = ((System.Windows.Controls.Button)(target));
             
-            #line 43 "..\..\MainWindow.xaml"
+            #line 44 "..\..\MainWindow.xaml"
             this.LogOut.Click += new System.Windows.RoutedEventHandler(this.LogOut_Click);
             
             #line default
             #line hidden
             return;
-            case 2:
+            case 3:
             this.SearchText = ((System.Windows.Controls.TextBox)(target));
             
-            #line 63 "..\..\MainWindow.xaml"
+            #line 64 "..\..\MainWindow.xaml"
             this.SearchText.KeyDown += new System.Windows.Input.KeyEventHandler(this.SearchInText_KeyDown);
             
             #line default
             #line hidden
             return;
-            case 3:
+            case 4:
             this.searchName = ((System.Windows.Controls.Button)(target));
             
-            #line 78 "..\..\MainWindow.xaml"
+            #line 79 "..\..\MainWindow.xaml"
             this.searchName.Click += new System.Windows.RoutedEventHandler(this.search_Click);
             
             #line default
             #line hidden
             return;
-            case 4:
+            case 5:
             this.SearchBackground = ((System.Windows.Controls.Image)(target));
             return;
-            case 5:
+            case 6:
             this.UsersList = ((System.Windows.Controls.ListView)(target));
             
-            #line 85 "..\..\MainWindow.xaml"
+            #line 86 "..\..\MainWindow.xaml"
             this.UsersList.PreviewMouseDoubleClick += new System.Windows.Input.MouseButtonEventHandler(this.UsersList_PreviewMouseDoubleClick);
             
             #line default
             #line hidden
             return;
-            case 6:
+            case 7:
             this.UserName = ((System.Windows.Controls.TextBlock)(target));
             return;
-            case 7:
+            case 8:
             this.MessagesList = ((System.Windows.Controls.ListView)(target));
             return;
-            case 8:
+            case 9:
             this.Message = ((System.Windows.Controls.TextBox)(target));
             
-            #line 129 "..\..\MainWindow.xaml"
+            #line 130 "..\..\MainWindow.xaml"
             this.Message.KeyDown += new System.Windows.Input.KeyEventHandler(this.Message_KeyDown);
             
             #line default
             #line hidden
             return;
-            case 9:
+            case 10:
             
-            #line 138 "..\..\MainWindow.xaml"
+            #line 139 "..\..\MainWindow.xaml"
             ((System.Windows.Controls.Button)(target)).Click += new System.Windows.RoutedEventHandler(this.SendMessage_Click);
             
             #line default

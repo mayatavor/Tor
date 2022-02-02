@@ -228,8 +228,12 @@ namespace gui
                         case 303:
                             if(this.username == r.objects[1])
                             {
-                                MessageRecived m = new MessageRecived(r.objects[2]);
-                                this.MessagesList.Items.Add(m);
+                                Dispatcher.BeginInvoke((Action)(() =>
+                                {
+                                    MessageRecived m = new MessageRecived(r.objects[2]);
+                                    this.MessagesList.Items.Add(m);
+                                }));
+                                
                                 break;
                             }
 
