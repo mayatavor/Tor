@@ -6,6 +6,7 @@ enum MessageType
 	logIn = 101,
 	signUp = 102,
 	logout = 212,
+	sendUserLeft = 121,
 	ghostLogIn = 103,
 	sendChatMessage = 300,
 	getChatHistory = 301,

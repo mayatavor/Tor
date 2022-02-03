@@ -158,6 +158,7 @@ Message* Server::caseLogout(std::vector<std::string> args)
 		return new Message(error, msg);
 	}
 	this->_clients.erase(it);
+	this->sendWhenUserLoggedOut(args[0]);
 	std::vector<std::string> msg = { "User logged out successfuly" };
 	return new Message(success, msg);
 }
@@ -306,6 +307,34 @@ void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 		uli.usernameOther = joinedUsername;
 		uli.isGhost = joinedUsername.find("ghost") != std::string::npos;
 		std::string msg = std::to_string(MessageType::getUsersWhenJoined) + DELIMITER + uli.usernameOther + IN_USER_DELIMITER + std::to_string(uli.isFavorite) + IN_USER_DELIMITER + std::to_string(uli.isGhost);
+		Message* builtMessage = new Message(msg);
+
+		SOCKET clientSocket = createSocket(u.getPort(), u.getIp());
+		std::string m = builtMessage->buildMessage();
+		try
+		{
+			Helper::sendData(clientSocket, m);
+			delete builtMessage;
+		}
+		catch (const std::exception& e)
+		{
+			builtMessage = new Message(e.what());
+			Helper::sendData(clientSocket, builtMessage->buildMessage());
+			delete builtMessage;
+		}
+	}
+}
+
+void Server::sendWhenUserLoggedOut(std::string leftUsername)
+{
+	for (auto it = this->_clients.begin(); it != this->_clients.end(); it++)
+	{
+		User u = this->_db->getUser(it->first);
+		UsersListItem uli;
+		uli.isFavorite = this->_db->isFavorite(it->first, leftUsername);
+		uli.usernameOther = leftUsername;
+		uli.isGhost = leftUsername.find("ghost") != std::string::npos;
+		std::string msg = std::to_string(MessageType::sendUserLeft) + DELIMITER + uli.usernameOther;
 		Message* builtMessage = new Message(msg);
 
 		SOCKET clientSocket = createSocket(u.getPort(), u.getIp());

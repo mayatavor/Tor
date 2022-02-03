@@ -63,6 +63,8 @@ private:
 
 	void sendUsersWhenNewJoins(std::string joinedUsername);
 
+	void sendWhenUserLoggedOut(std::string leftUsername);
+
 	void sendUserMessage(std::string username, std::string content, std::string senderUsername);
 
 	SOCKET createSocket(int port, std::string ip);
