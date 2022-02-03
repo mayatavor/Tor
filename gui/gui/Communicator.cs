@@ -87,6 +87,10 @@ namespace gui
             Response res = this._socket.TalkToServer(len + reqInfo);
 
             List<Message> messages = new List<Message>();
+
+            if (res.objects.Count() == 2 && res.objects[1] == "::::none::::\0")
+                return messages;
+
             string[] sep = new string[] { "::::" };
             string[] userInfo;
 
@@ -140,11 +144,7 @@ namespace gui
             string reqInfo = (int)MessageCodes.sendChatMessage + DIVIDER + myUserName + DIVIDER + username + DIVIDER + msg;
             string len = getPaddedNumber(reqInfo.Length, 5);
 
-            Response res = this._socket.TalkToServer(len+reqInfo);
-            if (res == null)
-                return false;
-            else if (res.code == 0)
-                return false;
+            this._socket.TalkToServerOneWay(len+reqInfo);
             return true;
         }
 

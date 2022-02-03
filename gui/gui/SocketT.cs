@@ -109,6 +109,23 @@ namespace gui
             return null;
         }
 
+
+        public void TalkToServerOneWay(string mas)
+        {
+            try
+            {
+                byte[] msg = Encoding.ASCII.GetBytes(mas);
+                // Send the data through the socket.
+                int bytesSent = this.sender.Send(msg);
+            }
+            catch (Exception w)
+            {
+                w.ToString();
+            }
+        }
+
+
+
         private IPAddress LocalIPAddress()
         {
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())

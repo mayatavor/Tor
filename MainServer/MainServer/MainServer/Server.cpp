@@ -279,7 +279,7 @@ Message* Server::caseGetChatHistory(std::vector<std::string> args)
 {
 	Chat chat = this->_db->getChatByUsers(args[0], args[1]);
 	if (chat.getChatId() == -1) {
-		std::vector<std::string> msg = { ":::none::::" };
+		std::vector<std::string> msg = { "::::none::::" };
 		return new Message(MessageType::success, msg);
 	}
 	std::list<MessagesListItem> messages = this->_db->getChatHistory(chat.getChatId());
