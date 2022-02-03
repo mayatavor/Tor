@@ -191,7 +191,10 @@ namespace gui
 
             for (int i = 0; i < users.Count; i++)
             {
-                this.UsersList.Items.Add(users[i]);
+                if (users[i].GetStar())
+                    this.UsersList.Items.Insert(0, users[i]);
+                else
+                    this.UsersList.Items.Add(users[i]);
             }
         }
 
