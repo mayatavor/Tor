@@ -20,16 +20,19 @@ namespace gui
     public partial class Connection : Window
     {
         private Communicator _communicator;
+        private int serverPort;
         public Connection()
         {
             InitializeComponent();
             Application.Current.Properties["Com"] = new Communicator();
+            Application.Current.Properties["Server"] = new AcceptMessages();
+            serverPort = ((AcceptMessages)Application.Current.Properties["Server"]).GetPort();
             this._communicator = (Communicator)Application.Current.Properties["Com"];
         }
 
         private void EnterGhost_Click(object sender, RoutedEventArgs e)
         {
-            (int code, string msg) res = this._communicator.Ghost();
+            (int code, string msg) res = this._communicator.Ghost(serverPort);
 
             if (res.code == 400)
             {
@@ -56,7 +59,7 @@ namespace gui
             }
             else
             {
-                string res = this._communicator.Login(this.UserNameLogIn.Text, this.PasswordLogIn.Text);
+                string res = this._communicator.Login(this.UserNameLogIn.Text, this.PasswordLogIn.Text, serverPort);
 
                 if (res != "")
                 {
@@ -89,7 +92,7 @@ namespace gui
             }
             else
             {
-                string res = this._communicator.SignUp(this.UserNameSignUp.Text, this.PasswordSignUp.Text);
+                string res = this._communicator.SignUp(this.UserNameSignUp.Text, this.PasswordSignUp.Text, serverPort);
 
                 if (res != "")
                 {

@@ -10,6 +10,8 @@ enum MessageType
 	sendChatMessage = 300,
 	getChatHistory = 301,
 	getUsers = 302,
+	getUsersWhenJoined = 320,
+	getUsersWhenLeft = 230,
 	sendMessageToOtherUser = 303,
 	error = 400,
 	success = 200,

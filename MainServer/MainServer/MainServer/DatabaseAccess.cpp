@@ -73,16 +73,18 @@ int getUsersCallback(void* data, int argc, char** argv, char** azColName)
 }
 
 
-void DatabaseAccess::createUser(std::string username, std::string password, std::string ip, std::string port)
+bool DatabaseAccess::createUser(std::string username, std::string password, std::string ip, std::string port)
 {
-	std::string str = "INSERT INTO Users (username, password, ipAddress) VALUES('" + username + "', '" + password + "', '" + ip + "');";
+	std::string str = "INSERT INTO Users (username, password, ipAddress, port) VALUES('" + username + "', '" + password + "', '" + ip + "', " + port + ");";
 	try
 	{
 		exec(str.c_str(), nullptr, nullptr);
+		return true;
 	}
 	catch (const std::exception& e)
 	{
 		std::cout << e.what() << std::endl;
+		return false;
 	}
 }
 
@@ -131,7 +133,7 @@ std::string DatabaseAccess::getUsernameById(int id)
 
 void DatabaseAccess::updateUsersIpAndPort(std::string username, std::string ip, std::string port)
 {
-	std::string str = "UPDATE Users SET ipAddress = '" + ip + "', port = " + port + ";";
+	std::string str = "UPDATE Users SET ipAddress = '" + ip + "', port = " + port + " WHERE username='" + username + "';";
 	try
 	{
 		exec(str.c_str(), nullptr, nullptr);
@@ -234,7 +236,7 @@ Chat DatabaseAccess::getChatByUsers(std::string firstUser, std::string secondUse
 {
 	User user1 = getUser(firstUser);
 	User user2 = getUser(secondUser);
-	std::string statement = "SELECT * FORM Chats WHERE ((firstUserId = " + std::to_string(user1.getId())  + " AND secondUserId = " + std::to_string(user2.getId()) + ") OR (firstUserId = " + std::to_string(user2.getId()) + " AND secondUserId = " + std::to_string(user1.getId())  + "));";
+	std::string statement = "SELECT * FROM Chats WHERE ((firstUserId = " + std::to_string(user1.getId())  + " AND secondUserId = " + std::to_string(user2.getId()) + ") OR (firstUserId = " + std::to_string(user2.getId()) + " AND secondUserId = " + std::to_string(user1.getId())  + "));";
 	std::list<Chat> chats;
 	try
 	{
@@ -305,11 +307,58 @@ std::list<std::string> DatabaseAccess::getFavoritesOfUser(std::string username)
 	return usernames;
 }
 
+bool DatabaseAccess::removeFavorite(std::string username, std::string usernameToRemove)
+{
+	User u = getUser(usernameToRemove);      //userId && chatID
+	Chat chat = getChatByUsers(username, usernameToRemove);
+	std::string statement = "DELETE FROM Favorites WHERE UserID = " + std::to_string(u.getId()) + " AND ChatId = " + std::to_string(chat.getChatId()) + ";";
+	try
+	{
+		exec(statement.c_str(), nullptr, nullptr);
+		return true;
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+		return false;
+	}
+}
+
+int isFavoriteCallback(void* data, int argc, char** argv, char** azColName)
+{
+	int* count = (int*)data;
+	*count = std::atoi(argv[0]);
+	return 0;
+}
+
+bool DatabaseAccess::isFavorite(std::string username1, std::string username2)
+{
+	int count = 0;
+	std::string statement = "with q1 as \
+		(select chatId as chatId\
+			from chats\
+			where(firstUserId IN(select users.UserId as firstUserId from users where users.username = '" + username1 + "')\
+				and secondUserId IN(select users.UserId as secondUserId from users where users.username = '" + username2 +"'))\
+			OR(firstUserId IN(select users.UserId as secondUserId from users where users.username = '" + username2 + "')\
+				and secondUserId IN(select users.UserId as firstUserId from users where users.username = '" + username1 + "')))\
+		select count(favorites.chatId) from favorites where favorites.chatId in(select chatId from q1); ";
+
+	try
+	{
+		exec(statement.c_str(), &isFavoriteCallback, &count);
+		return count;
+	}
+	catch (const std::exception& e)
+	{
+		throw e;
+	}
+}
+
 bool DatabaseAccess::addMessage(std::string msgContent, int chatId, int senderId)
 {
 	std::time_t timestamp = std::time(nullptr);
 	long int t = static_cast<long int>(timestamp);
-	std::string statement = "INSERT INTO Messages (chatId, senderId, time) VALUES (" + std::to_string(chatId) + ", " + std::to_string(senderId) + ", " + std::to_string(t) + ");";
+	std::string statement = "INSERT INTO Messages (chatId, senderId, messageContent) VALUES (" + std::to_string(chatId) + ", " + std::to_string(senderId) + ", '" + msgContent + "');";
 	try
 	{
 		exec(statement.c_str(), nullptr, nullptr);
@@ -327,17 +376,11 @@ int getChatHistoryCallback(void* data, int argc, char** argv, char** azColName)
 	std::list<MessagesListItem>* mesages = (std::list<MessagesListItem>*)data;
 	MessagesListItem message;
 	for (int i = 0; i < argc; i++) {
-		/*if (std::string(azColName[i]) == "chatId")
-			chat.setChatId(std::atoi(argv[i]));
-		else if (std::string(azColName[i]) == "firstUserId")
-			chat.setFirstuser(std::atoi(argv[i]));
-		else if (std::string(azColName[i]) == "secondUserId")
-			chat.setSecondUser(std::atoi(argv[i]));*/
 		if (std::string(azColName[i]) == "messageContent") {
 			message.msg = argv[i];
 		}
 		else if (std::string(azColName[i]) == "senderId") {
-			message.username = std::atoi(argv[i]);
+			message.id = argv[i];
 		}
 	}
 	mesages->push_back(message);
@@ -347,12 +390,12 @@ int getChatHistoryCallback(void* data, int argc, char** argv, char** azColName)
 std::list<MessagesListItem> DatabaseAccess::getChatHistory(int chatId)
 {
 	std::list<MessagesListItem> messages;
-	std::string statement = "SELECT messageContent, sendeId from Messages WHERE chatId = " + std::to_string(chatId) + ";";
+	std::string statement = "SELECT messageContent, senderId from Messages WHERE chatId = " + std::to_string(chatId) + ";";
 	try
 	{
 		exec(statement.c_str(), getChatHistoryCallback, &messages);
 		for (auto it = messages.begin(); it != messages.end(); it++) {
-			it->username = this->getUsernameById(atoi(it->username.c_str()));
+			it->username = this->getUsernameById(std::stoi(it->id));
 		}
 	}
 	catch (const std::exception& e)
@@ -365,11 +408,11 @@ std::list<MessagesListItem> DatabaseAccess::getChatHistory(int chatId)
 
 bool DatabaseAccess::createDBstructure()
 {
-	char usersTable[] = "CREATE TABLE IF NOT EXISTS Users(userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, ipAddress TEXT NOT NULL, port INTEGER DEFAULT 0); ";
+	char usersTable[] = "CREATE TABLE IF NOT EXISTS Users(userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT, ipAddress TEXT NOT NULL, port INTEGER DEFAULT 0); ";
 	char SecondaryServersTable[] = "CREATE TABLE IF NOT EXISTS SecondaryServers(serverID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ipAddress TEXT NOT NULL, password TEXT NOT NULL, d INTEGER NOT NULL, e INTEGER NOT NULL); ";
 	char chatsTable[] = "CREATE TABLE IF NOT EXISTS Chats(chatId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, firstUserId INTEGER NOT NULL, secondUserId INTEGER NOT NULL, FOREIGN KEY(firstUserId) REFERENCES Users(userId), FOREIGN KEY(secondUserId) REFERENCES Users(userId)); ";
 	char FavoritesTable[] = "CREATE TABLE IF NOT EXISTS Favorites(userId INTEGER NOT NULL, chatId INTEGER NOT NULL, FOREIGN KEY(userId) REFERENCES Users(useId), FOREIGN KEY(chatId) REFERENCES Chats(chatId)); ";
-	char MessagesTable[] = "CREATE TABLE IF NOT EXISTS Messages(messageId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, chatId INTEGER NOT NULL, messageContent TEXT NOT NULL, senderId INTEGER NOT NULL, time INTEGER NOT NULL, FOREIGN KEY(chatId) REFERENCES Chats(chatId), FOREIGN KEY(senderId) REFERENCES Users(userId)); ";
+	char MessagesTable[] = "CREATE TABLE IF NOT EXISTS Messages(messageId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, chatId INTEGER NOT NULL, messageContent TEXT NOT NULL, senderId INTEGER NOT NULL, FOREIGN KEY(chatId) REFERENCES Chats(chatId), FOREIGN KEY(senderId) REFERENCES Users(userId)); ";
 	try
 	{
 		exec(usersTable, nullptr, nullptr);

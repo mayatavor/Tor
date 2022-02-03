@@ -14,7 +14,7 @@ public:
 	virtual void clear() = 0;
 
 	//users
-	virtual void createUser(std::string username, std::string password, std::string ip, std::string port) = 0;
+	virtual bool createUser(std::string username, std::string password, std::string ip, std::string port) = 0;
 	virtual void deleteUser(const int& userId) = 0;
 	virtual bool doesUserExist(const std::string& username) = 0;
 	virtual User getUser(const std::string& username) = 0;
@@ -38,7 +38,9 @@ public:
 
 	//Favorites
 	virtual bool addFavorite(std::string addsUsername, std::string usernameToAdd) = 0;
-	//virtual std::list<
+	virtual std::list<std::string> getFavoritesOfUser(std::string username) = 0;
+	virtual bool removeFavorite(std::string username, std::string usernameToRemove) = 0;
+	virtual bool isFavorite(std::string username1, std::string username2) = 0;
 
 };
 

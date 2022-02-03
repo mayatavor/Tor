@@ -20,7 +20,13 @@ public:
 
 	//users
 	//void createUser(const User& user);
-	void createUser(std::string username, std::string password, std::string ip, std::string port);
+
+	/*
+	* The function adds a user to the users table in the DB.
+	* input: The user's username, password, ip and port.
+	* output: True if the user created successflly and false if not.
+	*/
+	bool createUser(std::string username, std::string password, std::string ip, std::string port);
 	void deleteUser(const int& userId);
 	bool doesUserExist(const std::string& username);
 	User getUser(const std::string& username);
@@ -45,6 +51,10 @@ public:
 	bool addFavorite(std::string addsUsername, std::string usernameToAdd);
 	//The function returns a list of all the usernamames that the user marked as favortites.
 	std::list<std::string> getFavoritesOfUser(std::string username);
+	//The function remvoes a specific row from the favorites table.
+	bool removeFavorite(std::string username, std::string usernameToRemove);
+	//The function returns true is username2 is in the favorites of username1, else it returns false.
+	bool isFavorite(std::string username1, std::string username2);
 
 
 	//Messages 

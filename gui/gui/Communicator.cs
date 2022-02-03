@@ -50,9 +50,9 @@ namespace gui
             return this.myUsername;
         }
 
-        public string Login(string username, string password)
+        public string Login(string username, string password, int port)
         {
-            string reqInfo = "101" + DIVIDER + username + DIVIDER + password;
+            string reqInfo = (int)MessageCodes.logIn + DIVIDER + username + DIVIDER + password + DIVIDER + port;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
 
@@ -60,9 +60,9 @@ namespace gui
                 return res.objects[1];
             return "";
         }
-        public string SignUp(string username, string password)
+        public string SignUp(string username, string password, int port)
         {
-            string reqInfo = "102" + DIVIDER + username + DIVIDER + password;
+            string reqInfo = (int)MessageCodes.signUp + DIVIDER + username + DIVIDER + password + DIVIDER + port;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
 
@@ -70,9 +70,9 @@ namespace gui
                 return res.objects[1];
             return "";
         }
-        public (int, string) Ghost()
+        public (int, string) Ghost(int port)
         {
-            string reqInfo = (int)MessageCodes.ghostLogIn + "";
+            string reqInfo = (int)MessageCodes.ghostLogIn + DIVIDER + port;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
 
@@ -87,10 +87,14 @@ namespace gui
             Response res = this._socket.TalkToServer(len + reqInfo);
 
             List<Message> messages = new List<Message>();
+
+            if (res.objects.Count() == 2 && res.objects[1] == "::::none::::\0")
+                return messages;
+
             string[] sep = new string[] { "::::" };
             string[] userInfo;
 
-            for (int i = 1; i < res.objects.Count() - 1; i++)
+            for (int i = 1; i < res.objects.Count(); i++)
             {
                 userInfo = res.objects[i].Split(sep, StringSplitOptions.RemoveEmptyEntries);
                 messages.Add(new Message(userInfo[0], userInfo[1]));
@@ -99,14 +103,18 @@ namespace gui
             return messages;
         }
 
-        public List<UserInfo> GetUsers() // username::::isFavorite::::isGhost
+        public List<UserInfo> GetUsers(string username) // username::::isFavorite::::isGhost
         {
-            string reqInfo = (int)MessageCodes.getUsers + "";
+            string reqInfo = (int)MessageCodes.getUsers + DIVIDER + username;
             string len = getPaddedNumber(reqInfo.Length, 5);
 
             Response res = this._socket.TalkToServer(len + reqInfo);
 
             List<UserInfo> users = new List<UserInfo>();
+
+            if (res.objects.Count() == 2 && res.objects[1] == "::::none::::\0")
+                return users;
+
             string[] sep = new string[] { "::::" };
             string[] userInfo;
 
@@ -136,11 +144,7 @@ namespace gui
             string reqInfo = (int)MessageCodes.sendChatMessage + DIVIDER + myUserName + DIVIDER + username + DIVIDER + msg;
             string len = getPaddedNumber(reqInfo.Length, 5);
 
-            Response res = this._socket.TalkToServer(len+reqInfo);
-            if (res == null)
-                return false;
-            else if (res.code == 0)
-                return false;
+            this._socket.TalkToServerOneWay(len+reqInfo);
             return true;
         }
 

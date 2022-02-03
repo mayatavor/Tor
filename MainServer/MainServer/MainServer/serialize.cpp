@@ -14,22 +14,24 @@ std::vector<std::string> serialize::serializeUsers(std::list<std::string> allUse
             uli.isFavorite = false;
             uli.usernameOther = *it;
             uli.isGhost = (*it).find("ghost") != std::string::npos;
-        if (std::find(favorites.begin(), favorites.end(), *it) != favorites.end()) {
-            //bool isGhost = (*it).find("ghost") != std::string::npos;
+        if (std::find(favorites.begin(), favorites.end(), *it) != favorites.end()) 
             uli.isFavorite = true;
-        }
-            users.push_back(uli);
+        users.push_back(uli);
     }
     std::list<UsersListItem>::iterator usersIt;
     std::vector<std::string> msg;
     for (usersIt = users.begin(); usersIt != users.end(); usersIt++) {
-        std::string user = (*usersIt).usernameOther + IN_USER_DELIMITER + std::to_string((*usersIt).isFavorite) + IN_USER_DELIMITER + std::to_string((*usersIt).isGhost) + BETWEEN_USERS_DELIMITER;
-        //message += user;
+        std::string user = (*usersIt).usernameOther + IN_USER_DELIMITER + std::to_string((*usersIt).isFavorite) + IN_USER_DELIMITER + std::to_string((*usersIt).isGhost);
         msg.push_back(user);
     }
-    std::string lastUser = msg[msg.size() - 1];
-    msg[msg.size() - 1] = lastUser.substr(0, lastUser.length() - 1);
-    //message = message.substr(0, message.length() - 1);
+
+    if (msg.size() > 0) 
+    {
+        //std::string lastUser = msg[msg.size() - 1];
+        //msg[msg.size() - 1] = lastUser.substr(0, lastUser.length() - 1);
+    }
+    else
+        msg.push_back("::::none::::");
     return msg;
 }
 

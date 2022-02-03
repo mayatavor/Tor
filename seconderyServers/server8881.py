@@ -2,13 +2,13 @@ import socket
 import threading
 
 HOST = '127.0.0.1'  # Standard loopback interface address
-MY_PORT = 8883         # Port to listen on
-MY_ID = 3
+MY_PORT = 8881      # Port to listen on
+MY_ID = 1
 
 MAIN_SERVER_PORT = 5678
 
-public_key = (3, 13861) # expontent, n
-private_key = (9075, 13861) # d, n
+public_key = (7, 14279) # expontent, n
+private_key = (8023, 14279) # d, n
 
 
 def decode_RSA(msg):
@@ -24,6 +24,7 @@ def decode_RSA(msg):
 
     print(plain)
     return plain
+
 
 
 def sentToNextClient(ip, port, msg):
@@ -64,7 +65,6 @@ def connectToMainServer(s):
     msg = str(len(msg)).zfill(5) + msg
     s.send(msg.encode())
 
-
 def main():
     serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serv.bind((HOST, MY_PORT))
@@ -75,6 +75,7 @@ def main():
     s.connect((host, MAIN_SERVER_PORT))
 
     connectToMainServer(s)
+
 
     while True:
         conn, addr = serv.accept()
