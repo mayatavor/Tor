@@ -60,7 +60,8 @@ namespace gui
             {
                 if (this._communicator.RemoveFromFavorites(this._communicator.GetUserName(), this.username))
                 {
-                    this.StarBackGround.Source = new BitmapImage(new Uri("Assets/fullHeart.png", UriKind.Relative));
+                    
+                    this.StarBackGround.Source = new BitmapImage(new Uri("Assets/emptyHeart.png", UriKind.Relative));
                     this.star = false;
                 }
                 else
@@ -71,8 +72,8 @@ namespace gui
             else
             {
                 if (this._communicator.AddToFavorites(this._communicator.GetUserName(), this.username))
-                { 
-                    this.StarBackGround.Source = new BitmapImage(new Uri("Assets/emptyHeart.png", UriKind.Relative));
+                {
+                    this.StarBackGround.Source = new BitmapImage(new Uri("Assets/fullHeart.png", UriKind.Relative));
                     this.star = true;
                 }
                 else
