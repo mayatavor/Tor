@@ -75,8 +75,8 @@ namespace gui
             string reqInfo = (int)MessageCodes.ghostLogIn + DIVIDER + port;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
-
-            return (res.code, res.objects[1]);
+            string ghostName = res.objects[1].Substring(0, res.objects[1].Length - 1);
+            return (res.code, ghostName);
         }
 
         public List<Message> GetMessages(string username1, string username2)

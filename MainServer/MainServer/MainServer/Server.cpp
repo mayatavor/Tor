@@ -121,7 +121,7 @@ Message* Server::caseSignUp(std::vector<std::string> args, SOCKET usersSocket)
 		return new Message(MessageType::success, answerArgs);
 	}
 	else {
-		std::vector<std::string> answerArgs = { "Error accurd while singing up" };
+		std::vector<std::string> answerArgs = { "Error accurd while signing up" };
 		return new Message(MessageType::error, answerArgs);
 	}
 }
@@ -131,11 +131,11 @@ Message* Server::caseGhostLogin(std::vector<std::string> args, SOCKET usersSocke
 	int ghostIdentifier = rand();
 	std::string username = "ghost" + std::to_string(ghostIdentifier);
 	std::vector<std::string> answerArgs;
-	if (this->_db->createUser(username, "", args[2], args[3]))
+	if (this->_db->createUser(username, "", args[1], args[0]))
 	{
-		this->sendUsersWhenNewJoins(args[0]);
+		//this->sendUsersWhenNewJoins(username);
 		this->_clients.insert(std::pair<std::string, SOCKET>(username, usersSocket));
-		answerArgs.push_back("Ghost user logged in successfully");
+		answerArgs.push_back(username);
 		return new Message(MessageType::success, answerArgs);
 
 	}
@@ -251,7 +251,7 @@ Message* Server::caseSendMessage(std::vector<std::string> args)
 		msg.push_back("One of the users doesn't exist");
 		return new Message(MessageType::error, msg);
 	}
-	if (u1.getUsername().find("ghost") == std::string::npos && u2.getUsername().find("ghost") == std::string::npos) {    ///Check if the both of the users are not ghosts becuse there is bo need to save chat history when ghosts.
+	if (u1.getUsername().find("ghost") == std::string::npos && u2.getUsername().find("ghost") == std::string::npos) {    //Check if the both of the users are not ghosts becuse there is bo need to save chat history when ghosts.
 		Chat chat = this->_db->getChatByUsers(args[0], args[1]);
 		if (chat.getChatId() == -1)
 			this->_db->createChat(u1.getId(), u2.getId());
@@ -259,14 +259,7 @@ Message* Server::caseSendMessage(std::vector<std::string> args)
 		success = this->_db->addMessage(args[2], chat.getChatId(), u1.getId());
 	}
 	if (success) {
-		//msg.push_back("Message sent successfully");
-		//std::vector<std::string> msgToUser = { args[2] };
-		//Message* msgToOtherClient = new Message(MessageType::sendMessageToOtherUser, msgToUser);
-		//SOCKET otherUserSock = this->_clients[args[1]];
-		//Helper::sendData(otherUserSock, msgToOtherClient->buildMessage());   //Send data to the other user in the chat.
-		this->sendUserMessage(args[1], args[2], args[0]);
-		/*delete msgToOtherClient;
-		return new Message(MessageType::success, msg);*/
+		this->sendUserMessage(args[1], args[2], args[0], u1.getUsername().find("ghost") == std::string::npos);
 		return nullptr;
 	}
 	else
@@ -353,7 +346,7 @@ void Server::sendWhenUserLoggedOut(std::string leftUsername)
 	}
 }
 
-void Server::sendUserMessage(std::string username, std::string content, std::string senderUsername)
+void Server::sendUserMessage(std::string username, std::string content, std::string senderUsername, bool isGhost)
 {
 	User u = this->_db->getUser(username);
 	SOCKET sock = createSocket(u.getPort(), u.getIp());
