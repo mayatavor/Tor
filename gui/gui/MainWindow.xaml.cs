@@ -222,7 +222,7 @@ namespace gui
                             }));
                             break;
 
-                        case 230:
+                        case 121:
                             string[] userInfo2;
                             userInfo2 = r.objects[1].Split(sep, StringSplitOptions.RemoveEmptyEntries);
                             Dispatcher.BeginInvoke((Action)(() =>
