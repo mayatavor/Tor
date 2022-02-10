@@ -65,7 +65,7 @@ private:
 
 	void sendWhenUserLoggedOut(std::string leftUsername);
 
-	void sendUserMessage(std::string username, std::string content, std::string senderUsername);
+	void sendUserMessage(std::string username, std::string content, std::string senderUsername, bool isGhost);
 
 	SOCKET createSocket(int port, std::string ip);
 

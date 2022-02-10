@@ -51,7 +51,7 @@ bool Message::validateArgumentLength()
 			return false;
 		break;
 	case MessageType::ghostLogIn:
-		if (this->_args.size() != 1)
+		if (this->_args.size() != 2)
 			return false;
 		break;
 	case MessageType::sendChatMessage:

@@ -14,6 +14,7 @@ enum MessageType
 	getUsersWhenJoined = 320,
 	getUsersWhenLeft = 230,
 	sendMessageToOtherUser = 303,
+	sendMessageFromGhost = 330,
 	error = 400,
 	success = 200,
 	ghostName = 201,
