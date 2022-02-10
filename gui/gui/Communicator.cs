@@ -10,15 +10,20 @@ public enum MessageCodes
     logIn = 101,
     signUp = 102,
     logout = 212,
+    sendUserLeft = 121,
     ghostLogIn = 103,
     sendChatMessage = 300,
     getChatHistory = 301,
+    getUsers = 302,
+    getUsersWhenJoined = 320,
+    getUsersWhenLeft = 230,
+    sendMessageToOtherUser = 303,
+    sendMessageFromGhost = 330,
     error = 400,
     success = 200,
     ghostName = 201,
     favoriteUser = 110,
     removeFavoriteUser = 111,
-    getUsers = 302,
 }
 
 namespace gui

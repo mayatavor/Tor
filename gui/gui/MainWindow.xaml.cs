@@ -198,6 +198,21 @@ namespace gui
             }
         }
 
+        private bool isUserInList(string username)
+        {
+            for (int i = 0; i < this.UsersList.Items.Count; i++)
+            {
+                UserInfo user = (UserInfo)this.UsersList.Items[i];
+
+                if (user.GetUsername() == username)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
 
         private void HandleResponses()
         {
@@ -232,11 +247,11 @@ namespace gui
                             break;
 
                         case 303:
-                            if(this.username == r.objects[1])
+                            if(this.username == r.objects[1]) //might need changing is this is not the right format
                             {
                                 Dispatcher.BeginInvoke((Action)(() =>
                                 {
-                                    MessageRecived m = new MessageRecived(r.objects[2]);
+                                    MessageRecived m = new MessageRecived(r.objects[2]);//might need changing is this is not the right format
                                     this.MessagesList.Items.Add(m);
                                 }));
                                 
@@ -248,7 +263,31 @@ namespace gui
                                 for (int i = 0; i < this.UsersList.Items.Count; i++)
                                 {
                                     UserInfo usr = (UserInfo)this.UsersList.Items[i];
-                                    if (usr.GetUsername() == r.objects[1])
+                                    if (usr.GetUsername() == r.objects[1])//might need changing is this is not the right format
+                                    {
+                                        ((UserInfo)this.UsersList.Items[i]).SetToBlue();
+                                        break;
+                                    }
+                                }
+                            }));
+                            break;
+
+                        case 330:
+                            if (!this.isUserInList(r.objects[1]))//might need changing is this is not the right format
+                            {
+                                string[] userInfo4;
+                                userInfo4 = r.objects[1].Split(sep, StringSplitOptions.RemoveEmptyEntries);
+                                Dispatcher.BeginInvoke((Action)(() =>
+                                {
+                                    this.UsersList.Items.Add(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo4[1])), userInfo4[0], Convert.ToBoolean(Convert.ToInt16(userInfo4[2]))));
+                                }));
+                            }
+                            Dispatcher.BeginInvoke((Action)(() =>
+                            {
+                                for (int i = 0; i < this.UsersList.Items.Count; i++)
+                                {
+                                    UserInfo usr = (UserInfo)this.UsersList.Items[i];
+                                    if (usr.GetUsername() == r.objects[1])//might need changing is this is not the right format
                                     {
                                         ((UserInfo)this.UsersList.Items[i]).SetToBlue();
                                         break;
