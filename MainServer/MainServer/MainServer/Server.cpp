@@ -158,6 +158,7 @@ Message* Server::caseLogout(std::vector<std::string> args)
 		return new Message(error, msg);
 	}
 	this->_clients.erase(it);
+	this->_db->deleteUser(args[0]);
 	this->sendWhenUserLoggedOut(args[0]);
 	std::vector<std::string> msg = { "User logged out successfuly" };
 	return new Message(success, msg);

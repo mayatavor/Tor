@@ -44,7 +44,6 @@ namespace gui
             //get users from the server
             getUsers(username);
 
-            this.UserNameChats.Text += username;
 
             this.t2 = new Thread(this._server.StartServer);
             t2.Start();

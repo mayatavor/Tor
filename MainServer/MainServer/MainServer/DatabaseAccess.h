@@ -27,7 +27,7 @@ public:
 	* output: True if the user created successflly and false if not.
 	*/
 	bool createUser(std::string username, std::string password, std::string ip, std::string port);
-	void deleteUser(const int& userId);
+	void deleteUser(const std::string& username);
 	bool doesUserExist(const std::string& username);
 	User getUser(const std::string& username);
 	std::string getUsernameById(int id);

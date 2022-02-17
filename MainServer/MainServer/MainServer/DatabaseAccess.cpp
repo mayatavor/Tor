@@ -88,9 +88,9 @@ bool DatabaseAccess::createUser(std::string username, std::string password, std:
 	}
 }
 
-void DatabaseAccess::deleteUser(const int& userId)
+void DatabaseAccess::deleteUser(const std::string& username)
 {
-	std::string str = "DELETE FROM Users WHERE userID = " + std::to_string(userId) + ";";
+	std::string str = "DELETE FROM Users WHERE username = '" + username + "';";
 	try
 	{
 		exec(str.c_str(), nullptr, nullptr);
