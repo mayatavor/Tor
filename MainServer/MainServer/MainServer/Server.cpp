@@ -400,7 +400,7 @@ std::list<std::string> Server::getOnlineUsernamesExceptMe(std::string myUsername
 	std::map<std::string, SOCKET>::iterator it;
 	std::list<std::string> usernames;
 	for (it = this->_clients.begin(); it != this->_clients.end(); it++) {
-		if(it->first != myUsername)
+		if(it->first != myUsername && it->first.find("ghost") == std::string::npos)
 			usernames.push_back(it->first);
 	}
 	return usernames;
