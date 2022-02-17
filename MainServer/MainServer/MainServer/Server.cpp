@@ -99,7 +99,7 @@ Message* Server::caseLogin(std::vector<std::string> args, SOCKET usersSocket)
 		Message* msg = new Message(error, args);
 		return msg;
 	}
-	this->sendUsersWhenNewJoins(args[0]);
+ 	this->sendUsersWhenNewJoins(args[0]);
 	this->_clients.insert(std::pair<std::string, SOCKET>(args[0], usersSocket));
 	this->_db->updateUsersIpAndPort(args[0], args[3], args[2]);
 	return new Message(success, { "LoggedIn successfully" });
@@ -297,7 +297,7 @@ void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 	{
 		User u = this->_db->getUser(it->first);
 		UsersListItem uli;
-		uli.isFavorite = this->_db->isFavorite(it->first, joinedUsername);;
+		uli.isFavorite = this->_db->isFavorite(it->first, joinedUsername);
 		uli.usernameOther = joinedUsername;
 		uli.isGhost = joinedUsername.find("ghost") != std::string::npos;
 		std::string msg = std::to_string(MessageType::getUsersWhenJoined) + DELIMITER + uli.usernameOther + IN_USER_DELIMITER + std::to_string(uli.isFavorite) + IN_USER_DELIMITER + std::to_string(uli.isGhost);
