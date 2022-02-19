@@ -41,7 +41,6 @@ namespace gui
                 listener.Bind(localEndPoint);
                 listener.Listen(10);
 
-                Console.WriteLine("Waiting for a connection...");
 
                 while (true)
                 {
