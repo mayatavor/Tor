@@ -24,11 +24,11 @@
 
 #define IN_USER_DELIMITER "::::"
 
+
 Server::Server()
 {
 	this->_db = new DatabaseAccess();
 	this->_db->open();
-	srand(time(0));
 	
 	// this server use TCP. that why SOCK_STREAM & IPPROTO_TCP
 	// if the server use UDP we will use: SOCK_DGRAM & IPPROTO_UDP
@@ -128,7 +128,8 @@ Message* Server::caseSignUp(std::vector<std::string> args, SOCKET usersSocket)
 
 Message* Server::caseGhostLogin(std::vector<std::string> args, SOCKET usersSocket)
 {
-	int ghostIdentifier = rand();
+	srand(time(NULL));
+	int ghostIdentifier = rand() % 5000;
 	std::string username = "ghost" + std::to_string(ghostIdentifier);
 	std::vector<std::string> answerArgs;
 	if (this->_db->createUser(username, "", args[1], args[0]))
