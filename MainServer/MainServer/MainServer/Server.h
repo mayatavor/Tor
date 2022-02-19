@@ -73,7 +73,7 @@ private:
 	std::list<std::string> getOnlineUsernamesExceptMe(std::string myUsername);
 	void accept();
 	void clientHandler(SOCKET clientSocket, int port);
-	void addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port);
+	Message* addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port);
 	void addSecondaryServer(SOCKET socket, int id);
 
 };
