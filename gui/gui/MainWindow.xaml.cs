@@ -27,6 +27,7 @@ namespace gui
         private string myUserName;
         private string username;
         private ConcurrentQueue<Response> responses;
+        private Dictionary<string, List<Message>> _ghostsMessages;
         private Thread t;
         private Thread t2;
         private bool isOut;
@@ -40,6 +41,7 @@ namespace gui
             this.myUserName = username;
             this.username = "";
             this.isOut = false;
+            this._ghostsMessages = new Dictionary<string, List<Message>>();
 
             //get users from the server
             getUsers(username);
@@ -97,18 +99,26 @@ namespace gui
 
                 //get the chat history
                 List<Message> messages = this._communicator.GetMessages(myUserName, user.GetUsername());
-                for (int i = 0; i < messages.Count; i++)
+                AddMessagesToList(messages);
+            }
+        }
+
+
+        private void AddMessagesToList(List<Message> messages)
+        {
+            this.MessagesList.Items.Clear();
+
+            for (int i = 0; i < messages.Count; i++)
+            {
+                if (messages[i].username == myUserName)
                 {
-                    if (messages[i].username == myUserName)
-                    {
-                        MessageSent m = new MessageSent(messages[i].message);
-                        this.MessagesList.Items.Add(m);
-                    }
-                    else
-                    {
-                        MessageRecived m = new MessageRecived(messages[i].message);
-                        this.MessagesList.Items.Add(m);
-                    }
+                    MessageSent m = new MessageSent(messages[i].message);
+                    this.MessagesList.Items.Add(m);
+                }
+                else
+                {
+                    MessageRecived m = new MessageRecived(messages[i].message);
+                    this.MessagesList.Items.Add(m);
                 }
             }
         }
@@ -213,6 +223,16 @@ namespace gui
         }
 
 
+        private void AddMessageToMessageDict(string ghostName, Message m)
+        {
+            if (this._ghostsMessages.ContainsKey(ghostName))
+            {
+                List<Message> msgs = this._ghostsMessages[ghostName];
+                msgs.Add(m);
+                this._ghostsMessages[ghostName] = msgs;
+            }
+        }
+
         private void HandleResponses()
         {
             Response r;
@@ -253,7 +273,7 @@ namespace gui
                                     MessageRecived m = new MessageRecived(r.objects[2]);//might need changing is this is not the right format
                                     this.MessagesList.Items.Add(m);
                                 }));
-                                
+
                                 break;
                             }
 
@@ -274,25 +294,66 @@ namespace gui
                         case 330:
                             if (!this.isUserInList(r.objects[1]))//might need changing is this is not the right format
                             {
-                                string[] userInfo4;
-                                userInfo4 = r.objects[1].Split(sep, StringSplitOptions.RemoveEmptyEntries);
                                 Dispatcher.BeginInvoke((Action)(() =>
                                 {
-                                    this.UsersList.Items.Add(new UserInfo(Convert.ToBoolean(Convert.ToInt16(userInfo4[1])), userInfo4[0], Convert.ToBoolean(Convert.ToInt16(userInfo4[2]))));
+                                    this.UsersList.Items.Add(new UserInfo(false, r.objects[1], true));
+                                }));
+
+                                Message mes = new Message(r.objects[1], r.objects[2]);
+                                List<Message> list = new List<Message>();
+                                list.Add(mes);
+                                this._ghostsMessages.Add(r.objects[1], list);
+
+                                Dispatcher.BeginInvoke((Action)(() =>
+                                {
+                                    for (int i = 0; i < this.UsersList.Items.Count; i++)
+                                    {
+                                        UserInfo usr = (UserInfo)this.UsersList.Items[i];
+                                        if (usr.GetUsername() == r.objects[1])//might need changing is this is not the right format
+                                        {
+                                            ((UserInfo)this.UsersList.Items[i]).SetToBlue();
+                                            break;
+                                        }
+                                    }
                                 }));
                             }
-                            Dispatcher.BeginInvoke((Action)(() =>
+                            else
                             {
-                                for (int i = 0; i < this.UsersList.Items.Count; i++)
+                                if (this.username == r.objects[1]) //might need changing is this is not the right format
                                 {
-                                    UserInfo usr = (UserInfo)this.UsersList.Items[i];
-                                    if (usr.GetUsername() == r.objects[1])//might need changing is this is not the right format
+                                    Dispatcher.BeginInvoke((Action)(() =>
                                     {
-                                        ((UserInfo)this.UsersList.Items[i]).SetToBlue();
-                                        break;
-                                    }
+                                        MessageRecived m = new MessageRecived(r.objects[2]);//might need changing is this is not the right format
+                                        this.MessagesList.Items.Add(m);
+                                    }));
+
+                                    AddMessageToMessageDict(r.objects[1], new Message(r.objects[1], r.objects[2]));
+
+                                    break;
                                 }
-                            }));
+
+                                else
+                                {
+                                    Dispatcher.BeginInvoke((Action)(() =>
+                                    {
+                                        for (int i = 0; i < this.UsersList.Items.Count; i++)
+                                        {
+                                            UserInfo usr = (UserInfo)this.UsersList.Items[i];
+                                            if (usr.GetUsername() == r.objects[1])//might need changing is this is not the right format
+                                            {
+                                                ((UserInfo)this.UsersList.Items[i]).SetToBlue();
+                                                break;
+                                            }
+                                        }
+                                    }));
+
+                                    AddMessageToMessageDict(r.objects[1], new Message(r.objects[1], r.objects[2]));
+
+                                    break;
+                                }
+                            }
+
+
                             break;
 
                         default:
