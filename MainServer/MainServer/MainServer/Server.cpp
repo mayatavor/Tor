@@ -352,7 +352,11 @@ void Server::sendUserMessage(std::string username, std::string content, std::str
 {
 	User u = this->_db->getUser(username);
 	SOCKET sock = createSocket(u.getPort(), u.getIp());
-	std::string msg = std::to_string(MessageType::sendMessageToOtherUser) + DELIMITER + senderUsername + DELIMITER + content;
+	std::string msg = "";
+	if (isGhost)
+		msg = std::to_string(MessageType::sendMessageFromGhost) + DELIMITER + senderUsername + DELIMITER + content;
+	else
+		msg = std::to_string(MessageType::sendMessageToOtherUser) + DELIMITER + senderUsername + DELIMITER + content;
 	Message* builtMessage = new Message(msg);
 	try
 	{
