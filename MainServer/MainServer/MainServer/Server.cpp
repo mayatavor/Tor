@@ -260,7 +260,7 @@ Message* Server::caseSendMessage(std::vector<std::string> args)
 		success = this->_db->addMessage(args[2], chat.getChatId(), u1.getId());
 	}
 	if (success) {
-		this->sendUserMessage(args[1], args[2], args[0], u1.getUsername().find("ghost") == std::string::npos);
+		this->sendUserMessage(args[1], args[2], args[0], u1.getUsername().find("ghost") != std::string::npos);
 		return nullptr;
 	}
 	else
@@ -435,28 +435,34 @@ void Server::accept()
 
 void Server::clientHandler(SOCKET socket, int port)
 {
+	Message* msg = nullptr;
+	Helper h;
 	try
 	{
-		Helper h;
 		while (true)
 		{
 			int len = h.getIntPartFromSocket(socket, 5);
 			std::string message = h.getStringPartFromSocket(socket, len);
-			addMessageToMessagesQueue(message, socket, port);
+			msg = addMessageToMessagesQueue(message, socket, port);
+			delete msg;
 		}
 	}
 	catch (const std::exception& e)
 	{
 		std::cout << e.what() << std::endl;
+		this->_db->deleteUser(msg->getArgs()[0]);
+		delete msg;
 	}
 }
 
-void Server::addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port)
+Message* Server::addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port)
 {
+	Message* msg = new Message(allMsg);
 	std::unique_lock<std::mutex> lock(this->_messagesMutex);
-	this->_messagesQueue.push(*new std::pair<SOCKET, Message>(socket, *new Message(allMsg)));
+	this->_messagesQueue.push(*new std::pair<SOCKET, Message>(socket, *msg));
 	lock.unlock();
 	this->_messagesCv.notify_one();
+	return msg;
 }
 
 void Server::addSecondaryServer(SOCKET socket, int id)
