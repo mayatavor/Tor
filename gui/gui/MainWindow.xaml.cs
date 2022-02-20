@@ -27,7 +27,7 @@ namespace gui
         private string myUserName;
         private string username;
         private ConcurrentQueue<Response> responses;
-        private Dictionary<string, List<Message>> _ghostsMessages;
+        //private Dictionary<string, List<Message>> _ghostsMessages;
         private Thread t;
         private Thread t2;
         private bool isOut;
@@ -41,7 +41,7 @@ namespace gui
             this.myUserName = username;
             this.username = "";
             this.isOut = false;
-            this._ghostsMessages = new Dictionary<string, List<Message>>();
+            //this._ghostsMessages = new Dictionary<string, List<Message>>();
 
             //get users from the server
             getUsers(username);
@@ -223,6 +223,7 @@ namespace gui
         }
 
 
+        /*
         private void AddMessageToMessageDict(string ghostName, Message m)
         {
             if (this._ghostsMessages.ContainsKey(ghostName))
@@ -232,6 +233,7 @@ namespace gui
                 this._ghostsMessages[ghostName] = msgs;
             }
         }
+        */
 
         private void HandleResponses()
         {
@@ -299,10 +301,12 @@ namespace gui
                                     this.UsersList.Items.Add(new UserInfo(false, r.objects[1], true));
                                 }));
 
+                                /*
                                 Message mes = new Message(r.objects[1], r.objects[2]);
                                 List<Message> list = new List<Message>();
                                 list.Add(mes);
                                 this._ghostsMessages.Add(r.objects[1], list);
+                                */
 
                                 Dispatcher.BeginInvoke((Action)(() =>
                                 {
@@ -327,7 +331,7 @@ namespace gui
                                         this.MessagesList.Items.Add(m);
                                     }));
 
-                                    AddMessageToMessageDict(r.objects[1], new Message(r.objects[1], r.objects[2]));
+                                    //AddMessageToMessageDict(r.objects[1], new Message(r.objects[1], r.objects[2]));
 
                                     break;
                                 }
@@ -347,7 +351,7 @@ namespace gui
                                         }
                                     }));
 
-                                    AddMessageToMessageDict(r.objects[1], new Message(r.objects[1], r.objects[2]));
+                                    //AddMessageToMessageDict(r.objects[1], new Message(r.objects[1], r.objects[2]));
 
                                     break;
                                 }
