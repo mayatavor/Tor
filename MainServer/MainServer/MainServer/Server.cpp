@@ -253,14 +253,16 @@ Message* Server::caseSendMessage(std::vector<std::string> args)
 		msg.push_back("One of the users doesn't exist");
 		return new Message(MessageType::error, msg);
 	}
-	if (u1.getUsername().find("ghost") == std::string::npos && u2.getUsername().find("ghost") == std::string::npos) {    //Check if the both of the users are not ghosts becuse there is bo need to save chat history when ghosts.
+	if (u1.getUsername().find("ghost") == std::string::npos && u2.getUsername().find("ghost") == std::string::npos) 
+	{    //Check if the both of the users are not ghosts becuse there is bo need to save chat history when ghosts.
 		Chat chat = this->_db->getChatByUsers(args[0], args[1]);
 		if (chat.getChatId() == -1)
 			this->_db->createChat(u1.getId(), u2.getId());
 		chat = this->_db->getChatByUsers(args[0], args[1]);
 		success = this->_db->addMessage(args[2], chat.getChatId(), u1.getId());
 	}
-	if (success) {
+	if (success)
+	{
 		this->sendUserMessage(args[1], args[2], args[0], u1.getUsername().find("ghost") != std::string::npos);
 		return nullptr;
 	}
