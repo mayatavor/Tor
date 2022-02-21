@@ -440,23 +440,26 @@ void Server::accept()
 
 void Server::clientHandler(SOCKET socket, int port)
 {
-	Message* msg = nullptr;
+
 	Helper h;
+	std::string username = "";
 	try
 	{
 		while (true)
 		{
 			int len = h.getIntPartFromSocket(socket, 5);
 			std::string message = h.getStringPartFromSocket(socket, len);
-			msg = addMessageToMessagesQueue(message, socket, port);
+			Message* msg = addMessageToMessagesQueue(message, socket, port);
+			username = msg->getArgs()[0];
 			delete msg;
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << e.what() << std::endl;
-		this->_db->deleteUser(msg->getArgs()[0]);
-		delete msg;
+		std::cout << e.what()  << " client handler" << std::endl;
+		if(username.find("ghost") != std::string::npos)
+			this->_db->deleteUser(username);
+		this->_clients.erase(username);
 	}
 }
 
