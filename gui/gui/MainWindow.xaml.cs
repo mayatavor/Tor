@@ -177,9 +177,7 @@ namespace gui
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
-            this.isOut = this._communicator.Logout(this.username);
-
-            Task.Delay(200).Wait();
+            this.isOut = this._communicator.Logout(this.myUserName);
 
             if(!this.isOut)
             {

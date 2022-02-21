@@ -152,7 +152,7 @@ Message* Server::caseLogout(std::vector<std::string> args)
 		std::vector<std::string> msg = { "User doesn't exist" };
 		return new Message(error, msg);
 	}*/
-	USER_EXISTS(args[0], "User doesn't exist", false);
+	//USER_EXISTS(args[0], "User doesn't exist", false);
 	std::map<std::string, SOCKET>::iterator it = this->_clients.find(args[0]);
 	if (it == this->_clients.end()) {
 		std::vector<std::string> msg = { "User doesn't connected so he can't be logged out" };
@@ -253,7 +253,7 @@ Message* Server::caseSendMessage(std::vector<std::string> args)
 		msg.push_back("One of the users doesn't exist");
 		return new Message(MessageType::error, msg);
 	}
-	if (u1.getUsername().find("ghost") == std::string::npos && u2.getUsername().find("ghost") == std::string::npos) 
+	if (true)//u1.getUsername().find("ghost") == std::string::npos && u2.getUsername().find("ghost") == std::string::npos) 
 	{    //Check if the both of the users are not ghosts becuse there is bo need to save chat history when ghosts.
 		Chat chat = this->_db->getChatByUsers(args[0], args[1]);
 		if (chat.getChatId() == -1)
