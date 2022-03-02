@@ -24,11 +24,11 @@
 
 #define IN_USER_DELIMITER "::::"
 
+
 Server::Server()
 {
 	this->_db = new DatabaseAccess();
 	this->_db->open();
-	srand(time(0));
 	
 	// this server use TCP. that why SOCK_STREAM & IPPROTO_TCP
 	// if the server use UDP we will use: SOCK_DGRAM & IPPROTO_UDP
@@ -99,7 +99,7 @@ Message* Server::caseLogin(std::vector<std::string> args, SOCKET usersSocket)
 		Message* msg = new Message(error, args);
 		return msg;
 	}
-	this->sendUsersWhenNewJoins(args[0]);
+ 	this->sendUsersWhenNewJoins(args[0]);
 	this->_clients.insert(std::pair<std::string, SOCKET>(args[0], usersSocket));
 	this->_db->updateUsersIpAndPort(args[0], args[3], args[2]);
 	return new Message(success, { "LoggedIn successfully" });
@@ -121,21 +121,22 @@ Message* Server::caseSignUp(std::vector<std::string> args, SOCKET usersSocket)
 		return new Message(MessageType::success, answerArgs);
 	}
 	else {
-		std::vector<std::string> answerArgs = { "Error accurd while singing up" };
+		std::vector<std::string> answerArgs = { "Error accurd while signing up" };
 		return new Message(MessageType::error, answerArgs);
 	}
 }
 
 Message* Server::caseGhostLogin(std::vector<std::string> args, SOCKET usersSocket)
 {
-	int ghostIdentifier = rand();
+	srand(time(NULL));
+	int ghostIdentifier = rand() % 5000;
 	std::string username = "ghost" + std::to_string(ghostIdentifier);
 	std::vector<std::string> answerArgs;
-	if (this->_db->createUser(username, "", args[2], args[3]))
+	if (this->_db->createUser(username, "", args[1], args[0]))
 	{
-		this->sendUsersWhenNewJoins(args[0]);
+		//this->sendUsersWhenNewJoins(username);
 		this->_clients.insert(std::pair<std::string, SOCKET>(username, usersSocket));
-		answerArgs.push_back("Ghost user logged in successfully");
+		answerArgs.push_back(username);
 		return new Message(MessageType::success, answerArgs);
 
 	}
@@ -151,13 +152,15 @@ Message* Server::caseLogout(std::vector<std::string> args)
 		std::vector<std::string> msg = { "User doesn't exist" };
 		return new Message(error, msg);
 	}*/
-	USER_EXISTS(args[0], "User doesn't exist", false);
+	//USER_EXISTS(args[0], "User doesn't exist", false);
 	std::map<std::string, SOCKET>::iterator it = this->_clients.find(args[0]);
 	if (it == this->_clients.end()) {
 		std::vector<std::string> msg = { "User doesn't connected so he can't be logged out" };
 		return new Message(error, msg);
 	}
 	this->_clients.erase(it);
+	this->_db->deleteUser(args[0]);
+	this->sendWhenUserLoggedOut(args[0]);
 	std::vector<std::string> msg = { "User logged out successfuly" };
 	return new Message(success, msg);
 }
@@ -250,22 +253,17 @@ Message* Server::caseSendMessage(std::vector<std::string> args)
 		msg.push_back("One of the users doesn't exist");
 		return new Message(MessageType::error, msg);
 	}
-	if (u1.getUsername().find("ghost") == std::string::npos && u2.getUsername().find("ghost") == std::string::npos) {    ///Check if the both of the users are not ghosts becuse there is bo need to save chat history when ghosts.
+	if (true)//u1.getUsername().find("ghost") == std::string::npos && u2.getUsername().find("ghost") == std::string::npos) 
+	{    //Check if the both of the users are not ghosts becuse there is bo need to save chat history when ghosts.
 		Chat chat = this->_db->getChatByUsers(args[0], args[1]);
 		if (chat.getChatId() == -1)
 			this->_db->createChat(u1.getId(), u2.getId());
 		chat = this->_db->getChatByUsers(args[0], args[1]);
 		success = this->_db->addMessage(args[2], chat.getChatId(), u1.getId());
 	}
-	if (success) {
-		//msg.push_back("Message sent successfully");
-		//std::vector<std::string> msgToUser = { args[2] };
-		//Message* msgToOtherClient = new Message(MessageType::sendMessageToOtherUser, msgToUser);
-		//SOCKET otherUserSock = this->_clients[args[1]];
-		//Helper::sendData(otherUserSock, msgToOtherClient->buildMessage());   //Send data to the other user in the chat.
-		this->sendUserMessage(args[1], args[2], args[0]);
-		/*delete msgToOtherClient;
-		return new Message(MessageType::success, msg);*/
+	if (success)
+	{
+		this->sendUserMessage(args[1], args[2], args[0], u1.getUsername().find("ghost") != std::string::npos);
 		return nullptr;
 	}
 	else
@@ -302,7 +300,7 @@ void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 	{
 		User u = this->_db->getUser(it->first);
 		UsersListItem uli;
-		uli.isFavorite = this->_db->isFavorite(it->first, joinedUsername);;
+		uli.isFavorite = this->_db->isFavorite(it->first, joinedUsername);
 		uli.usernameOther = joinedUsername;
 		uli.isGhost = joinedUsername.find("ghost") != std::string::npos;
 		std::string msg = std::to_string(MessageType::getUsersWhenJoined) + DELIMITER + uli.usernameOther + IN_USER_DELIMITER + std::to_string(uli.isFavorite) + IN_USER_DELIMITER + std::to_string(uli.isGhost);
@@ -324,11 +322,43 @@ void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 	}
 }
 
-void Server::sendUserMessage(std::string username, std::string content, std::string senderUsername)
+void Server::sendWhenUserLoggedOut(std::string leftUsername)
+{
+	for (auto it = this->_clients.begin(); it != this->_clients.end(); it++)
+	{
+		User u = this->_db->getUser(it->first);
+		UsersListItem uli;
+		uli.isFavorite = this->_db->isFavorite(it->first, leftUsername);
+		uli.usernameOther = leftUsername;
+		uli.isGhost = leftUsername.find("ghost") != std::string::npos;
+		std::string msg = std::to_string(MessageType::sendUserLeft) + DELIMITER + uli.usernameOther;
+		Message* builtMessage = new Message(msg);
+
+		SOCKET clientSocket = createSocket(u.getPort(), u.getIp());
+		std::string m = builtMessage->buildMessage();
+		try
+		{
+			Helper::sendData(clientSocket, m);
+			delete builtMessage;
+		}
+		catch (const std::exception& e)
+		{
+			builtMessage = new Message(e.what());
+			Helper::sendData(clientSocket, builtMessage->buildMessage());
+			delete builtMessage;
+		}
+	}
+}
+
+void Server::sendUserMessage(std::string username, std::string content, std::string senderUsername, bool isGhost)
 {
 	User u = this->_db->getUser(username);
 	SOCKET sock = createSocket(u.getPort(), u.getIp());
-	std::string msg = std::to_string(MessageType::sendMessageToOtherUser) + DELIMITER + senderUsername + DELIMITER + content;
+	std::string msg = "";
+	if (isGhost)
+		msg = std::to_string(MessageType::sendMessageFromGhost) + DELIMITER + senderUsername + DELIMITER + content;
+	else
+		msg = std::to_string(MessageType::sendMessageToOtherUser) + DELIMITER + senderUsername + DELIMITER + content;
 	Message* builtMessage = new Message(msg);
 	try
 	{
@@ -377,7 +407,7 @@ std::list<std::string> Server::getOnlineUsernamesExceptMe(std::string myUsername
 	std::map<std::string, SOCKET>::iterator it;
 	std::list<std::string> usernames;
 	for (it = this->_clients.begin(); it != this->_clients.end(); it++) {
-		if(it->first != myUsername)
+		if(it->first != myUsername && it->first.find("ghost") == std::string::npos)
 			usernames.push_back(it->first);
 	}
 	return usernames;
@@ -412,28 +442,37 @@ void Server::accept()
 
 void Server::clientHandler(SOCKET socket, int port)
 {
+
+	Helper h;
+	std::string username = "";
 	try
 	{
-		Helper h;
 		while (true)
 		{
 			int len = h.getIntPartFromSocket(socket, 5);
 			std::string message = h.getStringPartFromSocket(socket, len);
-			addMessageToMessagesQueue(message, socket, port);
+			Message* msg = addMessageToMessagesQueue(message, socket, port);
+			username = msg->getArgs()[0];
+			delete msg;
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << e.what() << std::endl;
+		std::cout << e.what()  << " client handler" << std::endl;
+		if(username.find("ghost") != std::string::npos)
+			this->_db->deleteUser(username);
+		this->_clients.erase(username);
 	}
 }
 
-void Server::addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port)
+Message* Server::addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port)
 {
+	Message* msg = new Message(allMsg);
 	std::unique_lock<std::mutex> lock(this->_messagesMutex);
-	this->_messagesQueue.push(*new std::pair<SOCKET, Message>(socket, *new Message(allMsg)));
+	this->_messagesQueue.push(*new std::pair<SOCKET, Message>(socket, *msg));
 	lock.unlock();
 	this->_messagesCv.notify_one();
+	return msg;
 }
 
 void Server::addSecondaryServer(SOCKET socket, int id)

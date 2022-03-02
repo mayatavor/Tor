@@ -18,8 +18,15 @@ bool DatabaseAccess::open()
 
 
 	if (doesFileExist == -1) {
-		if (!createDBstructure())
-			return false;
+		try
+		{
+			if (!createDBstructure())
+				return false;
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << e.what() << std::endl;
+		}
 	}
 
 	return true;
@@ -88,9 +95,9 @@ bool DatabaseAccess::createUser(std::string username, std::string password, std:
 	}
 }
 
-void DatabaseAccess::deleteUser(const int& userId)
+void DatabaseAccess::deleteUser(const std::string& username)
 {
-	std::string str = "DELETE FROM Users WHERE userID = " + std::to_string(userId) + ";";
+	std::string str = "DELETE FROM Users WHERE username = '" + username + "';";
 	try
 	{
 		exec(str.c_str(), nullptr, nullptr);
@@ -410,9 +417,9 @@ bool DatabaseAccess::createDBstructure()
 {
 	char usersTable[] = "CREATE TABLE IF NOT EXISTS Users(userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT, ipAddress TEXT NOT NULL, port INTEGER DEFAULT 0); ";
 	char SecondaryServersTable[] = "CREATE TABLE IF NOT EXISTS SecondaryServers(serverID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ipAddress TEXT NOT NULL, password TEXT NOT NULL, d INTEGER NOT NULL, e INTEGER NOT NULL); ";
-	char chatsTable[] = "CREATE TABLE IF NOT EXISTS Chats(chatId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, firstUserId INTEGER NOT NULL, secondUserId INTEGER NOT NULL, FOREIGN KEY(firstUserId) REFERENCES Users(userId), FOREIGN KEY(secondUserId) REFERENCES Users(userId)); ";
-	char FavoritesTable[] = "CREATE TABLE IF NOT EXISTS Favorites(userId INTEGER NOT NULL, chatId INTEGER NOT NULL, FOREIGN KEY(userId) REFERENCES Users(useId), FOREIGN KEY(chatId) REFERENCES Chats(chatId)); ";
-	char MessagesTable[] = "CREATE TABLE IF NOT EXISTS Messages(messageId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, chatId INTEGER NOT NULL, messageContent TEXT NOT NULL, senderId INTEGER NOT NULL, FOREIGN KEY(chatId) REFERENCES Chats(chatId), FOREIGN KEY(senderId) REFERENCES Users(userId)); ";
+	char chatsTable[] = "CREATE TABLE IF NOT EXISTS Chats(chatId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, firstUserId INTEGER NOT NULL, secondUserId INTEGER NOT NULL, FOREIGN KEY(firstUserId) REFERENCES Users(userId) ON DELETE CASCADE, FOREIGN KEY(secondUserId) REFERENCES Users(userId) ON DELETE CASCADE);";
+	char FavoritesTable[] = "CREATE TABLE IF NOT EXISTS Favorites(userId INTEGER NOT NULL, chatId INTEGER NOT NULL, FOREIGN KEY(userId) REFERENCES Users(userId), FOREIGN KEY(chatId) REFERENCES Chats(chatId) ON DELETE CASCADE);";
+	char MessagesTable[] = "CREATE TABLE IF NOT EXISTS Messages(messageId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, chatId INTEGER NOT NULL, messageContent TEXT NOT NULL, senderId INTEGER NOT NULL, FOREIGN KEY(chatId) REFERENCES Chats(chatId) ON DELETE CASCADE, FOREIGN KEY(senderId) REFERENCES Users(userId) ON DELETE CASCADE);";
 	try
 	{
 		exec(usersTable, nullptr, nullptr);
@@ -435,5 +442,6 @@ bool DatabaseAccess::exec(const char* sqlStatement, int(*callback)(void*, int, c
 	int res = sqlite3_exec(_db, sqlStatement, callback, data, &errMessage);
 	if (res != SQLITE_OK)
 		throw("Failed to execute the query");
-	return true;
+	else
+		return true;
 }
