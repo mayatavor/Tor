@@ -44,17 +44,20 @@ def thread(conn):
         if not data: break
         print(data)
         data = data.decode()
-        list = data.split("::::")
-        if len(list) < 3: break
-        next_ip = list[-2]
-        next_port = list[-1]
-        print(next_ip + " and " + next_port)
-        print(list[0])
+        if data == "500":
+            conn.sendall("501")
+        else:
+            list = data.split("::::")
+            if len(list) < 3: break
+            next_ip = list[-2]
+            next_port = list[-1]
+            print(next_ip + " and " + next_port)
+            print(list[0])
 
-        list.pop(-1)
-        list.pop(-1)
+            list.pop(-1)
+            list.pop(-1)
 
-        sentToNextClient(next_ip, next_port, "::::".join(list))
+            sentToNextClient(next_ip, next_port, "::::".join(list))
     conn.close()
 
 """
