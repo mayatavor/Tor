@@ -23,10 +23,12 @@ public:
 	void serve(int port);
 
 	void messagesHandler();
+	static SOCKET createSocket(int port, std::string ip);
 
 private:
 	std::map<std::string, SOCKET> _clients;
-	std::list<SecondaryServer*> _secondaryServers;
+	//std::vector<SecondaryServer*> _secondaryServers;
+	std::map<int, SecondaryServer> _secondaryServers;
 	SOCKET _serverSocket;
 	std::queue<std::pair<SOCKET, Message>> _messagesQueue;
 	std::mutex _messagesMutex;
@@ -56,8 +58,11 @@ private:
 	//This function handles send message request.
 	Message* caseSendMessage(std::vector<std::string> args);
 
-	//This message handles get chat history (get the privious messages of a specific chat) request.
+	//This function handles get chat history (get the privious messages of a specific chat) request.
 	Message* caseGetChatHistory(std::vector<std::string> args);
+
+	//This function handles the secondary server connect request.
+	Message* caseSecondaryServerConnected(std::vector<std::string> args, SOCKET socket);
 
 	void sendBroadcastMessage(Message* msg);
 
@@ -67,14 +72,14 @@ private:
 
 	void sendUserMessage(std::string username, std::string content, std::string senderUsername, bool isGhost);
 
-	SOCKET createSocket(int port, std::string ip);
-
 	//The function iterates through the map of the clients and creates a list with the online usernames except the given username.
 	std::list<std::string> getOnlineUsernamesExceptMe(std::string myUsername);
 	void accept();
 	void clientHandler(SOCKET clientSocket, int port);
 	Message* addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port);
-	void addSecondaryServer(SOCKET socket, int id);
-
+	void addSecondaryServer(SOCKET socket, int id, std::pair<int, int> publicKey, int port);
+	std::vector<int> getServersRoute(int numOfServers);
+	std::map<int, SOCKET&> checkServersValidity();
+	void verifyServer(int serverId, bool& answer);
 };
 

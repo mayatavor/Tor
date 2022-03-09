@@ -42,6 +42,9 @@ Server::~Server()
 {
 	delete this->_db;
 	this->_secondaryServers.clear();
+	/*for (int i = 0; i < this->_secondaryServers.size(); i++) {
+		delete this->_secondaryServers[i];
+	}*/
 	//delete &this->_secondaryServers;
 	try
 	{
@@ -179,6 +182,7 @@ Message* Server::caseAddFavorites(std::vector<std::string> args)
 }
 
 
+
 void Server::messagesHandler()
 {
 	Helper h;
@@ -220,6 +224,9 @@ void Server::messagesHandler()
 				break;
 			case MessageType::getChatHistory:
 				msg = caseGetChatHistory(args);
+				break;
+			case MessageType::secondaryServerConnected:
+				msg = caseSecondaryServerConnected(args, m.first);
 				break;
 			default:
 				break;
@@ -282,6 +289,14 @@ Message* Server::caseGetChatHistory(std::vector<std::string> args)
 	}
 	std::list<MessagesListItem> messages = this->_db->getChatHistory(chat.getChatId());
 	std::vector<std::string> msg = serialize::serializeChatHistory(messages);
+	return new Message(MessageType::success, msg);
+}
+
+Message* Server::caseSecondaryServerConnected(std::vector<std::string> args, SOCKET socket)
+{
+	std::vector<std::string> msg = { "" };
+	std::pair<int, int> puclicKey(std::stoi(args[1]), std::stoi(args[2]));
+	addSecondaryServer(socket, std::stoi(args[0]), puclicKey, std::stoi(args[3]));
 	return new Message(MessageType::success, msg);
 }
 
@@ -450,6 +465,7 @@ void Server::clientHandler(SOCKET socket, int port)
 		while (true)
 		{
 			int len = h.getIntPartFromSocket(socket, 5);
+			std::cout << "clinet handler" << std::endl;
 			std::string message = h.getStringPartFromSocket(socket, len);
 			Message* msg = addMessageToMessagesQueue(message, socket, port);
 			username = msg->getArgs()[0];
@@ -468,6 +484,7 @@ void Server::clientHandler(SOCKET socket, int port)
 Message* Server::addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port)
 {
 	Message* msg = new Message(allMsg);
+	std::cout << "addMessageToMessagesQueue" << std::endl;
 	std::unique_lock<std::mutex> lock(this->_messagesMutex);
 	this->_messagesQueue.push(*new std::pair<SOCKET, Message>(socket, *msg));
 	lock.unlock();
@@ -475,10 +492,50 @@ Message* Server::addMessageToMessagesQueue(std::string allMsg, SOCKET socket, in
 	return msg;
 }
 
-void Server::addSecondaryServer(SOCKET socket, int id)
+void Server::addSecondaryServer(SOCKET socket, int id, std::pair<int, int> publicKey, int port)
 {
 	std::unique_lock<std::mutex> lock(this->_secondaryServersMu);
-	this->_secondaryServers.push_back(new SecondaryServer(socket, id));
+	//this->_secondaryServers.push_back(new SecondaryServer(socket, id, publicKey, port));
+	this->_secondaryServers.insert(std::pair<int, SecondaryServer>(id, *new SecondaryServer(socket, id, publicKey, port)));
 	lock.unlock();
 	this->_messagesCv.notify_one();
 }
+
+std::vector<int> Server::getServersRoute(int numOfServers)
+{
+	std::map<int, SOCKET&> servers = this->checkServersValidity();
+	std::vector< std::map<int, SOCKET&>::iterator> randomServers;
+	int prevIndex = -1, random = -1;
+	for (int i = 0; i < numOfServers; i++) 
+	{
+		while (prevIndex == random) 
+			random = rand() % servers.size();
+
+		randomServers.push_back(servers.begin());
+		std::advance(randomServers[i], random);
+	}
+
+
+}
+
+std::map<int, SOCKET&> Server::checkServersValidity()
+{
+	std::map<int, SecondaryServer>::iterator it;
+	std::map<int, SOCKET&> servers;
+	for (it = this->_secondaryServers.begin(); it != this->_secondaryServers.end(); it++) 
+	{
+		SOCKET sock = createSocket(it->second.getPort(), "127.0.0.1");
+		if (sock != 0)
+			servers[it->second.getId()] = sock;
+		else
+			this->_secondaryServers.erase(it);
+	}
+	
+}
+
+//void Server::verifyServer(int serverId, bool& answer)
+//{
+//	SOCKET socket = createSocket(this->_secondaryServers[serverId].getPort(), "127.0.0.1");
+//	
+//
+//}
