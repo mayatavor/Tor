@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\magshimim\OurTor\haifa-1002-ourthor\gui\gui\obj\Debug\
+C:\magshimim\seniorYear\haifa-1002-ourthor\gui\gui\obj\Debug\
 gui
 none
 false
 DEBUG;TRACE
-C:\magshimim\OurTor\haifa-1002-ourthor\gui\gui\App.xaml
+C:\magshimim\seniorYear\haifa-1002-ourthor\gui\gui\App.xaml
 6-1178433829
 
-14-1016928778
-201580072503
+15-1859288145
+191576216282
 Connection.xaml;MainWindow.xaml;MessageError.xaml;MessageRecived.xaml;MessageSent.xaml;UserInfo.xaml;
 
-False
+True
 

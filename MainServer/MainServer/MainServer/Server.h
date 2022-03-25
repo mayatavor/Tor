@@ -78,8 +78,15 @@ private:
 	void clientHandler(SOCKET clientSocket, int port);
 	Message* addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port);
 	void addSecondaryServer(SOCKET socket, int id, std::pair<int, int> publicKey, int port);
+
+	/*
+	* This fucntion generates rrandom ids of servers and saves them into a vector and returns it.
+	* input: The number of servers to generate.
+	* output: The vercotr that contains the server's ids
+	*/
 	std::vector<int> getServersRoute(int numOfServers);
-	std::map<int, SOCKET&> checkServersValidity();
-	void verifyServer(int serverId, bool& answer);
+	std::map<int, SOCKET> checkServersValidity();
+	
+	//void verifyServer(int serverId, bool& answer);
 };
 

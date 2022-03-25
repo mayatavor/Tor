@@ -503,25 +503,26 @@ void Server::addSecondaryServer(SOCKET socket, int id, std::pair<int, int> publi
 
 std::vector<int> Server::getServersRoute(int numOfServers)
 {
-	std::map<int, SOCKET&> servers = this->checkServersValidity();
-	std::vector< std::map<int, SOCKET&>::iterator> randomServers;
+	std::map<int, SOCKET> servers = this->checkServersValidity();
+	//std::vector< std::map<int, SOCKET&>::iterator> randomServers;
+	std::vector<int> randomIds;
 	int prevIndex = -1, random = -1;
 	for (int i = 0; i < numOfServers; i++) 
 	{
 		while (prevIndex == random) 
 			random = rand() % servers.size();
 
-		randomServers.push_back(servers.begin());
-		std::advance(randomServers[i], random);
+		//randomServers.push_back(servers.begin());
+		randomIds.push_back(random);
+		//std::advance(randomServers[i], random);
 	}
-
-
+	return randomIds;
 }
 
-std::map<int, SOCKET&> Server::checkServersValidity()
+std::map<int, SOCKET> Server::checkServersValidity()
 {
 	std::map<int, SecondaryServer>::iterator it;
-	std::map<int, SOCKET&> servers;
+	std::map<int, SOCKET> servers;
 	for (it = this->_secondaryServers.begin(); it != this->_secondaryServers.end(); it++) 
 	{
 		SOCKET sock = createSocket(it->second.getPort(), "127.0.0.1");
@@ -530,7 +531,7 @@ std::map<int, SOCKET&> Server::checkServersValidity()
 		else
 			this->_secondaryServers.erase(it);
 	}
-	
+	return servers;
 }
 
 //void Server::verifyServer(int serverId, bool& answer)
