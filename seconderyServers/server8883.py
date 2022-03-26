@@ -41,8 +41,9 @@ def thread(conn):
     while True:
         data = conn.recv(4096)
         if not data: break
-        print(data)
         data = data.decode()
+        print(data)
+        data = decode_RSA(data)
         if data == "500":
             conn.sendall("501")
         else:
@@ -82,6 +83,7 @@ def main():
 
     while True:
         conn, addr = serv.accept()
+        print("check")
         x = threading.Thread(target=thread, args=(conn,))
         x.start()
 
