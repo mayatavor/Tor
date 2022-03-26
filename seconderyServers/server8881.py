@@ -38,6 +38,7 @@ def sentToNextClient(ip, port, msg):
     client.close()
 
 
+
 def thread(conn):
     print("check2")
     data = conn.recv(4096)
@@ -45,7 +46,7 @@ def thread(conn):
         return
     data = data.decode()
     print(data)
-    #data = decode_RSA(data)
+    data = decode_RSA(data)
     if data == "500":
         conn.sendall("501")
     else:
@@ -74,6 +75,8 @@ def connectToMainServer(s):
     s.send(msg.encode())
 
 def main():
+    print(decode_RSA("נננננננננננננננננננננננננננננננננננננZZZZⁿΓ=╨▒╨▒╨ⁿZZZZⁿⁿⁿⁿ"))
+    """
     serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serv.bind((HOST, MY_PORT))
     serv.listen()
@@ -94,7 +97,7 @@ def main():
     print('client disconnected')
     serv.close()
     s.close()
-
+"""
 
 if __name__ == "__main__":
     main()

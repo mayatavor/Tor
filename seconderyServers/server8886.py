@@ -45,7 +45,7 @@ def thread(conn):
         return
     data = data.decode()
     print(data)
-    #data = decode_RSA(data)
+    data = decode_RSA(data)
     if data == "500":
         conn.sendall("501")
     else:
