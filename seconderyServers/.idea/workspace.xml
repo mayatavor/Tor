@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="c2439f06-eb9e-4ed4-bd0f-65d1b08528e6" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+=======
+    <list default="true" id="c2439f06-eb9e-4ed4-bd0f-65d1b08528e6" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../MainServer/MainServer/MainServer/Server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../MainServer/MainServer/MainServer/Server.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server8881.py" beforeDir="false" afterPath="$PROJECT_DIR$/server8881.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server8882.py" beforeDir="false" afterPath="$PROJECT_DIR$/server8882.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server8883.py" beforeDir="false" afterPath="$PROJECT_DIR$/server8883.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server8884.py" beforeDir="false" afterPath="$PROJECT_DIR$/server8884.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server8885.py" beforeDir="false" afterPath="$PROJECT_DIR$/server8885.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server8886.py" beforeDir="false" afterPath="$PROJECT_DIR$/server8886.py" afterDir="false" />
+    </list>
+>>>>>>> 376bcc78dc2aaa52ef81f2b205ece0cab659fb29
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+<<<<<<< HEAD
   <component name="FUSProjectUsageTrigger">
     <session id="777047569">
       <usages-collector id="statistics.lifecycle.project">
@@ -112,48 +126,13 @@
       </file>
     </leaf>
   </component>
+=======
+>>>>>>> 376bcc78dc2aaa52ef81f2b205ece0cab659fb29
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/server8883.py" />
-        <option value="$PROJECT_DIR$/server8881.py" />
-        <option value="$PROJECT_DIR$/server8884.py" />
-        <option value="$PROJECT_DIR$/server8885.py" />
-        <option value="$PROJECT_DIR$/server8886.py" />
-        <option value="$PROJECT_DIR$/server8882.py" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2225" />
-    <option name="y" value="-18" />
-    <option name="width" value="974" />
-    <option name="height" value="1047" />
-  </component>
   <component name="ProjectId" id="263m80TJ89gagxs7rdwlK9j8By1" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="Course" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="seconderyServers" type="b2602c69:ProjectViewProjectNode" />
-              <item name="seconderyServers" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
-  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -163,29 +142,17 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="RunManager" selected="Python.server8886">
-    <configuration name="server8882" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="server8882" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="seconderyServers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\משתמש\PycharmProjects\HW7\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/server8882.py" />
@@ -197,16 +164,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="server8883" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="server8883" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="seconderyServers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\משתמש\PycharmProjects\HW7\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/server8883.py" />
@@ -218,16 +185,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="server8884" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="server8884" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="seconderyServers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\משתמש\PycharmProjects\HW7\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/server8884.py" />
@@ -239,16 +206,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="server8885" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="server8885" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="seconderyServers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\משתמש\PycharmProjects\HW7\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/server8885.py" />
@@ -260,16 +227,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="server8886" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="server8886" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="seconderyServers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\משתמש\PycharmProjects\HW7\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/server8886.py" />
@@ -311,6 +278,7 @@
     </task>
     <servers />
   </component>
+<<<<<<< HEAD
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
@@ -350,26 +318,33 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+=======
+>>>>>>> 376bcc78dc2aaa52ef81f2b205ece0cab659fb29
   <component name="WindowStateProjectService">
-    <state x="-974" y="0" key="#server8881" timestamp="1646661176097">
-      <screen x="-1366" y="0" width="1366" height="728" />
+    <state x="551" y="0" key="#server8881" timestamp="1648301095535">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="-974" y="0" key="#server8881/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1646661176097" />
-    <state width="1345" height="179" key="GridCell.Tab.0.bottom" timestamp="1646663801523">
-      <screen x="-1366" y="0" width="1366" height="728" />
+    <state x="-974" y="0" key="#server8881/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1648296419474" />
+    <state x="551" y="0" key="#server8881/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648301095535" />
+    <state x="551" y="0" key="#server8882" timestamp="1648301101346">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1345" height="179" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1646663801523" />
-    <state width="1345" height="179" key="GridCell.Tab.0.center" timestamp="1646663801523">
-      <screen x="-1366" y="0" width="1366" height="728" />
+    <state x="-974" y="0" key="#server8882/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1648296427014" />
+    <state x="551" y="0" key="#server8882/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648301101346" />
+    <state x="551" y="0" key="#server8883" timestamp="1648301112192">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1345" height="179" key="GridCell.Tab.0.center/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1646663801523" />
-    <state width="1345" height="179" key="GridCell.Tab.0.left" timestamp="1646663801523">
-      <screen x="-1366" y="0" width="1366" height="728" />
+    <state x="-974" y="0" key="#server8883/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1648296434937" />
+    <state x="551" y="0" key="#server8883/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648301112192" />
+    <state x="551" y="0" key="#server8884" timestamp="1648301120340">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1345" height="179" key="GridCell.Tab.0.left/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1646663801523" />
-    <state width="1345" height="179" key="GridCell.Tab.0.right" timestamp="1646663801523">
-      <screen x="-1366" y="0" width="1366" height="728" />
+    <state x="-974" y="0" key="#server8884/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1648296441911" />
+    <state x="551" y="0" key="#server8884/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648301120340" />
+    <state x="551" y="0" key="#server8885" timestamp="1648301127740">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+<<<<<<< HEAD
     <state width="1345" height="179" key="GridCell.Tab.0.right/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1646663801523" />
   </component>
   <component name="editorHistoryManager">
@@ -430,5 +405,50 @@
         </state>
       </provider>
     </entry>
+=======
+    <state x="-974" y="0" key="#server8885/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1648296449456" />
+    <state x="551" y="0" key="#server8885/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648301127740" />
+    <state x="551" y="0" key="#server8886" timestamp="1648301133848">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-974" y="0" key="#server8886/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1648296456987" />
+    <state x="551" y="0" key="#server8886/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648301133848" />
+    <state width="1899" height="169" key="GridCell.Tab.0.bottom" timestamp="1648301133884">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1345" height="258" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1648300381840" />
+    <state width="1899" height="169" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648301133884" />
+    <state width="1899" height="169" key="GridCell.Tab.0.center" timestamp="1648301133884">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1345" height="258" key="GridCell.Tab.0.center/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1648300381840" />
+    <state width="1899" height="169" key="GridCell.Tab.0.center/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648301133884" />
+    <state width="1899" height="169" key="GridCell.Tab.0.left" timestamp="1648301133884">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1345" height="258" key="GridCell.Tab.0.left/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1648300381840" />
+    <state width="1899" height="169" key="GridCell.Tab.0.left/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648301133884" />
+    <state width="1899" height="169" key="GridCell.Tab.0.right" timestamp="1648301133884">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1345" height="258" key="GridCell.Tab.0.right/0.0.1920.1040/-1366.0.1366.728@-1366.0.1366.728" timestamp="1648300381840" />
+    <state width="1899" height="169" key="GridCell.Tab.0.right/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648301133884" />
+    <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1648299966095">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648299966095" />
+    <state width="1899" height="348" key="GridCell.Tab.1.center" timestamp="1648299966095">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.center/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648299966095" />
+    <state width="1899" height="348" key="GridCell.Tab.1.left" timestamp="1648299966095">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.left/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648299966095" />
+    <state width="1899" height="348" key="GridCell.Tab.1.right" timestamp="1648299966095">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.right/0.0.1920.1040/-1366.0.1366.728@0.0.1920.1040" timestamp="1648299966095" />
+>>>>>>> 376bcc78dc2aaa52ef81f2b205ece0cab659fb29
   </component>
 </project>
