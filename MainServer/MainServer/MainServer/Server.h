@@ -10,6 +10,7 @@
 #include <queue>
 #include <list>
 #include <map>
+#include "RSAencryption.h"
 
 
 #define DELIMITER "~"
@@ -84,7 +85,7 @@ private:
 	* input: The number of servers to generate.
 	* output: The vercotr that contains the server's ids
 	*/
-	std::vector<int> getServersRoute(int numOfServers);
+	std::vector<int> getServersRoute(int numOfServers, std::map<int, SOCKET> validServers);
 	std::map<int, SOCKET> checkServersValidity();
 	
 	//void verifyServer(int serverId, bool& answer);

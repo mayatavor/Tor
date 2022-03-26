@@ -24,6 +24,7 @@
 
 #define IN_USER_DELIMITER "::::"
 
+#define SERVERS_NUMBER 3
 
 Server::Server()
 {
@@ -368,13 +369,30 @@ void Server::sendWhenUserLoggedOut(std::string leftUsername)
 void Server::sendUserMessage(std::string username, std::string content, std::string senderUsername, bool isGhost)
 {
 	User u = this->_db->getUser(username);
-	SOCKET sock = createSocket(u.getPort(), u.getIp());
 	std::string msg = "";
+
+	std::map<int, SOCKET> servers = this->checkServersValidity();
+	std::vector<int> route = this->getServersRoute(SERVERS_NUMBER, servers);
+
 	if (isGhost)
 		msg = std::to_string(MessageType::sendMessageFromGhost) + DELIMITER + senderUsername + DELIMITER + content;
 	else
 		msg = std::to_string(MessageType::sendMessageToOtherUser) + DELIMITER + senderUsername + DELIMITER + content;
+
+	std::vector<int>::iterator it;
+	for(int i = 0; i < route.size(); it++)
+	{
+		//SecondaryServer server = this->_secondaryServers[i];
+		SecondaryServer server = this->_secondaryServers[route[i]];
+		msg = RSAencryption::EncryptRSA(msg, server.getPublicKey().first, server.getPublicKey().second);
+		msg += server.getIp() + IN_USER_DELIMITER + std::to_string(server.getPort());
+	}
+
+	SecondaryServer server2 = this->_secondaryServers[route[SERVERS_NUMBER - 1]];
+	msg = RSAencryption::EncryptRSA(msg, server2.getPublicKey().first, server2.getPublicKey().second);
+
 	Message* builtMessage = new Message(msg);
+	SOCKET sock = servers[SERVERS_NUMBER];
 	try
 	{
 		Helper::sendData(sock, builtMessage->buildMessage());
@@ -501,19 +519,19 @@ void Server::addSecondaryServer(SOCKET socket, int id, std::pair<int, int> publi
 	this->_messagesCv.notify_one();
 }
 
-std::vector<int> Server::getServersRoute(int numOfServers)
+std::vector<int> Server::getServersRoute(int numOfServers, std::map<int, SOCKET> validServers)
 {
-	std::map<int, SOCKET> servers = this->checkServersValidity();
 	//std::vector< std::map<int, SOCKET&>::iterator> randomServers;
 	std::vector<int> randomIds;
 	int prevIndex = -1, random = -1;
 	for (int i = 0; i < numOfServers; i++) 
 	{
 		while (prevIndex == random) 
-			random = rand() % servers.size();
+			random = rand() % validServers.size();
 
 		//randomServers.push_back(servers.begin());
 		randomIds.push_back(random);
+		prevIndex = random;
 		//std::advance(randomServers[i], random);
 	}
 	return randomIds;
@@ -540,3 +558,4 @@ std::map<int, SOCKET> Server::checkServersValidity()
 //	
 //
 //}
+

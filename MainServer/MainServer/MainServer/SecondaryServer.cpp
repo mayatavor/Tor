@@ -32,3 +32,8 @@ int SecondaryServer::getPort() const
 {
 	return this->_port;
 }
+
+std::string SecondaryServer::getIp() const
+{
+	return "127.0.0.1";
+}

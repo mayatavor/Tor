@@ -2,7 +2,7 @@ import socket
 import threading
 
 HOST = '127.0.0.1'  # Standard loopback interface address
-MY_PORT = 8082      # Port to listen on
+MY_PORT = 8882      # Port to listen on
 MY_ID = 2
 
 MAIN_SERVER_PORT = 5678
@@ -64,7 +64,7 @@ def thread(conn):
 connects to the main server and sends the public key with the server id
 """
 def connectToMainServer(s):
-    msg = "100" + "~" + str(MY_ID) + "~" + str(public_key[0]) + "~" + str(public_key[1]) + "~" + MY_PORT
+    msg = "100" + "~" + str(MY_ID) + "~" + str(public_key[0]) + "~" + str(public_key[1]) + "~" + str(MY_PORT)
     msg = str(len(msg)).zfill(5) + msg
     s.send(msg.encode())
 

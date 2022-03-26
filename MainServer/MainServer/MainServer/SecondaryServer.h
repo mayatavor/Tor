@@ -2,6 +2,7 @@
 #include <WinSock2.h>
 #include <Windows.h>
 #include <utility>
+#include <string>
 
 
 class SecondaryServer
@@ -15,6 +16,7 @@ public:
 	SOCKET getSocket() const;
 	std::pair<int, int> getPublicKey() const;
 	int getPort() const;
+	std::string getIp() const;
 
 
 private:

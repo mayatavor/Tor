@@ -64,7 +64,7 @@ def thread(conn):
 connects to the main server and sends the public key with the server id
 """
 def connectToMainServer(s):
-    msg = "100" + "~" + str(MY_ID) + "~" + str(public_key[0]) + "~" + str(public_key[1]) + "~" + MY_PORT
+    msg = "100" + "~" + str(MY_ID) + "~" + str(public_key[0]) + "~" + str(public_key[1]) + "~" + str(MY_PORT)
     msg = str(len(msg)).zfill(5) + msg
     s.send(msg.encode())
 
