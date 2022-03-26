@@ -244,6 +244,7 @@ namespace gui
                 if (this.responses.Count() > 0)
                 {
                     this.responses.TryDequeue(out r);
+                    MessageBoxResult result = MessageBox.Show(r.code.ToString(), "LogOut Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
                     switch (r.code)
                     {

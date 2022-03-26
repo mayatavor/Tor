@@ -19,7 +19,7 @@ def decode_RSA(msg):
         print(letter , ": ", value)
 
         plain_letter = (value**private_key[0]) % private_key[1]
-        print(plain_letter)
+        print(chr(plain_letter))
         plain += chr(plain_letter)
 
     print(plain)
@@ -38,27 +38,30 @@ def sentToNextClient(ip, port, msg):
 
 
 def thread(conn):
-    while True:
-        data = conn.recv(4096)
-        if not data: break
-        data = data.decode()
-        print(data)
-        data = decode_RSA(data)
-        if data == "500":
-            conn.sendall("501")
-        else:
-            list = data.split("::::")
-            if len(list) < 3: break
-            next_ip = list[-2]
-            next_port = list[-1]
-            print(next_ip + " and " + next_port)
-            print(list[0])
+    print("check2")
+    data = conn.recv(4096)
+    if not data:
+        return
+    data = data.decode()
+    print(data)
+    #data = decode_RSA(data)
+    if data == "500":
+        conn.sendall("501")
+    else:
+        list = data.split("::::")
+        if len(list) < 3:
+            return
+        next_ip = list[-2]
+        next_port = list[-1]
+        print(next_ip + " and " + next_port)
+        print(list[0])
 
-            list.pop(-1)
-            list.pop(-1)
+        list.pop(-1)
+        list.pop(-1)
 
-            sentToNextClient(next_ip, next_port, "::::".join(list))
+        sentToNextClient(next_ip, next_port, "::::".join(list))
     conn.close()
+    print("broke")
 
 
 """

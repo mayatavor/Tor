@@ -379,22 +379,26 @@ void Server::sendUserMessage(std::string username, std::string content, std::str
 		msg = std::to_string(MessageType::sendMessageFromGhost) + DELIMITER + senderUsername + DELIMITER + content;
 	else
 		msg = std::to_string(MessageType::sendMessageToOtherUser) + DELIMITER + senderUsername + DELIMITER + content;
-	msg += IN_USER_DELIMITER + u.getIp() + IN_USER_DELIMITER + std::to_string(u.getPort());
+	std::string ipds = "127.0.0.1";
+	Message* builtMessage = new Message(msg);
+	msg = builtMessage->buildMessage();
+	delete builtMessage;
+	msg += IN_USER_DELIMITER + ipds + IN_USER_DELIMITER + std::to_string(u.getPort());
 
 	std::vector<int>::iterator it;
 	for(int i = 0; i < route.size() - 1; i++)
 	{
 		//SecondaryServer server = this->_secondaryServers[i];
 		SecondaryServer server = this->_secondaryServers[route[i]];
-		msg = RSAencryption::EncryptRSA(msg, server.getPublicKey().first, server.getPublicKey().second);
+		//msg = RSAencryption::EncryptRSA(msg, server.getPublicKey().first, server.getPublicKey().second);
 		msg += IN_USER_DELIMITER + server.getIp() + IN_USER_DELIMITER + std::to_string(server.getPort());
 	}
 
 	SecondaryServer server2 = this->_secondaryServers[route[SERVERS_NUMBER - 1]];
-	msg = RSAencryption::EncryptRSA(msg, server2.getPublicKey().first, server2.getPublicKey().second);
+	//msg = RSAencryption::EncryptRSA(msg, server2.getPublicKey().first, server2.getPublicKey().second);
 
 	//Message* builtMessage = new Message(msg);
-	SOCKET sock = servers[SERVERS_NUMBER];
+	SOCKET sock = servers[route[SERVERS_NUMBER - 1]]; 
 	try
 	{
 		Helper::sendData(sock, msg);
