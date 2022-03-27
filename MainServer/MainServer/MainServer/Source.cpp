@@ -24,15 +24,10 @@ int main()
 	{
 		std::cout << "Error occured: " << e.what() << std::endl;
 	}
+	//7 14279
 
-
-	//SOCKET sock = Server::createSocket(8888, "127.0.0.1");
-
-	/*std::vector<std::string> vec = { "username", "password","ip", "port"};
-	Message* newMessage = new Message(logIn, vec);
-	std::string megString = newMessage->buildMessage();
-	std::cout << megString << std::endl;
-	Message* msg = new Message("101≡username≡password≡ip≡port");*/
+	//std::string enc = RSAencryption::EncryptRSA("H", 3, 3127);
+	//std::cout << enc << std::endl;
 
 
 	system("PAUSE");

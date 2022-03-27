@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include <string>
 
 // recieve data from socket according byteSize
 // returns the data as int
@@ -69,4 +70,15 @@ void Helper::sendData(SOCKET sc, std::string message)
 		throw std::exception("Error while sending message to client");
 	}
 }
+
+void Helper::sendData(SOCKET sc, std::vector<int> msg)
+{
+	/*if (send(sc, msg.data(), msg.size() * sizeof(msg[0]), 0) == INVALID_SOCKET)
+	{
+		throw std::exception("Error while sending message to client");
+	}*/
+	
+	send(sc, (char*)(msg.data()), msg.size() * sizeof(int), 0);
+}
+
 
