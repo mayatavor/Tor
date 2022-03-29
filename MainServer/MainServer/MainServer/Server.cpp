@@ -410,11 +410,11 @@ void Server::sendUserMessage(std::string username, std::string content, std::str
 	try
 	{
 		std::string msg1 = "500~" + std::to_string(encrypted.size());
-		std::string msg2(encrypted.begin(), encrypted.end());
+		//std::string msg2(encrypted.begin(), encrypted.end());
 		std::cout << "msg1:   " << msg1 << std::endl;
-		std::cout << "msg2:   " << msg2 << std::endl;
+		//std::cout << "msg2:   " << msg2 << std::endl;
 		Helper::sendData(sock, msg1);
-		Helper::sendData(sock, msg2);
+		Helper::sendData(sock, encrypted);;
 	}
 	catch (const std::exception& e)
 	{

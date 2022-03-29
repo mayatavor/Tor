@@ -56,8 +56,13 @@ def sentToNextClient(ip, port, msg):
 
     firstMsg = '500~' + str(len(msg))
     client.send(firstMsg.encode())
-    client.send(pickle.dumps(msg)) #.encode()
-
+    #client.send(pickle.dumps(msg)) #.encode()
+    #lst = struct.unpack('<' + str(length) +'I', data)
+    msg1 = tuple(msg)
+    print(msg1)
+    formatted_msg = struct.pack('<' + str(len(msg)) + 'I', *msg1)
+    #packer = struct.Struct()
+    client.send(formatted_msg)
     client.close()
 
 

@@ -26,6 +26,21 @@ def decode_RSA(msg):
     print(plain)
     return plain
 
+def decode_RSA_lst(msg):
+    plain =[]
+
+    for letter in msg:
+
+        print(letter )
+
+        plain_letter = ((letter**private_key[0]) % private_key[1])
+        print("plain_letter : ", plain_letter)
+        # print("chr ", chr(plain_letter))
+        # plain += chr(plain_letter)
+        plain.insert(len(plain), plain_letter)
+
+    print("plain : ", plain)
+    return plain
 
 def sentToNextClient(ip, port, msg):
     print("in sendtTONextClient, port = ", port, " ip = ", ip)
