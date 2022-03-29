@@ -14,5 +14,6 @@ public:
 
 	static std::vector<int> EncryptRSA1(std::string msg, int e, int n, std::vector<int>& vec);
 
+	static std::string EncryptRSA2(std::string msg, int e, int n);
 };
 

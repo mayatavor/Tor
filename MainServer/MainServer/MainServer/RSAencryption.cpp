@@ -66,3 +66,35 @@ std::vector<int> RSAencryption::EncryptRSA1(std::string msg, int e, int n, std::
 
     return encrypted;
 }
+
+std::string RSAencryption::EncryptRSA2(std::string msg, int e, int n)
+{
+    std::string encrypted = "";
+    for (int i = 0; i < msg.size(); i++)
+    {
+        int value = msg[i];
+
+        std::cout << "val " << value << std::endl;
+
+        double letter = pow(value, e);
+        letter = fmod(letter, n);
+
+        std::cout << "letter " << letter << std::endl;
+        msg[i] = letter;
+    }
+    for (int i = 0; i < msg.size(); i++)
+    {
+        int value = int(msg[i]);
+
+        std::cout << "val " << value << std::endl;
+
+        double letter = pow(value, e);
+        letter = fmod(letter, n);
+
+        std::cout << "letter " << letter << std::endl;
+        encrypted.push_back(letter);
+        encrypted.push_back('~');
+    }
+
+    return encrypted;
+}
