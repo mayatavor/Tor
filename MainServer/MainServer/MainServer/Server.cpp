@@ -24,7 +24,7 @@
 
 #define IN_USER_DELIMITER "::::"
 
-#define SERVERS_NUMBER 2
+#define SERVERS_NUMBER 3
 
 Server::Server()
 {
@@ -381,8 +381,8 @@ void Server::sendUserMessage(std::string username, std::string content, std::str
 	std::string msg = "";
 
 	std::map<int, SOCKET> servers = this->checkServersValidity();
-	//std::vector<int> route = this->getServersRoute(SERVERS_NUMBER, servers);
-	std::vector<int> route = { 2, 1 };
+	std::vector<int> route = this->getServersRoute(SERVERS_NUMBER, servers);
+	//std::vector<int> route = { 2, 1 };
 	if (isGhost)
 		msg = std::to_string(MessageType::sendMessageFromGhost) + DELIMITER + senderUsername + DELIMITER + content;
 	else
@@ -391,10 +391,11 @@ void Server::sendUserMessage(std::string username, std::string content, std::str
 	Message* builtMessage = new Message(msg);
 	msg = builtMessage->buildMessage();
 	delete builtMessage;
-	msg += IN_USER_DELIMITER + ipds + IN_USER_DELIMITER + std::to_string(u.getPort());
+	msg += IN_USER_DELIMITER + ipds + IN_USER_DELIMITER + std::to_string(u.getPort()) + IN_USER_DELIMITER 
+		+ this->_secondaryServers[route[0]].getIp() + IN_USER_DELIMITER + std::to_string(this->_secondaryServers[route[0]].getPort());
 	std::vector<int> encrypted = {};
 	std::vector<int>::iterator it;
-	for(int i = 0; i < route.size() - 1; i++)
+	for(int i = 1; i < route.size() - 1; i++)
 	{
 		//SecondaryServer server = this->_secondaryServers[i];
 		SecondaryServer server = this->_secondaryServers[route[i]];
@@ -406,14 +407,15 @@ void Server::sendUserMessage(std::string username, std::string content, std::str
 	encrypted = RSAencryption::EncryptRSA1(msg, server2.getPublicKey().first, server2.getPublicKey().second, encrypted);
 
 	//Message* builtMessage = new Message(msg);
-	SOCKET sock = servers[route[SERVERS_NUMBER - 1]]; 
+	SOCKET sock = servers[route[SERVERS_NUMBER - 1]];  
 	try
 	{
-		std::string msg1 = "500~" + std::to_string(encrypted.size());
+		std::string msg1 = "500~" + std::to_string(encrypted.size()) + "~1";
 		//std::string msg2(encrypted.begin(), encrypted.end());
-		std::cout << "msg1:   " << msg1 << std::endl;
+		
 		//std::cout << "msg2:   " << msg2 << std::endl;
 		Helper::sendData(sock, msg1);
+
 		Helper::sendData(sock, encrypted);;
 	}
 	catch (const std::exception& e)
