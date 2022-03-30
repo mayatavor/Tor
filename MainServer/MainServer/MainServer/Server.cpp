@@ -395,7 +395,7 @@ void Server::sendUserMessage(std::string username, std::string content, std::str
 		+ this->_secondaryServers[route[0]].getIp() + IN_USER_DELIMITER + std::to_string(this->_secondaryServers[route[0]].getPort());
 	std::vector<int> encrypted = {};
 	std::vector<int>::iterator it;
-	for(int i = 1; i < route.size() - 1; i++)
+	for(int i = 0; i < route.size() - 1; i++)
 	{
 		//SecondaryServer server = this->_secondaryServers[i];
 		SecondaryServer server = this->_secondaryServers[route[i]];
