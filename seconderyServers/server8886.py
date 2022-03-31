@@ -65,9 +65,11 @@ def sentToNextClient(ip, port, msg, servers_index):
 
 def send_to_gui(ip, port, msg):
     print('msg = ', msg)
+    print("port ", port)
+    print("ip ", ip)
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect((ip, int(port)))
-    client.send(msg.encode())
+    client.sendall(msg.encode())
     client.close()
 
 def thread(conn):

@@ -48,6 +48,8 @@ def decode_RSA_lst(msg):
 def sentToNextClient(ip, port, msg, servers_index):
     print("in sendtTONextClient, port = ", port, " ip = ", ip)
     print("message = ", msg)
+    print("port ", port)
+    print("ip ", ip)
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect((ip, int(port)))
 

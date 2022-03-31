@@ -391,9 +391,10 @@ void Server::sendUserMessage(std::string username, std::string content, std::str
 	Message* builtMessage = new Message(msg);
 	msg = builtMessage->buildMessage();
 	delete builtMessage;
-	msg += IN_USER_DELIMITER + ipds + IN_USER_DELIMITER + std::to_string(u.getPort()) + IN_USER_DELIMITER 
-		+ this->_secondaryServers[route[0]].getIp() + IN_USER_DELIMITER + std::to_string(this->_secondaryServers[route[0]].getPort());
 	std::vector<int> encrypted = {};
+	msg += IN_USER_DELIMITER + ipds + IN_USER_DELIMITER + std::to_string(u.getPort());
+	//encrypted = RSAencryption::EncryptRSA1(msg, server.getPublicKey().first, server.getPublicKey().second, encrypted);
+		// + IN_USER_DELIMITER + this->_secondaryServers[route[0]].getIp() + IN_USER_DELIMITER + std::to_string(this->_secondaryServers[route[0]].getPort());
 	std::vector<int>::iterator it;
 	for(int i = 0; i < route.size() - 1; i++)
 	{
