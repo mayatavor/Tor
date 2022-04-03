@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Security.Cryptography;
 
 public enum MessageCodes
 {
@@ -33,11 +35,13 @@ namespace gui
         private SocketT _socket;
         private string DIVIDER = "~";
         private string myUsername;
+        private Aes myAes;
 
         public Communicator()
         {
             this._socket = new SocketT();
             this._socket.startSocket();
+            this.myAes = Aes.Create(); // generates a key and a vector => can access by ().Key / ().IV
         }
 
         ~Communicator()
