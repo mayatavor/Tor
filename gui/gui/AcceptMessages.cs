@@ -76,7 +76,7 @@ namespace gui
         //find a port to run the server on
         public static int FindPort()
         {
-            for (int i = 7000; i < 65535; i++)
+            for (int i = 8887; i < 65535; i++)
             {
                 if (!PortInUse(i))
                     return i;

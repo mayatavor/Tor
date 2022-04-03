@@ -108,7 +108,7 @@
                     Height="55"
                     Background="#fffafa"/>
 
-                <ListView Grid.Row="1" Name="MessagesList" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+                <ListView Grid.Row="1" Name="MessagesList" VerticalAlignment="Bottom" HorizontalContentAlignment="Stretch">
                 </ListView>
 
 

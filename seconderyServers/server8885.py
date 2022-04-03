@@ -1,5 +1,6 @@
 import socket
 import threading
+import struct
 
 HOST = '127.0.0.1'  # Standard loopback interface address
 MY_PORT = 8885      # Port to listen on
@@ -7,8 +8,10 @@ MY_ID = 5
 
 MAIN_SERVER_PORT = 5678
 
-public_key = (11, 10721) # expontent, n
-private_key = (8591, 10721) # d, n
+# public_key = (11, 10721) # expontent, n
+# private_key = (8591, 10721) # d, n
+public_key = (3, 3127) # expontent, n
+private_key = (2011, 3127) # d, n
 
 
 def decode_RSA(msg):
@@ -25,42 +28,95 @@ def decode_RSA(msg):
     print(plain)
     return plain
 
+def decode_RSA_lst(msg):
+    plain =[]
+
+    for letter in msg:
+
+        print(letter )
+
+        plain_letter = ((letter**private_key[0]) % private_key[1])
+        print("plain_letter : ", plain_letter)
+        # print("chr ", chr(plain_letter))
+        # plain += chr(plain_letter)
+        plain.insert(len(plain), plain_letter)
+
+    print("plain : ", plain)
+    return plain
 
 
-def sentToNextClient(ip, port, msg):
+def sentToNextClient(ip, port, msg, servers_index):
     print("in sendtTONextClient, port = ", port, " ip = ", ip)
     print("message = ", msg)
+    print("port ", port)
+    print("ip ", ip)
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect((ip, int(port)))
 
-    client.send(msg.encode())
+    firstMsg = '500~' + str(len(msg)) + '~' + str(servers_index)
+    client.send(firstMsg.encode())
+    received_msg = client.recv(12)
+    received_msg = received_msg.decode()
+    print(received_msg)
+    print('first message sent')
+    msg1 = tuple(msg)
+    formatted_msg = struct.pack('<' + str(len(msg)) + 'I', *msg1)
 
+    client.send(formatted_msg)
     client.close()
 
+def send_to_gui(ip, port, msg):
+    print('msg = ', msg)
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.connect((ip, int(port)))
+    client.send(msg.encode())
+    client.close()
 
 def thread(conn):
     print("check2")
     data = conn.recv(4096)
     if not data:
         return
-    data = data.decode()
-    print(data)
-    data = decode_RSA(data)
-    if data == "500":
-        conn.sendall("501")
-    else:
-        list = data.split("::::")
-        if len(list) < 3:
-            return
-        next_ip = list[-2]
-        next_port = list[-1]
+    print("before decode ", data)
+
+    try:
+        decoded = data.decode()
+        first_msg = decoded.split('~')
+        length = first_msg[1]
+        success_msg = "success:true"
+        conn.send(success_msg.encode())
+        data = conn.recv(4096)
+
+        res = struct.unpack('<' + str(length) + 'I', data)
+
+        decoded_rsa = decode_RSA_lst(res)
+        details = decoded_rsa[-17:]
+        print("details = ", details)
+
+        print('len - ', len(details))
+        for i in range(0, len(details)):
+            details[i] = chr(details[i])
+        print("decoded ", details)
+        details = "".join(details).split('::::')
+
+        next_ip = details[0]
+        next_port = details[1]
+        next_msg = decoded_rsa[:-21]
+
         print(next_ip + " and " + next_port)
-        print(list[0])
+        print(next_msg)
+        if first_msg[2] == '3':
+            for i in range(0, len(next_msg)):
+                next_msg[i] = chr(next_msg[i])
+            send_to_gui(next_ip, next_port, "".join(next_msg))
+        else:
+            sentToNextClient(next_ip, next_port, next_msg, int(first_msg[2]) + 1)
+        print('after func')
 
-        list.pop(-1)
-        list.pop(-1)
 
-        sentToNextClient(next_ip, next_port, "::::".join(list))
+    except Exception as e:
+        print("error accrued - ", e)
+
     conn.close()
     print("broke")
 
