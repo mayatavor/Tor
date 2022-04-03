@@ -88,8 +88,8 @@ def thread(conn):
         data = conn.recv(4096)
 
         res = struct.unpack('<' + str(length) + 'I', data)
-
         decoded_rsa = decode_RSA_lst(res)
+
         details = decoded_rsa[-17:]
         print("details = ", details)
 

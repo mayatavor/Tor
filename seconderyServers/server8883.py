@@ -89,7 +89,8 @@ def thread(conn):
 
         res = struct.unpack('<' + str(length) + 'I', data)
 
-        decoded_rsa = list(res) if first_msg[2] == '3' else decode_RSA_lst(res)
+        #decoded_rsa = list(res) if first_msg[2] == '3' else decode_RSA_lst(res)
+        decoded_rsa = decode_RSA_lst(res)
 
         details = decoded_rsa[-17:]
         print("details = ", details)

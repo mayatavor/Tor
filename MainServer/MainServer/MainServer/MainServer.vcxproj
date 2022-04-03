@@ -149,7 +149,7 @@
     <ClCompile Include="serialize.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="sqlite3.c" />
+    <ClCompile Include="sqleet.c" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="WSAInitializer.cpp" />
   </ItemGroup>
@@ -166,7 +166,7 @@
     <ClInclude Include="serialize.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="socket.h" />
-    <ClInclude Include="sqlite3.h" />
+    <ClInclude Include="sqleet.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="WSAInitializer.h" />

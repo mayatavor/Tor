@@ -396,7 +396,7 @@ void Server::sendUserMessage(std::string username, std::string content, std::str
 	//encrypted = RSAencryption::EncryptRSA1(msg, server.getPublicKey().first, server.getPublicKey().second, encrypted);
 		// + IN_USER_DELIMITER + this->_secondaryServers[route[0]].getIp() + IN_USER_DELIMITER + std::to_string(this->_secondaryServers[route[0]].getPort());
 	std::vector<int>::iterator it;
-	for(int i = 0; i < route.size() - 1; i++)
+	for (int i = 0; i < route.size() - 1; i++)
 	{
 		//SecondaryServer server = this->_secondaryServers[i];
 		SecondaryServer server = this->_secondaryServers[route[i]];
@@ -408,12 +408,12 @@ void Server::sendUserMessage(std::string username, std::string content, std::str
 	encrypted = RSAencryption::EncryptRSA1(msg, server2.getPublicKey().first, server2.getPublicKey().second, encrypted);
 
 	//Message* builtMessage = new Message(msg);
-	SOCKET sock = servers[route[SERVERS_NUMBER - 1]];  
+	SOCKET sock = servers[route[SERVERS_NUMBER - 1]];
 	try
 	{
 		std::string msg1 = "500~" + std::to_string(encrypted.size()) + "~1";
 		//std::string msg2(encrypted.begin(), encrypted.end());
-		
+
 		//std::cout << "msg2:   " << msg2 << std::endl;
 		Helper::sendData(sock, msg1);
 
@@ -423,6 +423,7 @@ void Server::sendUserMessage(std::string username, std::string content, std::str
 	{
 		Helper::sendData(sock, e.what());
 	}
+
 }
 
 
