@@ -29,15 +29,16 @@ bool DatabaseAccess::open()
 			std::cout << e.what() << std::endl;
 		}
 	}
-	//else
-	//{
-	//	std::string key = "swordfish";
-	//	//int res1 = sqlite3_key(this->_db, &key, key.length());
-	//	if (res1 != SQLITE_OK) {
-	//		std::cout << "wrong key" << std::endl;
-	//		return false;
-	//	}
-	//}
+	else
+	{
+		//std::string key = "swordfish";
+		const char* key = "swordfish123";
+		int res1 = sqlite3_key(this->_db, key, 12);
+		if (res1 != SQLITE_OK) {
+			std::cout << "wrong key" << std::endl;
+			return false;
+		}
+	}
 
 	return true;
 }
@@ -438,8 +439,8 @@ bool DatabaseAccess::createDBstructure()
 		exec(FavoritesTable, nullptr, nullptr);
 		exec(MessagesTable, nullptr, nullptr);
 
-	/*	std::string key = "swordfish";
-		int res1 = sqlite3_rekey(this->_db, &key, key.length());*/
+		const char* key = "swordfish";
+		int res1 = sqlite3_rekey(this->_db, key, 9);
 		
 		return true;
 	}

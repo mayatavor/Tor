@@ -8,8 +8,8 @@
 
 int main()
 {
-	DatabaseAccess* db = new DatabaseAccess();
-	db->open();
+	/*DatabaseAccess* db = new DatabaseAccess();
+	db->open();*/
 	
 	try
 	{
