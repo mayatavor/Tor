@@ -55,9 +55,11 @@ namespace gui
 
                 mas = mas + DIVIDER + ds;
 
-                string len = getPaddedNumber(mas.Length, 5);
+                string enc = Encipher(mas, key);
 
-                byte[] msg = Encoding.ASCII.GetBytes(len + mas);
+                string len = getPaddedNumber(enc.Length, 5);
+
+                byte[] msg = Encoding.ASCII.GetBytes(len + enc);
                 // Send the data through the socket.
                 int bytesSent = this.sender.Send(msg);
 
@@ -71,6 +73,8 @@ namespace gui
                 bytesRec = this.sender.Receive(bytesArr3);
 
                 string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);
+
+                string dec = Decipher(res, this.key);
 
                 Response r = new Response(res);
                 return r;
