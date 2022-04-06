@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
-using System.Security.Cryptography;
 
 public enum MessageCodes
 {
@@ -35,19 +33,22 @@ namespace gui
         private SocketT _socket;
         private string DIVIDER = "~";
         private string myUsername;
-        private Aes myAes;
+        private Random _rand;
+        private int _key;
 
         public Communicator()
         {
             this._socket = new SocketT();
             this._socket.startSocket();
-            this.myAes = Aes.Create(); // generates a key and a vector => can access by ().Key / ().IV
+            this._rand = new Random();
+            this._key = this._rand.Next(1, 27);
         }
 
         ~Communicator()
         {
 
         }
+
 
         public void SetUserName(string u)
         {
@@ -61,7 +62,7 @@ namespace gui
 
         public string Login(string username, string password, int port)
         {
-            string reqInfo = (int)MessageCodes.logIn + DIVIDER + username + DIVIDER + password + DIVIDER + port;
+            string reqInfo = (int)MessageCodes.logIn + DIVIDER + username + DIVIDER + password + DIVIDER + port + DIVIDER + this._key;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
 
@@ -71,7 +72,7 @@ namespace gui
         }
         public string SignUp(string username, string password, int port)
         {
-            string reqInfo = (int)MessageCodes.signUp + DIVIDER + username + DIVIDER + password + DIVIDER + port;
+            string reqInfo = (int)MessageCodes.signUp + DIVIDER + username + DIVIDER + password + DIVIDER + port + DIVIDER + this._key;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
 
@@ -81,7 +82,7 @@ namespace gui
         }
         public (int, string) Ghost(int port)
         {
-            string reqInfo = (int)MessageCodes.ghostLogIn + DIVIDER + port;
+            string reqInfo = (int)MessageCodes.ghostLogIn + DIVIDER + port + DIVIDER + this._key;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
             string ghostName = res.objects[1].Substring(0, res.objects[1].Length - 1);
