@@ -149,7 +149,7 @@ std::string DatabaseAccess::getUsernameById(int id)
 		return NULL;
 }
 
-void DatabaseAccess::updateUsersIpAndPort(std::string username, std::string ip, std::string port)
+void DatabaseAccess::updateUsersDetails(std::string username, std::string ip, std::string port)
 {
 	std::string str = "UPDATE Users SET ipAddress = '" + ip + "', port = " + port + " WHERE username='" + username + "';";
 	try

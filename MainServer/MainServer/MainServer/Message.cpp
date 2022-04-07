@@ -2,9 +2,13 @@
 #include <iostream>
 #include <sstream>
 
+#define DECRYPT_KEY -13;
+#define ENCRYPT_KEY 13
+
 
 Message::Message(std::string allMsg) 
 {
+	allMsg = this->encryptAndDecrypt(-13, allMsg);
 	int pos = allMsg.find(DELIMITER);
 	std::string token = allMsg.substr(0, pos);
 	std::cout << token << std::endl;
@@ -80,7 +84,7 @@ bool Message::validateArgumentLength()
 	return true;
 }
 
-std::string Message::buildMessage()
+std::string Message::buildMessage(int key)
 {
 	std::string msg = std::accumulate(std::begin(this->_args), std::end(this->_args), std::string(),
 		[](std::string& ss, std::string& s) {
@@ -88,6 +92,8 @@ std::string Message::buildMessage()
 		});
 
 	std::string msgcontent = std::to_string(this->_mt) + DELIMITER + msg;
+	if(key != 0)
+		msgcontent = this->encryptAndDecrypt(key, msgcontent);
 	std::string len =  std::to_string(msgcontent.length() + 1);
 	len.insert(len.begin(), 5 - len.length(), '0');
 	/*len += DELIMITER;
@@ -95,4 +101,25 @@ std::string Message::buildMessage()
 	std::stringstream ss;
 	ss << len << msgcontent;
 	return  ss.str();
+}
+
+std::string Message::encryptAndDecrypt(int key, std::string msg)
+{
+	std::string result = "";
+
+	// traverse text
+	for (int i = 0; i < msg.length(); i++)
+	{
+		// apply transformation to each character
+		// Encrypt Uppercase letters
+		if (isupper(msg[i]))
+			result += char(int(msg[i] + key - 65) % 26 + 65);
+
+		// Encrypt Lowercase letters
+		else
+			result += char(int(msg[i] + key - 97) % 26 + 97);
+	}
+
+	// Return the resulting string
+	return result;
 }
