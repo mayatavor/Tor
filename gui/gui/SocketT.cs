@@ -55,11 +55,11 @@ namespace gui
 
                 mas = mas + DIVIDER + ds;
 
-                string enc = Encipher(mas, key);
+                //string enc = Encipher(mas, key);
 
-                string len = getPaddedNumber(enc.Length, 5);
+                string len = getPaddedNumber(mas.Length, 5);
 
-                byte[] msg = Encoding.ASCII.GetBytes(len + enc);
+                byte[] msg = Encoding.ASCII.GetBytes(len + mas);
                 // Send the data through the socket.
                 int bytesSent = this.sender.Send(msg);
 
