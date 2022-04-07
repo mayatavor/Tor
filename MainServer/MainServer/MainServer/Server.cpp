@@ -105,7 +105,7 @@ Message* Server::caseLogin(std::vector<std::string> args, SOCKET usersSocket)
 	}
  	this->sendUsersWhenNewJoins(args[0]);
 	this->_clients.insert(std::pair<std::string, SOCKET>(args[0], usersSocket));
-	this->_db->updateUsersIpAndPort(args[0], args[3], args[2]);
+	this->_db->updateUsersDetails(args[0], args[3], args[2]);
 	return new Message(success, { "LoggedIn successfully" });
 }
 
@@ -233,7 +233,7 @@ void Server::messagesHandler()
 				break;
 			}
 			if(msg)
-				h.sendData(m.first, msg->buildMessage());
+				h.sendData(m.first, msg->buildMessage(13));
 		}
 		if(msg)
 			delete msg;
@@ -311,7 +311,7 @@ Message* Server::caseSecondaryServerConnected(std::vector<std::string> args, SOC
 
 void Server::sendBroadcastMessage(Message* msg)
 {
-	std::string messageString = msg->buildMessage();
+	std::string messageString = msg->buildMessage(13);
 	for (auto it = this->_clients.begin(); it != this->_clients.end(); it++) {
 		Helper::sendData(it->second, messageString);
 	}
@@ -331,7 +331,7 @@ void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 		Message* builtMessage = new Message(msg);
 
 		SOCKET clientSocket = createSocket(u.getPort(), u.getIp());
-		std::string m = builtMessage->buildMessage();
+		std::string m = builtMessage->buildMessage(13);
 		try
 		{
 			Helper::sendData(clientSocket, m);
@@ -339,9 +339,10 @@ void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 		}
 		catch (const std::exception& e)
 		{
-			builtMessage = new Message(e.what());
+			/*builtMessage = new Message(e.what());
 			Helper::sendData(clientSocket, builtMessage->buildMessage());
-			delete builtMessage;
+			delete builtMessage;*/
+			std::cout << "Failed to send message: " << e.what() << std::endl;
 		}
 	}
 }
@@ -359,7 +360,7 @@ void Server::sendWhenUserLoggedOut(std::string leftUsername)
 		Message* builtMessage = new Message(msg);
 
 		SOCKET clientSocket = createSocket(u.getPort(), u.getIp());
-		std::string m = builtMessage->buildMessage();
+		std::string m = builtMessage->buildMessage(13);
 		try
 		{
 			Helper::sendData(clientSocket, m);
@@ -367,9 +368,10 @@ void Server::sendWhenUserLoggedOut(std::string leftUsername)
 		}
 		catch (const std::exception& e)
 		{
-			builtMessage = new Message(e.what());
-			Helper::sendData(clientSocket, builtMessage->buildMessage());
+			/*builtMessage = new Message(e.what());
+			Helper::sendData(clientSocket, builtMessage->buildMessage());*/
 			delete builtMessage;
+			std::cout << "Failes to send message: " << e.what() << std::endl;
 		}
 	}
 }
@@ -389,7 +391,7 @@ void Server::sendUserMessage(std::string username, std::string content, std::str
 		msg = std::to_string(MessageType::sendMessageToOtherUser) + DELIMITER + senderUsername + DELIMITER + content;
 	std::string ipds = "127.0.0.1";
 	Message* builtMessage = new Message(msg);
-	msg = builtMessage->buildMessage();
+	msg = builtMessage->buildMessage(0);
 	delete builtMessage;
 	std::vector<int> encrypted = {};
 	msg += IN_USER_DELIMITER + ipds + IN_USER_DELIMITER + std::to_string(u.getPort());
