@@ -33,17 +33,22 @@ namespace gui
         private SocketT _socket;
         private string DIVIDER = "~";
         private string myUsername;
+        private Random _rand;
+        private int _key;
 
         public Communicator()
         {
             this._socket = new SocketT();
             this._socket.startSocket();
+            this._rand = new Random();
+            this._key = this._rand.Next(1, 27);
         }
 
         ~Communicator()
         {
 
         }
+
 
         public void SetUserName(string u)
         {
@@ -57,7 +62,7 @@ namespace gui
 
         public string Login(string username, string password, int port)
         {
-            string reqInfo = (int)MessageCodes.logIn + DIVIDER + username + DIVIDER + password + DIVIDER + port;
+            string reqInfo = (int)MessageCodes.logIn + DIVIDER + username + DIVIDER + password + DIVIDER + port + DIVIDER + this._key;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
 
@@ -67,7 +72,7 @@ namespace gui
         }
         public string SignUp(string username, string password, int port)
         {
-            string reqInfo = (int)MessageCodes.signUp + DIVIDER + username + DIVIDER + password + DIVIDER + port;
+            string reqInfo = (int)MessageCodes.signUp + DIVIDER + username + DIVIDER + password + DIVIDER + port + DIVIDER + this._key;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
 
@@ -77,7 +82,7 @@ namespace gui
         }
         public (int, string) Ghost(int port)
         {
-            string reqInfo = (int)MessageCodes.ghostLogIn + DIVIDER + port;
+            string reqInfo = (int)MessageCodes.ghostLogIn + DIVIDER + port + DIVIDER + this._key;
 
             Response res = this._socket.FirstTalkWithServer(reqInfo);
             string ghostName = res.objects[1].Substring(0, res.objects[1].Length - 1);
