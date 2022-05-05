@@ -8,7 +8,7 @@
 
 Message::Message(std::string allMsg) 
 {
-	allMsg = this->encryptAndDecrypt(-13, allMsg);
+	//allMsg = this->encryptAndDecrypt(-13, allMsg);
 	int pos = allMsg.find(DELIMITER);
 	std::string token = allMsg.substr(0, pos);
 	std::cout << token << std::endl;
@@ -92,8 +92,8 @@ std::string Message::buildMessage(int key)
 		});
 
 	std::string msgcontent = std::to_string(this->_mt) + DELIMITER + msg;
-	if(key != 0)
-		msgcontent = this->encryptAndDecrypt(key, msgcontent);
+	/*if(key != 0)
+		msgcontent = this->encryptAndDecrypt(key, msgcontent);*/
 	std::string len =  std::to_string(msgcontent.length() + 1);
 	len.insert(len.begin(), 5 - len.length(), '0');
 	/*len += DELIMITER;
@@ -116,8 +116,10 @@ std::string Message::encryptAndDecrypt(int key, std::string msg)
 			result += char(int(msg[i] + key - 65) % 26 + 65);
 
 		// Encrypt Lowercase letters
-		else
+		else if (islower(msg[i]))
 			result += char(int(msg[i] + key - 97) % 26 + 97);
+		else
+			result += msg[i];
 	}
 
 	// Return the resulting string

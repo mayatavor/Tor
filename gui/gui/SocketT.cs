@@ -74,7 +74,7 @@ namespace gui
 
                 string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);
 
-                string dec = Decipher(res, this.key);
+                //string dec = Decipher(res, this.key);
 
                 Response r = new Response(res);
                 return r;
@@ -90,6 +90,7 @@ namespace gui
         {
             try
             {
+                //mas = Encipher(mas, 13);
                 byte[] msg = Encoding.ASCII.GetBytes(mas);
                 // Send the data through the socket.
                 int bytesSent = this.sender.Send(msg);
@@ -104,6 +105,8 @@ namespace gui
                 bytesRec = this.sender.Receive(bytesArr3);
 
                 string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);
+
+                //res = Decipher(res, this.key);
 
                 Response r = new Response(res);
                 return r;
