@@ -1,0 +1,100 @@
+from random import seed, randint
+
+def find_e(z: int):
+    # e -> gcd(e,z)==1      ; 1 < e < z
+    e = 2
+    while e < z:
+        # check if this is the required `e` value
+        if gcd(e, z)==1:
+            print( "e: ",e)
+            return e
+        # else : increment and continue
+        e += 1
+
+
+
+def find_d(e: int, z: int):
+    # d -> ed = 1(mod z)        ; 1 < d < z
+    d = 2
+    while d < z:
+        # check if this is the required `d` value
+        if ((d*e) % z)==1:
+            print( "d: ",d)
+            return d
+        # else : increment and continue
+        d += 1
+
+
+
+def gcd(x: int, y: int):
+    # GCD by Euclidean method
+    small,large = (x,y) if x<y else (y,x)
+
+    while small != 0:
+        temp = large % small
+        large = small
+        small = temp
+
+    return large
+
+prime_p=103
+prime_q=199
+
+n=prime_p * prime_q
+
+totient = (prime_q-1)*(prime_p-1)
+
+exponent = find_e(totient)
+
+d = find_d(exponent, totient)
+
+
+pub_key = (exponent, n)
+pri_key = (d, n)
+
+print( " public : ",pub_key)
+print( " private : ",pri_key)
+
+
+def encode_RSA(msg): # d,n
+    cipher = ""
+
+    print("-------------encode----------------")
+
+    for letter in msg:
+        value = ord(letter)
+        print(letter , ": ", value)
+
+        plain_letter = (value**exponent) % n
+        print(plain_letter)
+        cipher += chr(plain_letter)
+
+    print(cipher)
+
+    return cipher
+
+
+def decode_RSA(msg):
+    plain = ""
+
+    print("-------------decode----------------")
+
+    for letter in msg:
+        value = ord(letter)
+        print(letter , ": ", value)
+
+        plain_letter = (value**d) % n
+        print(plain_letter)
+        plain += chr(plain_letter)
+
+    print(plain)
+
+def main():
+    cipher = encode_RSA("HELLO")
+    decode_RSA(cipher)
+
+
+
+
+if __name__ == "__main__":
+    main()
