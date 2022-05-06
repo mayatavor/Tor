@@ -32,7 +32,7 @@ bool DatabaseAccess::open()
 	else
 	{
 		//std::string key = "swordfish";
-		const char* key = "swordfish123";
+		const char* key = "swordfish";
 		int res1 = sqlite3_key(this->_db, key, 12);
 		if (res1 != SQLITE_OK) {
 			std::cout << "wrong key" << std::endl;

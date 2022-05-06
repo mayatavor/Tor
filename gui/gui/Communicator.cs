@@ -62,9 +62,8 @@ namespace gui
 
         public string Login(string username, string password, int port)
         {
-            string reqInfo = (int)MessageCodes.logIn + DIVIDER + username + DIVIDER + password + DIVIDER + port + DIVIDER + this._key;
-
-            Response res = this._socket.FirstTalkWithServer(reqInfo);
+            string reqInfo = (int)MessageCodes.logIn + DIVIDER + username + DIVIDER + password + DIVIDER + port;
+            Response res = this._socket.FirstTalkWithServer(reqInfo, 13);
 
             if (res.code == 400)
                 return res.objects[1];
@@ -72,9 +71,9 @@ namespace gui
         }
         public string SignUp(string username, string password, int port)
         {
-            string reqInfo = (int)MessageCodes.signUp + DIVIDER + username + DIVIDER + password + DIVIDER + port + DIVIDER + this._key;
+            string reqInfo = (int)MessageCodes.signUp + DIVIDER + username + DIVIDER + password + DIVIDER + port;
 
-            Response res = this._socket.FirstTalkWithServer(reqInfo);
+            Response res = this._socket.FirstTalkWithServer(reqInfo, 13);
 
             if (res.code == (int)MessageCodes.error)
                 return res.objects[1];
@@ -82,9 +81,9 @@ namespace gui
         }
         public (int, string) Ghost(int port)
         {
-            string reqInfo = (int)MessageCodes.ghostLogIn + DIVIDER + port + DIVIDER + this._key;
+            string reqInfo = (int)MessageCodes.ghostLogIn + DIVIDER + port;
 
-            Response res = this._socket.FirstTalkWithServer(reqInfo);
+            Response res = this._socket.FirstTalkWithServer(reqInfo, 13);
             string ghostName = res.objects[1].Substring(0, res.objects[1].Length - 1);
             return (res.code, ghostName);
         }
