@@ -24,6 +24,7 @@
 
 #define IN_USER_DELIMITER "::::"
 
+#define SERVERS_NUMBER 3
 
 Server::Server()
 {
@@ -42,6 +43,9 @@ Server::~Server()
 {
 	delete this->_db;
 	this->_secondaryServers.clear();
+	/*for (int i = 0; i < this->_secondaryServers.size(); i++) {
+		delete this->_secondaryServers[i];
+	}*/
 	//delete &this->_secondaryServers;
 	try
 	{
@@ -101,7 +105,7 @@ Message* Server::caseLogin(std::vector<std::string> args, SOCKET usersSocket)
 	}
  	this->sendUsersWhenNewJoins(args[0]);
 	this->_clients.insert(std::pair<std::string, SOCKET>(args[0], usersSocket));
-	this->_db->updateUsersIpAndPort(args[0], args[3], args[2]);
+	this->_db->updateUsersDetails(args[0], args[3], args[2]);
 	return new Message(success, { "LoggedIn successfully" });
 }
 
@@ -179,6 +183,7 @@ Message* Server::caseAddFavorites(std::vector<std::string> args)
 }
 
 
+
 void Server::messagesHandler()
 {
 	Helper h;
@@ -221,11 +226,14 @@ void Server::messagesHandler()
 			case MessageType::getChatHistory:
 				msg = caseGetChatHistory(args);
 				break;
+			case MessageType::secondaryServerConnected:
+				msg = caseSecondaryServerConnected(args, m.first);
+				break;
 			default:
 				break;
 			}
 			if(msg)
-				h.sendData(m.first, msg->buildMessage());
+				h.sendData(m.first, msg->buildMessage(13));
 		}
 		if(msg)
 			delete msg;
@@ -285,9 +293,25 @@ Message* Server::caseGetChatHistory(std::vector<std::string> args)
 	return new Message(MessageType::success, msg);
 }
 
+Message* Server::caseSecondaryServerConnected(std::vector<std::string> args, SOCKET socket)
+{
+	std::vector<std::string> msg = { "" };
+	std::pair<int, int> puclicKey(std::stoi(args[1]), std::stoi(args[2]));
+	addSecondaryServer(socket, std::stoi(args[0]), puclicKey, std::stoi(args[3]));
+
+	//SOCKET sock = createSocket(std::stoi(args[3]), "127.0.0.1");
+	//SecondaryServer server2 = this->_secondaryServers[1];
+	//std::vector<int> msg1 = RSAencryption::EncryptRSA1("H::::127.0.0.1::::4444", server2.getPublicKey().first, server2.getPublicKey().second);
+
+	//Helper::sendData(sock, "500~" + std::to_string(msg1.size()));
+	//Helper::sendData(sock, msg1);
+
+	return new Message(MessageType::success, msg);
+}
+
 void Server::sendBroadcastMessage(Message* msg)
 {
-	std::string messageString = msg->buildMessage();
+	std::string messageString = msg->buildMessage(13);
 	for (auto it = this->_clients.begin(); it != this->_clients.end(); it++) {
 		Helper::sendData(it->second, messageString);
 	}
@@ -307,7 +331,7 @@ void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 		Message* builtMessage = new Message(msg);
 
 		SOCKET clientSocket = createSocket(u.getPort(), u.getIp());
-		std::string m = builtMessage->buildMessage();
+		std::string m = builtMessage->buildMessage(13);
 		try
 		{
 			Helper::sendData(clientSocket, m);
@@ -315,9 +339,10 @@ void Server::sendUsersWhenNewJoins(std::string joinedUsername)
 		}
 		catch (const std::exception& e)
 		{
-			builtMessage = new Message(e.what());
+			/*builtMessage = new Message(e.what());
 			Helper::sendData(clientSocket, builtMessage->buildMessage());
-			delete builtMessage;
+			delete builtMessage;*/
+			std::cout << "Failed to send message: " << e.what() << std::endl;
 		}
 	}
 }
@@ -335,7 +360,7 @@ void Server::sendWhenUserLoggedOut(std::string leftUsername)
 		Message* builtMessage = new Message(msg);
 
 		SOCKET clientSocket = createSocket(u.getPort(), u.getIp());
-		std::string m = builtMessage->buildMessage();
+		std::string m = builtMessage->buildMessage(13);
 		try
 		{
 			Helper::sendData(clientSocket, m);
@@ -343,34 +368,64 @@ void Server::sendWhenUserLoggedOut(std::string leftUsername)
 		}
 		catch (const std::exception& e)
 		{
-			builtMessage = new Message(e.what());
-			Helper::sendData(clientSocket, builtMessage->buildMessage());
+			/*builtMessage = new Message(e.what());
+			Helper::sendData(clientSocket, builtMessage->buildMessage());*/
 			delete builtMessage;
+			std::cout << "Failes to send message: " << e.what() << std::endl;
 		}
 	}
 }
 
 void Server::sendUserMessage(std::string username, std::string content, std::string senderUsername, bool isGhost)
 {
+	srand(time(NULL));
 	User u = this->_db->getUser(username);
-	SOCKET sock = createSocket(u.getPort(), u.getIp());
 	std::string msg = "";
+
+	std::map<int, SOCKET> servers = this->checkServersValidity();
+	std::vector<int> route = this->getServersRoute(SERVERS_NUMBER, servers);
+	//std::vector<int> route = { 2, 1 };
 	if (isGhost)
 		msg = std::to_string(MessageType::sendMessageFromGhost) + DELIMITER + senderUsername + DELIMITER + content;
 	else
 		msg = std::to_string(MessageType::sendMessageToOtherUser) + DELIMITER + senderUsername + DELIMITER + content;
+	std::string ipds = "127.0.0.1";
 	Message* builtMessage = new Message(msg);
+	msg = builtMessage->buildMessage(0);
+	delete builtMessage;
+	std::vector<int> encrypted = {};
+	msg += IN_USER_DELIMITER + ipds + IN_USER_DELIMITER + std::to_string(u.getPort());
+	//encrypted = RSAencryption::EncryptRSA1(msg, server.getPublicKey().first, server.getPublicKey().second, encrypted);
+		// + IN_USER_DELIMITER + this->_secondaryServers[route[0]].getIp() + IN_USER_DELIMITER + std::to_string(this->_secondaryServers[route[0]].getPort());
+	std::vector<int>::iterator it;
+	for (int i = 0; i < route.size() - 1; i++)
+	{
+		//SecondaryServer server = this->_secondaryServers[i];
+		SecondaryServer server = this->_secondaryServers[route[i]];
+		encrypted = RSAencryption::EncryptRSA1(msg, server.getPublicKey().first, server.getPublicKey().second, encrypted);
+		msg = IN_USER_DELIMITER + server.getIp() + IN_USER_DELIMITER + std::to_string(server.getPort());
+	}
+
+	SecondaryServer server2 = this->_secondaryServers[route[SERVERS_NUMBER - 1]];
+	encrypted = RSAencryption::EncryptRSA1(msg, server2.getPublicKey().first, server2.getPublicKey().second, encrypted);
+
+	//Message* builtMessage = new Message(msg);
+	SOCKET sock = servers[route[SERVERS_NUMBER - 1]];
 	try
 	{
-		Helper::sendData(sock, builtMessage->buildMessage());
-		delete builtMessage;
+		std::string msg1 = "500~" + std::to_string(encrypted.size()) + "~1";
+		//std::string msg2(encrypted.begin(), encrypted.end());
+
+		//std::cout << "msg2:   " << msg2 << std::endl;
+		Helper::sendData(sock, msg1);
+
+		Helper::sendData(sock, encrypted);;
 	}
 	catch (const std::exception& e)
 	{
-		builtMessage = new Message(e.what());
-		Helper::sendData(sock, builtMessage->buildMessage());
-		delete builtMessage;
+		Helper::sendData(sock, e.what());
 	}
+
 }
 
 
@@ -450,6 +505,7 @@ void Server::clientHandler(SOCKET socket, int port)
 		while (true)
 		{
 			int len = h.getIntPartFromSocket(socket, 5);
+			std::cout << "clinet handler" << std::endl;
 			std::string message = h.getStringPartFromSocket(socket, len);
 			Message* msg = addMessageToMessagesQueue(message, socket, port);
 			username = msg->getArgs()[0];
@@ -468,6 +524,7 @@ void Server::clientHandler(SOCKET socket, int port)
 Message* Server::addMessageToMessagesQueue(std::string allMsg, SOCKET socket, int port)
 {
 	Message* msg = new Message(allMsg);
+	std::cout << "addMessageToMessagesQueue" << std::endl;
 	std::unique_lock<std::mutex> lock(this->_messagesMutex);
 	this->_messagesQueue.push(*new std::pair<SOCKET, Message>(socket, *msg));
 	lock.unlock();
@@ -475,10 +532,55 @@ Message* Server::addMessageToMessagesQueue(std::string allMsg, SOCKET socket, in
 	return msg;
 }
 
-void Server::addSecondaryServer(SOCKET socket, int id)
+void Server::addSecondaryServer(SOCKET socket, int id, std::pair<int, int> publicKey, int port)
 {
 	std::unique_lock<std::mutex> lock(this->_secondaryServersMu);
-	this->_secondaryServers.push_back(new SecondaryServer(socket, id));
+	//this->_secondaryServers.push_back(new SecondaryServer(socket, id, publicKey, port));
+	this->_secondaryServers.insert(std::pair<int, SecondaryServer>(id, *new SecondaryServer(socket, id, publicKey, port)));
 	lock.unlock();
 	this->_messagesCv.notify_one();
 }
+
+std::vector<int> Server::getServersRoute(int numOfServers, std::map<int, SOCKET> validServers)
+{
+	//std::vector< std::map<int, SOCKET&>::iterator> randomServers;
+	std::vector<int> randomIds;
+	int prevIndex = -1, random = -1;
+	for (int i = 0; i < numOfServers; i++) 
+	{
+		while (prevIndex == random) 
+			random = rand() % validServers.size();
+
+		std::map<int, SOCKET>::iterator server = validServers.begin();
+		std::advance(server, random);
+
+		//randomServers.push_back(servers.begin());
+		randomIds.push_back((*server).first);  //push the id of the server that is in the requested index in the map.
+		prevIndex = random;
+		//std::advance(randomServers[i], random);
+	}
+	return randomIds;
+}
+
+std::map<int, SOCKET> Server::checkServersValidity()
+{
+	std::map<int, SecondaryServer>::iterator it;
+	std::map<int, SOCKET> servers;
+	for (it = this->_secondaryServers.begin(); it != this->_secondaryServers.end(); it++) 
+	{
+		SOCKET sock = createSocket(it->second.getPort(), "127.0.0.1");
+		if (sock != 0)
+			servers[it->second.getId()] = sock;
+		else
+			this->_secondaryServers.erase(it);
+	}
+	return servers;
+}
+
+//void Server::verifyServer(int serverId, bool& answer)
+//{
+//	SOCKET socket = createSocket(this->_secondaryServers[serverId].getPort(), "127.0.0.1");
+//	
+//
+//}
+

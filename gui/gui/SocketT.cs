@@ -18,6 +18,7 @@ namespace gui
         private Socket sender;
         const string SPACER = "::::";
         const string DIVIDER = "~";
+        private int key;
 
         public SocketT()
         {
@@ -44,14 +45,17 @@ namespace gui
          * this function sends the message in the same way as the origin function
          * but it also sends the IP as the first parameter
          */
-        public Response FirstTalkWithServer(string mas)
+        public Response FirstTalkWithServer(string mas, int key)
         {
+            this.key = key; // TODO: function to encrypt, add encription in 56
             try
             {
                 IPAddress d = LocalIPAddress();
                 string ds = d.ToString();
 
                 mas = mas + DIVIDER + ds;
+
+                //string enc = Encipher(mas, key);
 
                 string len = getPaddedNumber(mas.Length, 5);
 
@@ -70,6 +74,8 @@ namespace gui
 
                 string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);
 
+                //string dec = Decipher(res, this.key);
+
                 Response r = new Response(res);
                 return r;
             }
@@ -84,6 +90,7 @@ namespace gui
         {
             try
             {
+                //mas = Encipher(mas, 13);
                 byte[] msg = Encoding.ASCII.GetBytes(mas);
                 // Send the data through the socket.
                 int bytesSent = this.sender.Send(msg);
@@ -98,6 +105,8 @@ namespace gui
                 bytesRec = this.sender.Receive(bytesArr3);
 
                 string res = System.Text.Encoding.UTF8.GetString(bytesArr3, 0, bytesArr3.Length);
+
+                //res = Decipher(res, this.key);
 
                 Response r = new Response(res);
                 return r;
@@ -198,6 +207,35 @@ namespace gui
                 number = "0" + number;
             }
             return number;
+        }
+
+        //encrypt the letter recived
+        public static char cipher(char ch, int key)
+        {
+            if (!char.IsLetter(ch))
+            {
+                return ch;
+            }
+
+            char d = char.IsUpper(ch) ? 'A' : 'a';
+            return (char)((((ch + key) - d) % 26) + d);
+        }
+
+        //encrypt the string recived
+        public string Encipher(string input, int key)
+        {
+            string output = string.Empty;
+
+            foreach (char ch in input)
+                output += cipher(ch, key);
+
+            return output;
+        }
+
+        //decrypt the letter recived
+        public string Decipher(string input, int key)
+        {
+            return Encipher(input, 26 - key);
         }
 
 

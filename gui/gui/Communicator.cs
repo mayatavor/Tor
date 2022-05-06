@@ -33,17 +33,22 @@ namespace gui
         private SocketT _socket;
         private string DIVIDER = "~";
         private string myUsername;
+        private Random _rand;
+        private int _key;
 
         public Communicator()
         {
             this._socket = new SocketT();
             this._socket.startSocket();
+            this._rand = new Random();
+            this._key = this._rand.Next(1, 27);
         }
 
         ~Communicator()
         {
 
         }
+
 
         public void SetUserName(string u)
         {
@@ -58,8 +63,7 @@ namespace gui
         public string Login(string username, string password, int port)
         {
             string reqInfo = (int)MessageCodes.logIn + DIVIDER + username + DIVIDER + password + DIVIDER + port;
-
-            Response res = this._socket.FirstTalkWithServer(reqInfo);
+            Response res = this._socket.FirstTalkWithServer(reqInfo, 13);
 
             if (res.code == 400)
                 return res.objects[1];
@@ -69,7 +73,7 @@ namespace gui
         {
             string reqInfo = (int)MessageCodes.signUp + DIVIDER + username + DIVIDER + password + DIVIDER + port;
 
-            Response res = this._socket.FirstTalkWithServer(reqInfo);
+            Response res = this._socket.FirstTalkWithServer(reqInfo, 13);
 
             if (res.code == (int)MessageCodes.error)
                 return res.objects[1];
@@ -79,7 +83,7 @@ namespace gui
         {
             string reqInfo = (int)MessageCodes.ghostLogIn + DIVIDER + port;
 
-            Response res = this._socket.FirstTalkWithServer(reqInfo);
+            Response res = this._socket.FirstTalkWithServer(reqInfo, 13);
             string ghostName = res.objects[1].Substring(0, res.objects[1].Length - 1);
             return (res.code, ghostName);
         }

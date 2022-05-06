@@ -1,17 +1,39 @@
 #include "SecondaryServer.h"
 
-SecondaryServer::SecondaryServer(SOCKET socket, int id)
+SecondaryServer::SecondaryServer()
+{
+}
+
+SecondaryServer::SecondaryServer(SOCKET& socket, int& id, std::pair<int, int>& publicKey, int port)
 {
 	this->_id = id;
 	this->_socket = socket;
+	this->_publicKey.first = publicKey.first;
+	this->_publicKey.second = publicKey.second;
+	this->_port = port;
 }
 
-const int SecondaryServer::getId()
+int SecondaryServer::getId() const
 {
 	return this->_id;
 }
 
-const SOCKET SecondaryServer::getSocket()
+SOCKET SecondaryServer::getSocket() const
 {
 	return this->_socket;
+}
+
+std::pair<int, int> SecondaryServer::getPublicKey() const
+{
+	return this->_publicKey;
+}
+
+int SecondaryServer::getPort() const
+{
+	return this->_port;
+}
+
+std::string SecondaryServer::getIp() const
+{
+	return "127.0.0.1";
 }

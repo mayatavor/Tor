@@ -17,6 +17,7 @@ bool DatabaseAccess::open()
 	}
 
 
+
 	if (doesFileExist == -1) {
 		try
 		{
@@ -26,6 +27,16 @@ bool DatabaseAccess::open()
 		catch (const std::exception& e)
 		{
 			std::cout << e.what() << std::endl;
+		}
+	}
+	else
+	{
+		//std::string key = "swordfish";
+		const char* key = "swordfish";
+		int res1 = sqlite3_key(this->_db, key, 12);
+		if (res1 != SQLITE_OK) {
+			std::cout << "wrong key" << std::endl;
+			return false;
 		}
 	}
 
@@ -138,7 +149,7 @@ std::string DatabaseAccess::getUsernameById(int id)
 		return NULL;
 }
 
-void DatabaseAccess::updateUsersIpAndPort(std::string username, std::string ip, std::string port)
+void DatabaseAccess::updateUsersDetails(std::string username, std::string ip, std::string port)
 {
 	std::string str = "UPDATE Users SET ipAddress = '" + ip + "', port = " + port + " WHERE username='" + username + "';";
 	try
@@ -427,6 +438,10 @@ bool DatabaseAccess::createDBstructure()
 		exec(chatsTable, nullptr, nullptr);
 		exec(FavoritesTable, nullptr, nullptr);
 		exec(MessagesTable, nullptr, nullptr);
+
+		const char* key = "swordfish";
+		int res1 = sqlite3_rekey(this->_db, key, 9);
+		
 		return true;
 	}
 	catch (const std::exception& e)

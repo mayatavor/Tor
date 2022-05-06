@@ -1,6 +1,6 @@
 #pragma once
 #include "IDataAccess.h"
-#include "sqlite3.h"
+#include "sqleet.h"
 #include <iostream>
 #include <string>
 #include "Structs.h"
@@ -31,7 +31,7 @@ public:
 	bool doesUserExist(const std::string& username);
 	User getUser(const std::string& username);
 	std::string getUsernameById(int id);
-	void updateUsersIpAndPort(std::string usrname, std::string ip, std::string port);
+	void updateUsersDetails(std::string usrname, std::string ip, std::string port);
 	//The function returns list of all of the users
 	std::list<std::string> getUsers();
 	

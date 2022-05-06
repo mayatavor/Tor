@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 class RSAencryption
 {
@@ -11,5 +12,8 @@ public:
 	*/
 	static std::string EncryptRSA(std::string msg, int e, int n);
 
+	static std::vector<int> EncryptRSA1(std::string msg, int e, int n, std::vector<int>& vec);
+
+	static std::string EncryptRSA2(std::string msg, int e, int n);
 };
 
