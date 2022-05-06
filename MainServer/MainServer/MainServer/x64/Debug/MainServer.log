@@ -1,0 +1,23 @@
+﻿  RSAencryption.cpp
+C:\magshimim\OurTor\haifa-1002-ourthor\MainServer\MainServer\MainServer\RSAencryption.cpp(32,23): warning C4244: 'argument': conversion from 'double' to '_Elem', possible loss of data
+          with
+          [
+              _Elem=char
+          ]
+C:\magshimim\OurTor\haifa-1002-ourthor\MainServer\MainServer\MainServer\RSAencryption.cpp(51,24): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\magshimim\OurTor\haifa-1002-ourthor\MainServer\MainServer\MainServer\RSAencryption.cpp(63,29): warning C4244: 'argument': conversion from 'double' to 'const _Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\magshimim\OurTor\haifa-1002-ourthor\MainServer\MainServer\MainServer\RSAencryption.cpp(83,18): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
+C:\magshimim\OurTor\haifa-1002-ourthor\MainServer\MainServer\MainServer\RSAencryption.cpp(95,29): warning C4244: 'argument': conversion from 'double' to 'const _Elem', possible loss of data
+          with
+          [
+              _Elem=char
+          ]
+  MainServer.vcxproj -> C:\magshimim\OurTor\haifa-1002-ourthor\MainServer\MainServer\x64\Debug\MainServer.exe
