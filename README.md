@@ -16,6 +16,7 @@ Our project is a chatting app. Our project includes:
 In out project, we used the RSA encryption. We built it from 0 and used it in out communication with the Secondery servers. Every Secondery server has a different key.
 
 [RSA](https://en.wikipedia.org/wiki/RSA_(cryptosystem)) (Rivest–Shamir–Adleman) is a public-key cryptosystem that is widely used for secure data transmission.
+
 RSA is an asymmetrical encryption, and that means that the key to encrypt and the key to decrypt are not the same. After encrypting a message, only the ones with the decryption key can decrypt the message.
 With this encryption, we were able to pass the packages through the Secondary Servers without the information being leaked. This Encryption keeps the users anonymous and their information private.
 
