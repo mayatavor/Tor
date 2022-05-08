@@ -13,7 +13,7 @@ Our project is a chatting app. Our project includes:
 
 ## RSA Encryption
 
-In out project, we used the RSA encryption. We built it from 0 and used it in out communication with the Secondery servers. Every Secondery server has a different key.
+In our project, we used the RSA encryption. We built it from 0 and used it in out communication with the Secondery servers. Every Secondery server has a different key.
 
 [RSA](https://en.wikipedia.org/wiki/RSA_(cryptosystem)) (Rivest–Shamir–Adleman) is a public-key cryptosystem that is widely used for secure data transmission.
 
