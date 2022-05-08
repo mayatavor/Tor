@@ -11,9 +11,15 @@ Our project is a chatting app. Our project includes:
 * Secondery Servers: In charge of sending requests between the Main server and the Users. every Secondery server has it's own encryption with a different private key, and only this server can decrypt the information.
 * Users: The users can communicate with each other. Every package sent from any user gets to the Main server. The main server decides what to do with the package.
 
+## RSA Encryption
+
 In out project, we used the RSA encryption. We built it from 0 and used it in out communication with the Secondery servers. Every Secondery server has a different key.
 
-### About the code
+[RSA](https://en.wikipedia.org/wiki/RSA_(cryptosystem)) (Rivest–Shamir–Adleman) is a public-key cryptosystem that is widely used for secure data transmission.
+RSA is an asymmetrical encryption, and that means that the key to encrypt and the key to decrypt are not the same. After encrypting a message, only the ones with the decryption key can decrypt the message.
+With this encryption, we were able to pass the packages through the Secondary Servers without the information being leaked. This Encryption keeps the users anonymous and their information private.
+
+## About the code
 
 In order to be able to accept packages from the Secondery Servers, the User had to have an option to receive packages from anyone. In order to be able to do that, the User had to become a server as well. The User now have a thread that runs in the back, accepting requests and dealing with them.
 
